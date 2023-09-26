@@ -24,8 +24,11 @@ function gamegoardComponent(){
                 </Col>
         </Row>
 
+        
         <Row>
-            <VP></VP>
+            <Col><VP></VP></Col>
+            <Col><VP></VP></Col>
+            
         </Row>
         </Container>
     )}

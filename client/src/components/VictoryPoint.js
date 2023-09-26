@@ -3,14 +3,23 @@ import {useState} from "react"
 
 function VictoryPoint(){
 
-    const [vpCounter, setvpCounter] = useState(0);
+    const [vpCounterPrimary, setvpCounterPrimary] = useState(0);
+    const [vpCounterSecondary, setvpCounterSecondary] = useState(0);
 
-    function reduceVP(){
-        setvpCounter(vpCounter -1)
+    function reduceVictoryPointPrimary(){
+        setvpCounterPrimary(vpCounterPrimary -1)
     }
 
-    function increaseVP(){
-        setvpCounter(vpCounter +1)
+    function increaseVictoryPointPrimary(){
+        setvpCounterPrimary(vpCounterPrimary +1)
+    }
+
+    function reduceVictoryPointSecondary(){
+        setvpCounterSecondary(vpCounterSecondary -1)
+    }
+
+    function increaseVictoryPointSecondary(){
+        setvpCounterSecondary(vpCounterSecondary +1)
     }
 
     return <Card style={{ marginTop: '2%' }}>
@@ -18,11 +27,19 @@ function VictoryPoint(){
         <Card.Body>
             <Row>
                 <Col>
-                    <Button onClick={() => reduceVP()}>-</Button>
+                    <Button onClick={() => reduceVictoryPointPrimary()}>-</Button>
                 </Col>
-                <Col> <h3>{vpCounter}</h3></Col>
+                <Col> <h3>{vpCounterPrimary}</h3></Col>
                 <Col>
-                    <Button onClick={ () => increaseVP()} >+</Button>
+                    <Button onClick={ () => increaseVictoryPointPrimary()} >+</Button>
+                </Col>
+
+                <Col>
+                    <Button onClick={() => reduceVictoryPointSecondary()}>-</Button>
+                </Col>
+                <Col> <h3>{vpCounterSecondary}</h3></Col>
+                <Col>
+                    <Button onClick={ () => increaseVictoryPointSecondary()} >+</Button>
                 </Col>
             </Row>
         </Card.Body>
