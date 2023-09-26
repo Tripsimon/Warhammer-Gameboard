@@ -1,29 +1,45 @@
 import { Card, Row, Col, Button } from "react-bootstrap";
-import {useState} from "react"
+import { useState } from "react"
 
-function VictoryPoint(){
+function VictoryPoint() {
 
     const [vpCounterPrimary, setvpCounterPrimary] = useState(0);
     const [vpCounterSecondary, setvpCounterSecondary] = useState(0);
 
-    function reduceVictoryPointPrimary(){
-        setvpCounterPrimary(vpCounterPrimary -1)
+    function reduceVictoryPointPrimary() {
+        setvpCounterPrimary(vpCounterPrimary - 1)
     }
 
-    function increaseVictoryPointPrimary(){
-        setvpCounterPrimary(vpCounterPrimary +1)
+    function increaseVictoryPointPrimary() {
+        setvpCounterPrimary(vpCounterPrimary + 1)
     }
 
-    function reduceVictoryPointSecondary(){
-        setvpCounterSecondary(vpCounterSecondary -1)
+    function reduceVictoryPointSecondary() {
+        setvpCounterSecondary(vpCounterSecondary - 1)
     }
 
-    function increaseVictoryPointSecondary(){
-        setvpCounterSecondary(vpCounterSecondary +1)
+    function increaseVictoryPointSecondary() {
+        setvpCounterSecondary(vpCounterSecondary + 1)
     }
 
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header><h2>VP</h2></Card.Header>
+        <Card.Header>
+            <Row>
+                <Col>
+                    <h3 style={{display: "block"}}>Primary</h3>
+                </Col>
+
+                <Col>
+                    <h2>VP</h2>
+                </Col>
+
+                <Col>
+                <h3>Secondary</h3>
+                </Col>
+            </Row>
+
+        </Card.Header>
+
         <Card.Body>
             <Row>
                 <Col>
@@ -31,7 +47,7 @@ function VictoryPoint(){
                 </Col>
                 <Col> <h3>{vpCounterPrimary}</h3></Col>
                 <Col>
-                    <Button onClick={ () => increaseVictoryPointPrimary()} >+</Button>
+                    <Button onClick={() => increaseVictoryPointPrimary()} >+</Button>
                 </Col>
 
                 <Col>
@@ -39,7 +55,7 @@ function VictoryPoint(){
                 </Col>
                 <Col> <h3>{vpCounterSecondary}</h3></Col>
                 <Col>
-                    <Button onClick={ () => increaseVictoryPointSecondary()} >+</Button>
+                    <Button onClick={() => increaseVictoryPointSecondary()} >+</Button>
                 </Col>
             </Row>
         </Card.Body>
