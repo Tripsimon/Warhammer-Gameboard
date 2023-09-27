@@ -4,8 +4,8 @@ import CP from "./CommandPoint.js"
 import VP from "./VictoryPoint.js"
 import { useState } from "react";
 
-import left from '../imgs/bg_ig.jpg'
-import right from '../imgs/bg_ba.jpg'
+import left from '../imgs/bg_adeptusMechanicus.jpg'
+import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
 
 function GamegoardComponent() {
 
