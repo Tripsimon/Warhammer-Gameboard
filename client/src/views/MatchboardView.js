@@ -1,13 +1,13 @@
 import { Container, Card, Row, Col, Button, Image } from "react-bootstrap";
 
-import CP from "./CommandPoint.js"
-import VP from "./VictoryPoint.js"
+import CP from "../components/CommandPoint.js"
+import VP from "../components/VictoryPoint.js"
 import { useState } from "react";
 
 import left from '../imgs/bg_adeptusMechanicus.jpg'
 import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
 
-function GamegoardComponent() {
+function MatchboardView() {
 
     const [roundCounter, setroundCounter] = useState(1);
 
@@ -64,5 +64,5 @@ function GamegoardComponent() {
     )
 }
 
-export default GamegoardComponent;
+export default MatchboardView;
 

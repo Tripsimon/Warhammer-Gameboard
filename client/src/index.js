@@ -1,15 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Navbar from './components/Navbar.js'
 import './index.css';
 import App from './App';
+import BrowseMatches from './views/BrowseMatches.js';
+import MatchboardView  from "./views/MatchboardView.js";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 
+
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+root.render(  
+
+  <BrowserRouter>
+    <Navbar></Navbar>
+  <Routes>
+    <Route path="/" element={<App />}></Route>
+    <Route path="/createGame" element={<BrowseMatches />}></Route>
+    <Route path='/matchRoom' element={<MatchboardView />}></Route>
+  </Routes>
+</BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
