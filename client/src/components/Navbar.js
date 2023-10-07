@@ -11,8 +11,7 @@ function NavbarComponent(){
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Nav.Link href="/createGame">Gameboard</Nav.Link>
-          <Nav.Link href="#link">KEKW</Nav.Link>
+          <Nav.Link href="/">Gameboard</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Container>

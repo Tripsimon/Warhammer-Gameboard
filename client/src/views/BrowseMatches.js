@@ -1,14 +1,22 @@
 import React from 'react'
-import {Card, Container, ListGroup, ListGroupItem, } from 'react-bootstrap'
+import {Button, Card, Container, ListGroup, ListGroupItem, } from 'react-bootstrap'
 
 function BrowseMatches() {
+
+  let KEKW = {
+    "name":"Jmeno"
+  }
+
   return (
-    <Container>
-        <Card>
+    <Container className='mt-2'>
+        <Card data-bs-theme="dark">
             <Card.Header> Seznam her</Card.Header>
             <Card.Body>
                 <ListGroup>
-                    <ListGroupItem> YEET</ListGroupItem>
+                    <ListGroupItem> 
+                      {KEKW.name} 
+                      <Button >Vstoupit</Button>
+                      </ListGroupItem>
                 </ListGroup>
             </Card.Body>
         </Card> 
