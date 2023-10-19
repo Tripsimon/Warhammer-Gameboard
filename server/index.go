@@ -1,19 +1,34 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+    "fmt"
+    "net/http"
 )
 
 func main() {
-    http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request){
-        fmt.Fprintf(w, "Hello!")
-    })
 
+    http.HandleFunc("/hello", hello)
+    http.HandleFunc("/headers", headers)
+    http.HandleFunc("/auth", authentification)
 
-    fmt.Printf("Starting server at port 3001\n")
-    if err := http.ListenAndServe(":3001", nil); err != nil {
-        log.Fatal(err)
+    http.ListenAndServe(":3001", nil)
+}
+
+func authentification(w http.ResponseWriter, req *http.Request){
+    fmt.Fprintf(w, "1")
+}
+
+func hello(w http.ResponseWriter, req *http.Request) {
+
+    fmt.Fprintf(w, "hello\n")
+}
+
+func headers(w http.ResponseWriter, req *http.Request) {
+
+    for name, headers := range req.Header {
+        for _, h := range headers {
+            fmt.Fprintf(w, "%v: %v\n", name, h)
+        }
     }
 }
+
