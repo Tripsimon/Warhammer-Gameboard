@@ -6,6 +6,9 @@ import (
 )
 
 func main() {
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
+        fmt.Fprintf(w, "Hello!")
+    })
 
     http.HandleFunc("/hello", hello)
     http.HandleFunc("/headers", headers)
