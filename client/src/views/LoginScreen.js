@@ -1,26 +1,31 @@
 import React from 'react'
 import { Button, Card, Container, Form, FormCheck } from 'react-bootstrap'
+import axios from "axios"
 
 function LoginScreen() {
 
-    function authenticate(e) {
-        e.preventDefault()
-        console.log("KWK")
+    function handleSubmit(){
+       axios.get("http://localhost:3001/auth")
+        .then(result => {
+            console.log(result)
+        })
+        .catch(result =>{
+            console.log(result)
+        })
     }
 
   return (
     <div>
-        <Container>
+        <Container className='mt-4'>
         <Card>
             <Card.Header>
                 Přihlášení
             </Card.Header>
             <Card.Body>
-                <Form>
+                <Form onSubmit={handleSubmit()}>
                     <Form.Group>
-                    <Form.Label>Negr</Form.Label>
                     <Form.Control type='text' placeholder='Zadejte token'></Form.Control>
-                    <Button onClick={authenticate(this)} type='submit'>Připojit</Button>
+                    <Button type='submit'>Připojit</Button>
                     </Form.Group>
                 </Form>
             </Card.Body>
