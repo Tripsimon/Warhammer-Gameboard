@@ -1,4 +1,4 @@
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Card, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from "react"
 
 function VictoryPoint() {
@@ -34,13 +34,29 @@ function VictoryPoint() {
                 </Col>
 
                 <Col>
-                <h3 className="text-center" >Secondary</h3>
+                    <h3 className="text-center" >Secondary</h3>
                 </Col>
             </Row>
 
         </Card.Header>
 
         <Card.Body>
+            <Card.Title>
+                <Row>
+                    <Col>
+                        <Button onClick={() => reduceVictoryPointPrimary()}>-</Button>
+                    </Col>
+                    <Col xs="6">
+                        Primary victory points:
+                    </Col>
+                    <Col>
+                        <Button onClick={() => increaseVictoryPointPrimary()} >+</Button>
+                    </Col>
+                </Row>
+            </Card.Title>
+            <Card.Title>
+                Secondary Victory Points
+            </Card.Title>
             <Row>
                 <Col>
                     <Button onClick={() => reduceVictoryPointPrimary()}>-</Button>
