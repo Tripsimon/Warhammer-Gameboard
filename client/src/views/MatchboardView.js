@@ -28,9 +28,9 @@ function MatchboardView() {
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col><h1>Kropec</h1></Col>
-                            <Col><h1>VS</h1></Col>
-                            <Col><h1>Blengl boy</h1></Col>
+                            <Col><h1 className="text-center" >Kropec</h1></Col>
+                            <Col><h1 className="text-center" >VS</h1></Col>
+                            <Col><h1 className="text-center" >Blengl boy</h1></Col>
                         </Row>
                     </Card.Header>
                     <Card.Body>

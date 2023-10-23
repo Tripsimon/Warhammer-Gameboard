@@ -13,7 +13,7 @@ function App() {
     <Navbar></Navbar>
   <Routes>
     <Route path="/" element={<LoginScreen />}></Route>
-    <Route path="/createGame" element={<BrowseMatches />}></Route>
+    <Route path="/browseMatches" element={<BrowseMatches />}></Route>
     <Route path='/match' element={<MatchboardView />}></Route>
   </Routes>
 </BrowserRouter>

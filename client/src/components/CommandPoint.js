@@ -15,7 +15,7 @@ function CommandPoint() {
     }
 
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header><h2>CP</h2></Card.Header>
+        <Card.Header><h2 className="text-center" >CP</h2></Card.Header>
         <Card.Body>
             <Row>
                 <Col>

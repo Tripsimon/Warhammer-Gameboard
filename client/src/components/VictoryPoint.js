@@ -26,15 +26,15 @@ function VictoryPoint() {
         <Card.Header>
             <Row>
                 <Col>
-                    <h3 style={{display: "block"}}>Primary</h3>
+                    <h3 className="text-center" >Primary</h3>
                 </Col>
 
                 <Col>
-                    <h2>VP</h2>
+                    <h2 className="text-center" >VP</h2>
                 </Col>
 
                 <Col>
-                <h3>Secondary</h3>
+                <h3 className="text-center" >Secondary</h3>
                 </Col>
             </Row>
 

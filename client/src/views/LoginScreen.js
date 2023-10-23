@@ -1,14 +1,22 @@
 import React from 'react'
+import { useNavigate  } from "react-router-dom";
 import { Button, Card, Container, Form, FormCheck } from 'react-bootstrap'
 import axios from "axios"
 
 function LoginScreen() {
 
+    const navigate = useNavigate();
+
+    // Autorizace pro přihlášení do systému
     const handleSubmit = (event) =>{
         event.preventDefault();
        axios.get("http://localhost:3001/auth")
         .then(result => {
-            console.log(result.data)
+            // TODO: Autorizace z DB a asi nějaká ochrana nebo tak
+
+           
+            console.log(result.data)    
+            navigate("/browseMatches");
         })
         .catch(result =>{
             console.log(result.data)
