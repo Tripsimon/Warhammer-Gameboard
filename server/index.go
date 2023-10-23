@@ -23,7 +23,6 @@ func enableCors(w *http.ResponseWriter) {
 
 func authentification(w http.ResponseWriter, req *http.Request){
     enableCors(&w)
-
     fmt.Fprintf(w, "1")
 }
 
