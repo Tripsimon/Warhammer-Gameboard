@@ -23,21 +23,8 @@ function VictoryPoint() {
     }
 
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header>
-            <Row>
-                <Col>
-                    <h3 className="text-center" >Primary</h3>
-                </Col>
-
-                <Col>
-                    <h2 className="text-center" >VP</h2>
-                </Col>
-
-                <Col>
-                    <h3 className="text-center" >Secondary</h3>
-                </Col>
-            </Row>
-
+        <Card.Header> 
+            <div>Round: 1</div>
         </Card.Header>
 
         <Card.Body>
@@ -58,21 +45,14 @@ function VictoryPoint() {
                 Secondary Victory Points
             </Card.Title>
             <Row>
-                <Col>
-                    <Button onClick={() => reduceVictoryPointPrimary()}>-</Button>
-                </Col>
-                <Col> <h3>{vpCounterPrimary}</h3></Col>
-                <Col>
-                    <Button onClick={() => increaseVictoryPointPrimary()} >+</Button>
-                </Col>
-
-                <Col>
-                    <Button onClick={() => reduceVictoryPointSecondary()}>-</Button>
-                </Col>
-                <Col> <h3>{vpCounterSecondary}</h3></Col>
-                <Col>
-                    <Button onClick={() => increaseVictoryPointSecondary()} >+</Button>
-                </Col>
+            <Form.Select aria-label="Default select example">
+                            <option>Vybrat</option>
+                            {// TODO: Tady dodělat nějak import stratagemů z DB
+                            }
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </Form.Select>
             </Row>
         </Card.Body>
     </Card>;
