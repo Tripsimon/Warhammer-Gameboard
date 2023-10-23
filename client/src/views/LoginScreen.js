@@ -4,15 +4,16 @@ import axios from "axios"
 
 function LoginScreen() {
 
-    function handleSubmit(){
+    const handleSubmit = (event) =>{
+        event.preventDefault();
        axios.get("http://localhost:3001/auth")
         .then(result => {
-            console.log(result)
+            console.log(result.data)
         })
         .catch(result =>{
-            console.log(result)
+            console.log(result.data)
         })
-    }
+    };
 
   return (
     <div>
@@ -22,7 +23,7 @@ function LoginScreen() {
                 Přihlášení
             </Card.Header>
             <Card.Body>
-                <Form onSubmit={handleSubmit()}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group>
                     <Form.Control type='text' placeholder='Zadejte token'></Form.Control>
                     <Button type='submit'>Připojit</Button>
