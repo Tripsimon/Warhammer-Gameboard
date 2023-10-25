@@ -42,5 +42,6 @@
   },
   "devDependencies": {
     "react-router-dom": "^6.16.0"
-  }
+  },
+  "author":"Lešák/Bidlo"
 }

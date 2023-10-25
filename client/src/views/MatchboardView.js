@@ -11,6 +11,16 @@ function MatchboardView() {
 
     const [roundCounter, setroundCounter] = useState(1);
 
+    const nextRound = () => {
+        if (roundCounter < 5) {
+            setroundCounter(roundCounter + 1)
+        }
+    }
+
+    const generateVictoryPointsHolders = ()=>{
+        return  <Row><Col><VP></VP></Col><Col><VP></VP></Col></Row> 
+    }
+
     return (
         <div>
             <div className="bgWrap">
@@ -35,13 +45,13 @@ function MatchboardView() {
                     </Card.Header>
                     <Card.Body>
                         <Row>
-                            <Col></Col>
-                            <Col><h3>Momentální kolo: {roundCounter}</h3></Col>
-                            <Col></Col>
+                            <Col className="text-center">VP:</Col>
+                            <Col><h3 className="text-center">Aktuální kolo: {roundCounter}</h3></Col>
+                            <Col className="text-center">VP:</Col>
                         </Row>
                     </Card.Body>
                     <Card.Footer>
-                        <Button className="btn btn-success" color="success">Další kolo</Button>
+                        <Button onClick={nextRound} className="btn btn-success" color="success">Další kolo</Button>
                     </Card.Footer>
                 </Card>
                 <Row>
@@ -53,12 +63,8 @@ function MatchboardView() {
                     </Col>
                 </Row>
 
+                    {generateVictoryPointsHolders()}
 
-                <Row>
-                    <Col><VP></VP></Col>
-                    <Col><VP></VP></Col>
-
-                </Row>
             </Container>
         </div>
     )
