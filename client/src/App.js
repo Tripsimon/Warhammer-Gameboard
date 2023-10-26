@@ -1,6 +1,7 @@
 import './App.css';
 import BrowseMatches from './views/BrowseMatches.js'
 import MatchboardView  from "./views/MatchboardView.js";
+import CreateMatch from './views/CreateMatch.js'
 import LoginScreen from './views/LoginScreen';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
@@ -15,6 +16,7 @@ function App() {
     <Route path="/" element={<LoginScreen />}></Route>
     <Route path="/browseMatches" element={<BrowseMatches />}></Route>
     <Route path='/match' element={<MatchboardView />}></Route>
+    <Route path="/createMatch" element={<CreateMatch />}></Route>
   </Routes>
 </BrowserRouter>
   );
