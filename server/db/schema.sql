@@ -1,4 +1,5 @@
 CREATE TABLE Facilities (
     id int NOT NULL AUTO_INCREMENT KEY,
-    token  varchar(255)
+    login varchar(255),
+    password varchar(255)
 )

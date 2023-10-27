@@ -33,8 +33,7 @@ services:
 
       # Zavedení DB
       - "./db/:/docker-entrypoint-initdb.d"
-    
-  
+
 # Names our volume
 volumes:
   warhammer-board:
