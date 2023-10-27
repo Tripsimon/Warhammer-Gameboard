@@ -12,6 +12,8 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
+    "react-native-svg": "^13.14.0",
+    "react-qr-code": "^2.0.12",
     "react-redux": "^8.1.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
@@ -43,5 +45,5 @@
   "devDependencies": {
     "react-router-dom": "^6.16.0"
   },
-  "author":"Lešák/Bidlo"
+  "author": "Lešák/Bidlo"
 }

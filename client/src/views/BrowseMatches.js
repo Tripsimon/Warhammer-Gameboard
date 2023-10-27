@@ -1,8 +1,10 @@
-import React from 'react'
-import {Button, Card, Container, Table, } from 'react-bootstrap'
+import React from 'react';
+import {Button, Card, Container, Table, } from 'react-bootstrap';
+import { useNavigate  } from "react-router-dom";
 import MatchEntry from '../components/MatchEntry';
-
 function BrowseMatches() {
+
+  const navigate = useNavigate();
 
   let matches = [{
     "name":"Jmeno",
@@ -33,10 +35,9 @@ function BrowseMatches() {
                         matches.map((match,index) => (
                           <MatchEntry key={index} name={match['name']} state={match['state']} />
                         ))}
-                      <Button >Vstoupit</Button>
-
                       </tbody>
-                </Table>              
+                </Table>
+                <Button onClick={()=> navigate("/createMatch")} >Vytvořit zápas</Button>              
             </Card.Body>
         </Card> 
     </Container>
