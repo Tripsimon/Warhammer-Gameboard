@@ -23,6 +23,10 @@ function LoginScreen() {
         })
     };
 
+    const handleAdminLogin = () => {
+        navigate("/adminPage");
+    };
+
   return (
     <div>
         <Container className='mt-4'>
@@ -37,7 +41,12 @@ function LoginScreen() {
                     <Button type='submit'>Připojit</Button>
                     </Form.Group>
                 </Form>
-            </Card.Body>
+                <Form.Group>
+                            <Form.Control
+                                type='text' placeholder='Zadejte heslo pro admina'></Form.Control>
+                        </Form.Group>
+                        <Button onClick={handleAdminLogin}>Admin Přihlášení</Button>
+                    </Card.Body>
         </Card>
         </Container>
     </div>

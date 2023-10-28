@@ -3,6 +3,7 @@ import BrowseMatches from './views/BrowseMatches.js'
 import MatchboardView  from "./views/MatchboardView.js";
 import CreateMatch from './views/CreateMatch.js'
 import LoginScreen from './views/LoginScreen';
+import AdminPage from './views/AdminPage.js';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar.js'
@@ -17,6 +18,7 @@ function App() {
     <Route path="/browseMatches" element={<BrowseMatches />}></Route>
     <Route path='/match' element={<MatchboardView />}></Route>
     <Route path="/createMatch" element={<CreateMatch />}></Route>
+    <Route path="/adminPage" element={<AdminPage/>}></Route>
   </Routes>
 </BrowserRouter>
   );
