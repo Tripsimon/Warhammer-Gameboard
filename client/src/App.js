@@ -4,6 +4,9 @@ import MatchboardView  from "./views/MatchboardView.js";
 import CreateMatch from './views/CreateMatch.js'
 import LoginScreen from './views/LoginScreen';
 import AdminPage from './views/AdminPage.js';
+import CreateFacility from './views/CreateFacility';
+import CreateFraction from './views/CreateFraction';
+import CreateDetachment from './views/CreateDetachment';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar.js'
@@ -19,6 +22,9 @@ function App() {
     <Route path='/match' element={<MatchboardView />}></Route>
     <Route path="/createMatch" element={<CreateMatch />}></Route>
     <Route path="/adminPage" element={<AdminPage/>}></Route>
+    <Route path="/createFacility" element={<CreateFacility/>}></Route>
+    <Route path="/createFraction" element={<CreateFraction/>}></Route>
+    <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
   </Routes>
 </BrowserRouter>
   );
