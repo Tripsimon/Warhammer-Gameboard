@@ -9,10 +9,6 @@ import (
 
 func main() {
 
-	db, err = sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
-
-	fmt.Println(db)
-
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
         fmt.Fprintf(w, "Hello!")
     })
