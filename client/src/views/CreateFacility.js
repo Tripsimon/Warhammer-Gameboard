@@ -6,6 +6,10 @@ import { useState } from 'react';
 
 function CreateFacility() {
 
+  const [createScreenName,setCreateScreenName] =useState();
+  const [createLogin,setCreateLogin] =useState();
+  const [createPassword,setCreatePassword] =useState();
+
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -45,13 +49,13 @@ return(
               <Modal.Title>Založení nové herny</Modal.Title>
               </Modal.Header>
               <Modal.Body><Form.Group>
-                <Form.Control type='text' placeholder='Jméno herny'></Form.Control>
+                <Form.Control value={createScreenName} onChange={(e) => setCreateScreenName(e.target.value)} type='text' placeholder='Jméno herny'></Form.Control>
                 <Row>
                   <Col>
-                    <Form.Control type='text' placeholder='Jméno (login)'></Form.Control>
+                    <Form.Control value={createLogin} onChange={(e) => setCreateLogin(e.target.value)} type='text' placeholder='Jméno (login)'></Form.Control>
                   </Col>
                   <Col>
-                    <Form.Control type='text' placeholder='Heslo'></Form.Control>
+                    <Form.Control value={createPassword} onChange={(e) => setCreatePassword(e.target.value)} type='text' placeholder='Heslo'></Form.Control>
                   </Col>
                 </Row>
               </Form.Group></Modal.Body>
