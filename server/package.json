@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "go run index.go",
+    "start": "go run .",
     "db":"docker-compose up --detach"
   },
   "author": "Lešák/Bidlo",

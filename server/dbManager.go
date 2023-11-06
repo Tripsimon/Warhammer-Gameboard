@@ -8,39 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-/*
-func main() {
-
-
-
-
-	DBcreateFacility("Jmeno","Heslo","ScreenJmeno")
-
-
-
-	type Facility struct {
-		Login    string `json:"login"`
-		Password string `json:"password"`
-	}
-
-
-
-	var facility Facility
-
-	err = db.QueryRow("SELECT login, password FROM facilities").Scan(&facility.Login, &facility.Password)
-
-	if err != nil {
-		panic(err.Error())
-	}
-
-	log.Println(facility.Login, facility.Password)
-
-
-}
-*/
-
 func DBcreateFacility(login string, password string, facilityName string) {
-
 	fmt.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -49,14 +17,14 @@ func DBcreateFacility(login string, password string, facilityName string) {
 	}
 	defer db.Close()
 
-	insert, err := db.Query("INSERT INTO facilities (login, password, facilityName) VALUES ('" + login + "','" + password + "','" + facilityName + "')")
+	insert, err := db.Query("INSERT INTO facilities (login, password, facilityName) VALUES (?,?,?)", login, password, facilityName)
 
 	if err != nil {
 		panic(err.Error())
 	}
 
 	defer insert.Close()
-
+	log.Println("Herna založena")
 }
 
 func DBGetFacilities() {

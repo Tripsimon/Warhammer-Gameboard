@@ -3,6 +3,7 @@ import {Container, Form, Button, Card, Row, Col, Table, Modal} from 'react-boots
 import { useNavigate  } from "react-router-dom";
 import FacilitiesEntry from '../components/FacilitiesEntry';
 import { useState } from 'react';
+import axios from 'axios';
 
 function CreateFacility() {
 
@@ -13,6 +14,8 @@ function CreateFacility() {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
+    console.log(createScreenName, createLogin, createPassword)
+    axios.get('http://localhost:3001/facility/createFacility?screenName='+createScreenName+'&login='+createLogin+'&password='+createPassword)
   
 };
 

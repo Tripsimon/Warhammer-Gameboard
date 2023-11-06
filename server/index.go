@@ -36,7 +36,7 @@ func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 }
 
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
-
+	enableCors(&w)
 	var login = strings.Join(req.URL.Query()["login"], "")
 	var password = strings.Join(req.URL.Query()["password"], "")
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")

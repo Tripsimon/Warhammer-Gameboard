@@ -21,7 +21,7 @@ function App() {
     <Route path="/browseMatches" element={<BrowseMatches />}></Route>
     <Route path='/match' element={<MatchboardView />}></Route>
     <Route path="/createMatch" element={<CreateMatch />}></Route>
-    <Route path="/adminPage" element={<AdminPage/>}></Route>
+    <Route path="/admin" element={<AdminPage/>}></Route>
     <Route path="/createFacility" element={<CreateFacility/>}></Route>
     <Route path="/createFraction" element={<CreateFraction/>}></Route>
     <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
