@@ -1,10 +1,10 @@
 version: '3.3'
-name: 'Warhammer_Board_Stack'
+name: 'warhammer_board_stack'
 services:
 
   adminer:
     image: adminer
-    container_name: "Sprava_Adminer"
+    container_name: "db_aministration"
     restart: always
     ports:
       - 8080:8080
@@ -15,7 +15,7 @@ services:
   db:
     image: mysql:5.7
     restart: always
-    container_name: "DB"
+    container_name: "db_core"
     environment:
       MYSQL_DATABASE: 'WH'
       # So you don't have to use root, but you can if you like
