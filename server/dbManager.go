@@ -2,14 +2,21 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Typy
+type facility struct {
+	Id         int    `json:id`
+	Login      string `json:login`
+	Password   string `json:password`
+	ScreenName string `json:screenName`
+}
+
 func DBcreateFacility(login string, password string, facilityName string) {
-	fmt.Println("Připojuji se k DB")
+	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -27,8 +34,8 @@ func DBcreateFacility(login string, password string, facilityName string) {
 	log.Println("Herna založena")
 }
 
-func DBGetFacilities() {
-	fmt.Println("Připojuji se k DB")
+func DBGetFacilities() (result []facility) {
+	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -36,26 +43,24 @@ func DBGetFacilities() {
 	}
 	defer db.Close()
 
-	var (
-		login      string
-		password   string
-		screenName string
-	)
-
 	query, err := db.Query("SELECT * FROM facilities")
 
 	if err != nil {
 		panic(err.Error())
 	}
 
+	things := []facility{}
 	for query.Next() {
-		err := query.Scan(&login, &password, &screenName)
+		var vec facility
+		err := query.Scan(&vec.Id, &vec.Login, &vec.Password, &vec.ScreenName)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(login, password, screenName)
+
+		things = append(things, vec)
 	}
 
 	defer query.Close()
+	return things
 
 }

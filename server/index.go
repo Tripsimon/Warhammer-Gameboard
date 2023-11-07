@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -19,7 +20,6 @@ func main() {
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
-	http.HandleFunc("/auth", authentification)
 
 	log.Println("Server naslouchá na portu 3001")
 	http.ListenAndServe(":3001", nil)
@@ -32,7 +32,11 @@ func enableCors(w *http.ResponseWriter) {
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-	DBGetFacilities()
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	json.NewEncoder(w).Encode(DBGetFacilities())
 }
 
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
@@ -40,17 +44,12 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	var login = strings.Join(req.URL.Query()["login"], "")
 	var password = strings.Join(req.URL.Query()["password"], "")
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
-	fmt.Fprintf(w, "SUCCESS")
 	DBcreateFacility(login, password, screenName)
-}
-
-func authentification(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
-	fmt.Fprintf(w, "1")
+	fmt.Println(w, "SUCCESS")
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {
-
+	enableCors(&w)
 	fmt.Fprintf(w, "hello\n")
 }
 
