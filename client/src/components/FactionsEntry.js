@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
-function FractionsEntry(props) {
+function FactionsEntry(props) {
 
     const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ function FractionsEntry(props) {
             {props.ID}
         </th>
         <th>
-            {props.fractionName}
+            {props.factionName}
         </th>
         <th>
             {props.description}
@@ -29,4 +29,4 @@ function FractionsEntry(props) {
   )
 }
 
-export default FractionsEntry
+export default FactionsEntry

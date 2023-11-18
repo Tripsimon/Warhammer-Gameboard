@@ -21,13 +21,13 @@ function CreateDetachment() {
 
   let detachments = [{
     "ID":"1",
-    "fractionName":"Frakce1",
+    "factionName":"Frakce1",
     "detachmentName":"Název1",
     "description":"Popis1"
   },
   {
     "ID":"2",
-    "fractionName":"Frakce2",
+    "factionName":"Frakce2",
     "detachmentName":"Název2",
     "description":"Popis2"
   }];
@@ -79,7 +79,7 @@ function CreateDetachment() {
                   <tbody>
                       {
                         detachments.map((match,index) => (
-                          <DetachmentsEntry key={index} ID={match['ID']} fractionName={match['fractionName']} 
+                          <DetachmentsEntry key={index} ID={match['ID']} factionName={match['factionName']} 
                            detachmentName={match['detachmentName']} description={match['description']} />
                         ))}
                       </tbody>

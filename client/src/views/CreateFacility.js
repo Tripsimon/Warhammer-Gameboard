@@ -19,15 +19,22 @@ function CreateFacility() {
     getFacilities()
   }, [])
 
-  function renderTable() {
-    if (facilities == undefined) {
-      return
-    } else {
-      return (
-        <h1>facilities[0].ScreenName</h1>
-
-    )}
-  }
+    function renderTable() { 
+    if (facilities == undefined) { 
+      return 
+    } else { 
+      return ( <Table striped bordered hover size="sm" > 
+    <thead> <tr> <th>ID</th> <th>Jméno herny</th> <th>Login</th> 
+    <th>Akce</th> </tr> </thead> <tbody> 
+      {facilities.map(facility => ( 
+      <tr key={facility.Id}> 
+      <td>{facility.Id}</td> 
+      <td>{facility.ScreenName}</td> 
+      <td>{facility.Login}</td> 
+      <td><Button variant="secondary" onClick={() => handleDeleteFacility(facility.Id)}>Smazat</Button></td>
+      </tr> ))} 
+      </tbody> 
+      </Table> ) } }
 
   /**
    * Funkce ktera ziska existujici facility
@@ -39,9 +46,6 @@ function CreateFacility() {
         setFacilities(res.data)
         console.log(facilities)
       })
-
-
-
   }
 
   const handleSubmit = (event) => {
@@ -54,11 +58,22 @@ function CreateFacility() {
   };
 
   const handleAdminPage = () => {
-    navigate("/adminPage");
+    navigate("/admin");
   };
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
+  const handleDeleteFacility = (id) => {
+    axios.delete('http://localhost:3001/facility/deleteFacility?id=' + id)
+      .then(() => {
+        getFacilities();
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 
   return (
 

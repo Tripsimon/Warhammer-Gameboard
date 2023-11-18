@@ -64,3 +64,41 @@ func DBGetFacilities() (result []facility) {
 	return things
 
 }
+
+func DBdeleteFacility(id string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	delete, err := db.Query("DELETE FROM facilities WHERE id = ?", id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer delete.Close()
+	log.Println("Herna smazána")
+}
+
+func DBcreateFaction(name string, codeName string, description string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	insert, err := db.Query("INSERT INTO factions (name, codeName, description) VALUES (?,?,?)", name, "null", description)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer insert.Close()
+	log.Println("Frakce založena")
+}

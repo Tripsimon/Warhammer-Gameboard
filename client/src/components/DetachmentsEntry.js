@@ -15,7 +15,7 @@ function DetachmentsEntry(props) {
             {props.ID}
         </th>
         <th>
-            {props.fractionName}
+            {props.factionName}
         </th>
         <th>
             {props.detachmentName}

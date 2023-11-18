@@ -19,6 +19,9 @@ func main() {
 
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
+	http.HandleFunc("/facility/deleteFacility", HandleDeleteFacility)
+
+	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -55,6 +58,22 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	var password = strings.Join(req.URL.Query()["password"], "")
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
 	DBcreateFacility(login, password, screenName)
+	fmt.Println(w, "SUCCESS")
+}
+
+func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+
+	var id = strings.Join(req.URL.Query()["id"], "")
+	DBdeleteFacility(id)
+	fmt.Println(w, "SUCCESS")
+}
+
+func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var screenName = strings.Join(req.URL.Query()["screenName"], "")
+	var description = strings.Join(req.URL.Query()["description"], "")
+	DBcreateFaction(screenName, "null", description)
 	fmt.Println(w, "SUCCESS")
 }
 
