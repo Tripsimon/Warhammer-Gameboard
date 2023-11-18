@@ -10,7 +10,9 @@ function LoginScreen() {
     // Autorizace pro přihlášení do systému
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.get("http://localhost:3001/auth")
+        navigate("/browseMatches");
+        /*
+        axios.get("http://localhost:3001/loginAutenticate")
             .then(result => {
                 // TODO: Autorizace z DB a asi nějaká ochrana nebo tak
 
@@ -21,6 +23,7 @@ function LoginScreen() {
             .catch(result => {
                 console.log(result.data)
             })
+            */
     };
 
     return (

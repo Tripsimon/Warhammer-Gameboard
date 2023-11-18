@@ -29,6 +29,10 @@ function CreateFacility() {
     )}
   }
 
+  /**
+   * Funkce ktera ziska existujici facility
+   * @param {*} event 
+   */
   const getFacilities = async (event) => {
     await axios.get('http://localhost:3001/facility/getAllFacility')
       .then(res => {
@@ -42,6 +46,10 @@ function CreateFacility() {
 
   const handleSubmit = (event) => {
     axios.get('http://localhost:3001/facility/createFacility?screenName=' + createScreenName + '&login=' + createLogin + '&password=' + createPassword)
+      .then()
+      .catch( err => {
+          console.log(err)
+      })
 
   };
 

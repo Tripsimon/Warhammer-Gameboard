@@ -15,6 +15,8 @@ func main() {
 		fmt.Fprintf(w, "Hello!")
 	})
 
+    http.HandleFunc("loginAutenticate", HandleLoginAuthenticate)
+
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
 
@@ -28,6 +30,14 @@ func main() {
 
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request){
+    enableCors(&w)
+
+    //TODO: AUTHENTIKACE
+
+    fmt.Println(w, "SUCCESS")
 }
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
