@@ -7,7 +7,6 @@ function AdminPage() {
 
     const password = "abc";
     const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-    const [savedPassword, setSavedPassword] = useState("");
     const [input, setInput] = useState("");
     const checkPassword = () => {
       return input === password;
@@ -26,8 +25,11 @@ function AdminPage() {
 const handleSubmit = () => {
   if (checkPassword()) {
     setIsPasswordCorrect(true);
-    setSavedPassword(input);
     sessionStorage.setItem("password", input);
+  }
+  else
+  {
+    alert("Chybné heslo!");
   }
 }
 
@@ -41,38 +43,38 @@ useEffect(() => {
 
 
 const renderContent = () => {
-  if (isPasswordCorrect) {
+ 
     return (
-
+  
     <div>
       <Container className='mt-4'>
         <Card>
           <Card.Header>
             <h2> Admin správa </h2>
                 <Button type='submit' onClick={() => {
-                  setSavedPassword("");
+                 
                   sessionStorage.removeItem("password");
                   window.location.reload();
-                  }}>Odhlásit</Button>
+                  }}>Odhlásit se</Button>
           </Card.Header>
           <Card.Body>
             <Form>
               <Form.Group>
                 <h4>Správa heren</h4>
                 <Button type='submit' onClick={handleFacilities}>Spravovat</Button>
-                <Row>               
+                <Row>
                 </Row>
               </Form.Group>
               <Form.Group>
                 <h4>Správa frakcí</h4>
                 <Button type='submit' onClick={handleFactions}>Spravovat</Button>
-                <Row>               
+                <Row>
                 </Row>
               </Form.Group>
               <Form.Group>
                 <h4>Správa detachmentů</h4>
                 <Button type='submit' onClick={handleDetachments}>Spravovat</Button>
-                <Row>               
+                <Row>
                 </Row>
               </Form.Group>
             </Form>
@@ -82,22 +84,28 @@ const renderContent = () => {
     </div>
 
 )
-} else {
-  return null
-}
 }
 
-return (
-    (
-    <div>
-      <label>Zadejte heslo:</label>
-      <input type="password" value={input} onChange={(e) => setInput(e.target.value)} />
-  <button type='submit' onClick={handleSubmit}>Odeslat</button>
-  {renderContent()}
-    </div>
-  )
+return ( isPasswordCorrect ? 
+  renderContent() 
+  : 
+  <Container className='mt-4'>
+        <Card>
+          <Card.Header>
+            <h2> Admin správa </h2>
+          </Card.Header>
+          <Card.Body>
+            <Form>
+              <Form.Group>
+                <h4>Zadejte heslo:</h4>
+                <Form.Control type="password" placeholder="Heslo" value={input} onChange={(e) => setInput(e.target.value)} />            
+                <Button type='submit' onClick={handleSubmit}>Odeslat</Button>
+              </Form.Group>
+              </Form>
+          </Card.Body>
+        </Card>
+      </Container>
 )
-
 }
 
 export default AdminPage
