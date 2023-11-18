@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {Container, Form, Button, Card, Row, Col} from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
 
-
 function AdminPage() {
 
     const password = "abc";
@@ -40,7 +39,6 @@ useEffect(() => {
     setIsPasswordCorrect(true);
   }
 }, []);
-
 
 const renderContent = () => {
  
