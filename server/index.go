@@ -15,7 +15,7 @@ func main() {
 		fmt.Fprintf(w, "Hello!")
 	})
 
-    http.HandleFunc("loginAutenticate", HandleLoginAuthenticate)
+	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
@@ -35,12 +35,18 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request){
-    enableCors(&w)
+/**
+* Funkce pro obsloužení požadavku na přihlášení
+**/
+func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
+	enableCors(&res)
+	var login = strings.Join(req.URL.Query()["login"], "")
+	var password = strings.Join(req.URL.Query()["login"], "")
 
-    //TODO: AUTHENTIKACE
+	DBAuthenticateUser(login, password)
 
-    fmt.Println(w, "SUCCESS")
+	fmt.Println(strings.Join(req.URL.Query()["login"], ""))
+	fmt.Fprintln(res, "SUCCESS")
 }
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {

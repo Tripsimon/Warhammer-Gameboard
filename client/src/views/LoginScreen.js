@@ -1,34 +1,53 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Container, Form } from 'react-bootstrap'
+import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
+import { useState } from 'react';
 import axios from "axios"
 
 function LoginScreen() {
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertText,setAlertText] = useState("");
+
+    const [Login,setLogin] = useState()
+    const [Password,setPassword] = useState()
 
     const navigate = useNavigate();
 
     // Autorizace pro přihlášení do systému
     const handleSubmit = (event) => {
         event.preventDefault();
-        navigate("/browseMatches");
-        /*
-        axios.get("http://localhost:3001/loginAutenticate")
+
+        if (!Login) {
+            setAlertText("Prosím, doplňte login vaší herny.")
+            setShowAlert(true)
+            return
+        }
+
+        if (!Password) {
+            setAlertText("Prosím, doplňte heslo vaší herny.")
+            setShowAlert(true)
+            return
+        }
+        
+        
+        axios.get("http://localhost:3001/loginAutenticate?login="+Login+"&password="+Password)
             .then(result => {
-                // TODO: Autorizace z DB a asi nějaká ochrana nebo tak
-
-
                 console.log(result.data)
                 navigate("/browseMatches");
             })
             .catch(result => {
                 console.log(result.data)
             })
-            */
+            
     };
 
     return (
-        <div>
+
             <Container className='mt-4'>
+                <Alert show={showAlert} variant='danger' >
+                    <h3>{alertText}</h3>
+                </Alert>
                 <Card>
                     <Form onSubmit={handleSubmit}>
                         <Card.Header>
@@ -37,8 +56,8 @@ function LoginScreen() {
                         <Card.Body>
 
                             <Form.Group>
-                                <Form.Control type='text' placeholder='Login' ></Form.Control>
-                                <Form.Control type='text' placeholder='Heslo' className='mt-2'></Form.Control>
+                                <Form.Control value={Login} onChange={(e) => setLogin(e.target.value)} type='text' placeholder='Login' ></Form.Control>
+                                <Form.Control value={Password} onChange={(e) => setPassword(e.target.value)} type='text' placeholder='Heslo' className='mt-2'></Form.Control>
 
                             </Form.Group>
 
@@ -49,7 +68,6 @@ function LoginScreen() {
                     </Form>
                 </Card>
             </Container>
-        </div>
     )
 }
 
