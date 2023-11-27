@@ -33,8 +33,28 @@ function LoginScreen() {
         
         axios.get("http://localhost:3001/loginAutenticate?login="+Login+"&password="+Password)
             .then(result => {
-                console.log(result.data)
-                navigate("/browseMatches");
+                console.log()
+                switch (result.data) {
+                    case "NOT FOUND":
+                        setAlertText("Tato kombinace loginu a hesla nebyla nalezena. Prosím, zkontrolujte zadaná data")
+                        setShowAlert(true)
+                        break;
+
+                    case "WRONG PASSWORD":
+                        setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data")
+                        setShowAlert(true)
+                        break;
+                    default:
+
+                    // SUCCESS
+                        if(result.data){
+                            navigate("/browseMatches");
+                            console.log(result.data)
+                        }
+
+                        break;
+                }
+
             })
             .catch(result => {
                 console.log(result.data)

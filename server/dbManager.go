@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -15,7 +16,7 @@ type facility struct {
 	ScreenName string `json:screenName`
 }
 
-func DBAuthenticateUser(login string, password string) {
+func DBAuthenticateUser(login string, password string) (answer string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -31,9 +32,21 @@ func DBAuthenticateUser(login string, password string) {
 	auth.Scan(&result.Id, &result.Login, &result.Password, &result.ScreenName)
 
 	if result.Id == 0 {
-		log.Print("neexistuje")
+		answer = "User not found"
+		return
 	}
 
+	if result.Password != password {
+		answer = "Wrong Password"
+		return
+	}
+
+	if result.Password == password {
+		answer = strconv.Itoa(result.Id)
+		return
+	}
+
+	return
 }
 
 func DBcreateFacility(login string, password string, facilityName string) {

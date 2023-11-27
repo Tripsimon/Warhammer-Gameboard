@@ -41,12 +41,28 @@ func enableCors(w *http.ResponseWriter) {
 func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 	enableCors(&res)
 	var login = strings.Join(req.URL.Query()["login"], "")
-	var password = strings.Join(req.URL.Query()["login"], "")
+	var password = strings.Join(req.URL.Query()["password"], "")
 
-	DBAuthenticateUser(login, password)
+	result := DBAuthenticateUser(login, password)
+	log.Println(result)
+	switch result {
+	case "User not found":
+		fmt.Fprint(res, "NOT FOUND")
+		break
 
-	fmt.Println(strings.Join(req.URL.Query()["login"], ""))
-	fmt.Fprintln(res, "SUCCESS")
+	case "Wrong Password":
+		fmt.Fprint(res, "WRONG PASSWORD")
+		break
+
+	default:
+
+		if len(result) > 0 {
+			fmt.Fprint(res, result)
+		}
+
+		break
+	}
+
 }
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
