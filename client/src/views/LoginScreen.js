@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useState } from 'react';
 import axios from "axios"
+import { useSelector } from 'react-redux';
+
+
 
 function LoginScreen() {
+
+    const count = useSelector(state => state.counter.value)
+    console.log(count)
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertText,setAlertText] = useState("");
@@ -13,6 +19,8 @@ function LoginScreen() {
     const [Password,setPassword] = useState()
 
     const navigate = useNavigate();
+
+
 
     // Autorizace pro přihlášení do systému
     const handleSubmit = (event) => {
@@ -60,15 +68,18 @@ function LoginScreen() {
                 console.log(result.data)
             })
             
+
     };
 
     return (
 
+            
             <Container className='mt-4'>
                 <Alert show={showAlert} variant='danger' >
                     <h3>{alertText}</h3>
                 </Alert>
                 <Card>
+                 
                     <Form onSubmit={handleSubmit}>
                         <Card.Header>
                             Přihlášení
