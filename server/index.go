@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
 	http.HandleFunc("/facility/deleteFacility", HandleDeleteFacility)
+	http.HandleFunc("/facility/checkFacilityLogin", HandleCheckFacilityLogin)
 
 	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
 
@@ -63,6 +64,15 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 		break
 	}
 
+}
+
+// Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities
+func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var login = strings.Join(req.URL.Query()["login"], "")
+	exists := DBcheckFacilityLogin(login)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
