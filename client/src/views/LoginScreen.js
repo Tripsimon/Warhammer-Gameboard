@@ -46,7 +46,7 @@ function LoginScreen() {
                         break;
                     default:
 
-                    // SUCCESS
+                        //SUCCESS
                         if(result.data){
                             navigate("/browseMatches");
                             console.log(result.data)
