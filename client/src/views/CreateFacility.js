@@ -50,7 +50,9 @@ function CreateFacility() {
 
   const handleSubmit = (event) => {
     axios.get('http://localhost:3001/facility/createFacility?screenName=' + createScreenName + '&login=' + createLogin + '&password=' + createPassword)
-      .then()
+      .then(() => {
+        getFacilities();
+      })
       .catch( err => {
           console.log(err)
       })
