@@ -78,10 +78,8 @@ func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-
 	json.NewEncoder(w).Encode(DBGetFacilities())
 }
 
@@ -96,12 +94,12 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 
 func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteFacility(id)
 	fmt.Println(w, "SUCCESS")
 }
 
+// Funkce pro vytvoření frakce
 func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
@@ -113,10 +111,8 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 // Funkce pro dotažení všech frakcí
 func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-
 	json.NewEncoder(w).Encode(DBGetFactions())
 }
 
