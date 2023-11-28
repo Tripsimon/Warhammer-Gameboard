@@ -19,6 +19,11 @@ function CreateFacility() {
     getFacilities()
   }, [])
 
+  /**
+ * Funkce pro vykreslení tabulky s informacemi o hernách.
+ * @function renderTable
+ * @returns {JSX.Element | null} - Vrací JSX element obsahující tabulku s informacemi o hernách nebo null, pokud nejsou žádné herny k dispozici.
+ */
     function renderTable() { 
     if (facilities == undefined) { 
       return 
@@ -44,7 +49,7 @@ function CreateFacility() {
       </Table> ) } }
 
   /**
-   * Funkce ktera ziska existujici facility
+   * Funkce která ziská existující herny
    * @param {*} event 
    */
   const getFacilities = async (event) => {
@@ -55,7 +60,11 @@ function CreateFacility() {
       })
   }
 
-  const handleSubmit = (event) => {
+  /**
+   * Funkce která založí novou hernu
+   * @param {*} event 
+   */
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!createScreenName || !createLogin || !createPassword || !confirmPassword) {
       alert("Vyplňte prosím všechna pole.");
@@ -65,18 +74,23 @@ function CreateFacility() {
       alert("Hesla se neshodují. Zkontrolujte prosím zadání.");
       return;
     }
-    axios.get('http://localhost:3001/facility/createFacility?screenName=' + createScreenName + '&login=' + createLogin + '&password=' + createPassword)
-      .then(() => {
-        getFacilities();
-        alert("Herna založena.");
-        setCreateScreenName("");
-        setCreateLogin("");
-        setCreatePassword("");
-        setConfirmPassword("");
-      })
-      .catch( err => {
-          console.log(err)
-      })
+    try {
+      const loginExists = await axios.get('http://localhost:3001/facility/checkFacilityLogin?login=' + createLogin);
+      if (loginExists.data.exists) {
+        alert("Přihlašovací jméno (login) již existuje. Zvolte prosím jiné.");
+        return;
+      }
+      await axios.get('http://localhost:3001/facility/createFacility?screenName=' + createScreenName + '&login=' + createLogin + '&password=' + createPassword);
+      getFacilities();
+      alert("Herna založena.");
+      setCreateScreenName("");
+      setCreateLogin("");
+      setCreatePassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      console.log(err);
+      alert("Chyba při ověřování loginu.");
+    }
   };
 
   const handleAdminPage = () => {
@@ -87,8 +101,8 @@ function CreateFacility() {
   const handleShow = () => setShow(true);
 
  /**
-   * Funkce ktera smaze vybranou existujici facilitu
-   * @param {number} id -- ID facility ke smazani
+   * Funkce která smaže vybranou existující hernu
+   * @param {number} id -- ID herny ke smazání
    */
   const handleDeleteFacility = (id) => {
     const confirmDelete = window.confirm("Opravdu chcete smazat tuto hernu?");

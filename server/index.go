@@ -23,6 +23,7 @@ func main() {
 	http.HandleFunc("/facility/checkFacilityLogin", HandleCheckFacilityLogin)
 
 	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
+	http.HandleFunc("/facility/getAllFaction", HandleGetAllFaction)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -107,6 +108,16 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	var description = strings.Join(req.URL.Query()["description"], "")
 	DBcreateFaction(screenName, "null", description)
 	fmt.Println(w, "SUCCESS")
+}
+
+// Funkce pro dotažení všech frakcí
+func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+
+	json.NewEncoder(w).Encode(DBGetFactions())
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {

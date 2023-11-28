@@ -16,6 +16,13 @@ type facility struct {
 	ScreenName string `json:screenName`
 }
 
+type faction struct {
+	Id          int    `json:id`
+	Name        string `json:name`
+	CodeName    string `json:codeName`
+	Description string `json:description`
+}
+
 func DBAuthenticateUser(login string, password string) (answer string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -156,4 +163,36 @@ func DBcreateFaction(name string, codeName string, description string) {
 
 	defer insert.Close()
 	log.Println("Frakce založena")
+}
+
+// Funkce pro dotažení všech frakcí
+func DBGetFactions() (result []faction) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	query, err := db.Query("SELECT * FROM factions")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	things := []faction{}
+	for query.Next() {
+		var vec faction
+		err := query.Scan(&vec.Id, &vec.Name, &vec.CodeName, &vec.Description)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		things = append(things, vec)
+	}
+
+	defer query.Close()
+	return things
+
 }
