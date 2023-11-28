@@ -69,6 +69,10 @@ function CreateFacility() {
       .then(() => {
         getFacilities();
         alert("Herna založena.");
+        setCreateScreenName("");
+        setCreateLogin("");
+        setCreatePassword("");
+        setConfirmPassword("");
       })
       .catch( err => {
           console.log(err)
