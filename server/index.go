@@ -24,6 +24,7 @@ func main() {
 
 	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
 	http.HandleFunc("/facility/getAllFaction", HandleGetAllFaction)
+	http.HandleFunc("/facility/deleteFaction", HandleDeleteFaction)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -114,6 +115,14 @@ func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetFactions())
+}
+
+// Funkce pro smazání frakce
+func HandleDeleteFaction(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var id = strings.Join(req.URL.Query()["id"], "")
+	DBdeleteFaction(id)
+	fmt.Println(w, "SUCCESS")
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {

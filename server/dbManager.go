@@ -196,3 +196,23 @@ func DBGetFactions() (result []faction) {
 	return things
 
 }
+
+// Funkce pro dotažení smazání frakce
+func DBdeleteFaction(id string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	delete, err := db.Query("DELETE FROM factions WHERE id = ?", id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer delete.Close()
+	log.Println("Frakce smazána")
+}

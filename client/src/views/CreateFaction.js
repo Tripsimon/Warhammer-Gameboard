@@ -30,6 +30,7 @@ function CreateFaction() {
     }
     axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&description=' + createDescription)
       .then(() => {
+        getFactions();
         alert("Frakce založena.");
         setCreateScreenName("");
         setCreateDescription("");
@@ -49,6 +50,23 @@ function CreateFaction() {
       setFactions(res.data)
       console.log(factions)
     })
+}
+
+ /**
+   * Funkce která smaže vybranou existující frakci
+   * @param {number} id -- ID herny ke smazání
+   */
+ const handleDeleteFaction = (id) => {
+  const confirmDelete = window.confirm("Opravdu chcete smazat tuto frakci?");
+  if (confirmDelete) {
+    axios.delete('http://localhost:3001/facility/deleteFaction?id=' + id)
+    .then(() => {
+      getFactions();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
 }
 
   const handleAdminPage = () => {
@@ -127,7 +145,7 @@ function renderTable() {
           <td>{factions.Name}</td> 
           <td>{factions.CodeName}</td> 
           <td>{factions.Description}</td> 
-          <td><Button variant="secondary" onClick={() => "handleDeleteFaction"(factions.Id)}>Smazat</Button></td>
+          <td><Button variant="secondary" onClick={() => handleDeleteFaction(factions.Id)}>Smazat</Button></td>
         </tr> ))} 
       </tbody> 
     </Table> ) } }
