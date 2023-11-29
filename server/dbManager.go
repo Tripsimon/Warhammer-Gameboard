@@ -155,7 +155,7 @@ func DBcreateFaction(name string, codeName string, description string) {
 	}
 	defer db.Close()
 
-	insert, err := db.Query("INSERT INTO factions (name, codeName, description) VALUES (?,?,?)", name, "null", description)
+	insert, err := db.Query("INSERT INTO factions (name, codeName, description) VALUES (?,?,?)", name, codeName, description)
 
 	if err != nil {
 		panic(err.Error())

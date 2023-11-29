@@ -12,6 +12,7 @@ function CreateFaction() {
   const [factions, setFactions] = useState();
   const [createScreenName, setCreateScreenName] = useState();
   const [createDescription, setCreateDescription] = useState();
+  const [createCodeName, setCreateCodeName] = useState();
 
 
   useEffect(() => {
@@ -28,11 +29,12 @@ function CreateFaction() {
       alert("Vyplňte prosím všechna pole.");
       return;
     }
-    axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&description=' + createDescription)
+    axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&codeName=' + createCodeName + '&description=' + createDescription)
       .then(() => {
         getFactions();
         alert("Frakce založena.");
         setCreateScreenName("");
+        setCreateCodeName("");
         setCreateDescription("");
     })
       .catch( err => {
@@ -91,6 +93,12 @@ function CreateFaction() {
                 <Form.Group>
                   <Form.Label>Jméno frakce:</Form.Label>
                   <Form.Control value={createScreenName} onChange={(e) => setCreateScreenName(e.target.value)} type='text' placeholder='Jméno frakce'></Form.Control>
+                  <Row>
+                      <Col>
+                        <Form.Label>codeName:</Form.Label>
+                        <Form.Control value={createCodeName} onChange={(e) => setCreateCodeName(e.target.value)} type='text' placeholder='codeName'></Form.Control>
+                      </Col>
+                    </Row>
                     <Row>
                       <Col>
                         <Form.Label>Popis frakce:</Form.Label>

@@ -5,7 +5,7 @@ CREATE TABLE `facilities` (
 	`facilityName` VARCHAR(50) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `factions` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -14,7 +14,7 @@ CREATE TABLE `factions` (
 	`description` VARCHAR(255) NULL DEFAULT NULL,
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `detachments` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -23,7 +23,7 @@ CREATE TABLE `detachments` (
 	`description` VARCHAR(50) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `stratagems` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -33,7 +33,7 @@ CREATE TABLE `stratagems` (
 	`description` VARCHAR(50) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `secondaryObjectives` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -42,7 +42,7 @@ CREATE TABLE `secondaryObjectives` (
 	`owner` ENUM('atacker','defender') NOT NULL DEFAULT 'atacker',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `matches` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -51,7 +51,7 @@ CREATE TABLE `matches` (
 	`playerTwo` INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci';
+COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `matchPlayers` (
 	`id` INT NOT NULL AUTO_INCREMENT,
@@ -72,6 +72,6 @@ CREATE TABLE `matchPlayers` (
 	`vpSecondary5` INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
-COLLATE='latin1_swedish_ci'
+COLLATE='cp1250_czech_cs'
 ;
 

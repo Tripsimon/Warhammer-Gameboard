@@ -104,8 +104,9 @@ func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
+	var codeName = strings.Join(req.URL.Query()["codeName"], "")
 	var description = strings.Join(req.URL.Query()["description"], "")
-	DBcreateFaction(screenName, "null", description)
+	DBcreateFaction(screenName, codeName, description)
 	fmt.Println(w, "SUCCESS")
 }
 
