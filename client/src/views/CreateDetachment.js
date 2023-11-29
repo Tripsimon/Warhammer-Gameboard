@@ -38,29 +38,33 @@ function CreateDetachment() {
       <Container className='mt-4'>
         <Card>
           <Card.Header>
-            <h2> Správa detachmentů </h2> <Button type='submit' onClick={handleShow}>Založení</Button>
+            <h2>Správa detachmentů </h2> 
+            <Button type='submit' onClick={handleShow}>Založení</Button>
             <Modal show={show} onHide={handleClose}>
              <Modal.Header closeButton>
               <Modal.Title>Založení nového detachmentu</Modal.Title>
-              </Modal.Header>
-              <Modal.Body><Form.Group>
-              <Form.Select aria-label="Default select example">
-                      <option disabled>Výběr frakce</option>
-                      <option value="1">Dotažen seznam frakcí z DB</option>
-                    </Form.Select>
+             </Modal.Header>
+             <Modal.Body><Form.Group>
+              <Form.Label>Vyberte frakci:</Form.Label>
+               <Form.Select aria-label="Volba frakce">
+                <option selected>Výběr frakce</option>
+                <option value="1">Dotažen seznam frakcí z DB</option>
+               </Form.Select>
+               <Form.Label>Jméno detachmentu:</Form.Label>
               <Form.Control type='text' placeholder='Jméno detachmentu'></Form.Control>
-                <Row>
-                  <Col>
-                    <Form.Control type='text' placeholder='Popis'></Form.Control>
-                  </Col>
-                </Row>
+               <Row>
+                <Col>
+                 <Form.Label>Popis:</Form.Label>
+                  <Form.Control type='text' placeholder='Popis'></Form.Control>
+                </Col>
+               </Row>
               </Form.Group></Modal.Body>
               <Modal.Footer>
                <Button variant="secondary" onClick={handleClose}>
                  Zavřít
                </Button>
-                <Button variant="primary" onClick={handleSubmit}>
-                  Založit
+               <Button variant="primary" onClick={handleSubmit}>
+                 Založit
                 </Button>
               </Modal.Footer>
             </Modal>

@@ -23,8 +23,10 @@ func main() {
 	http.HandleFunc("/facility/checkFacilityLogin", HandleCheckFacilityLogin)
 
 	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
-	http.HandleFunc("/facility/getAllFaction", HandleGetAllFaction)
-	http.HandleFunc("/facility/deleteFaction", HandleDeleteFaction)
+	http.HandleFunc("/faction/getAllFaction", HandleGetAllFaction)
+	http.HandleFunc("/faction/deleteFaction", HandleDeleteFaction)
+
+	http.HandleFunc("/detachment/createDetachment", HandleCreateDetachment)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -141,4 +143,14 @@ func headers(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "%v: %v\n", name, h)
 		}
 	}
+}
+
+// Funkce pro vytvoření detachmentu
+func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var factionId = strings.Join(req.URL.Query()["factionId"], "")
+	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
+	var description = strings.Join(req.URL.Query()["description"], "")
+	DBcreateDetachment(factionId, detachmentName, description)
+	fmt.Println(w, "SUCCESS")
 }

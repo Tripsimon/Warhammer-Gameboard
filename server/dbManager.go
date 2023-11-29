@@ -23,6 +23,13 @@ type faction struct {
 	Description string `json:description`
 }
 
+type detachment struct {
+	Id          int    `json:id`
+	Factionid   int    `json:factionId`
+	Name        string `json:name`
+	Description string `json:description`
+}
+
 func DBAuthenticateUser(login string, password string) (answer string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -146,6 +153,7 @@ func DBdeleteFacility(id string) {
 	log.Println("Herna smazána")
 }
 
+// Funkce pro vytvoření frakce
 func DBcreateFaction(name string, codeName string, description string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -215,4 +223,23 @@ func DBdeleteFaction(id string) {
 
 	defer delete.Close()
 	log.Println("Frakce smazána")
+}
+
+func DBcreateDetachment(faction_id string, name string, description string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	insert, err := db.Query("INSERT INTO detachments (faction_id, name, description) VALUES (?,?,?)", faction_id, name, description)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer insert.Close()
+	log.Println("Frakce založena")
 }

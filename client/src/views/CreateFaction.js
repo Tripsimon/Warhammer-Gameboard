@@ -47,7 +47,7 @@ function CreateFaction() {
    * @param {*} event 
    */
  const getFactions = async (event) => {
-  await axios.get('http://localhost:3001/facility/getAllFaction')
+  await axios.get('http://localhost:3001/faction/getAllFaction')
     .then(res => {
       setFactions(res.data)
       console.log(factions)
@@ -61,7 +61,7 @@ function CreateFaction() {
  const handleDeleteFaction = (id) => {
   const confirmDelete = window.confirm("Opravdu chcete smazat tuto frakci?");
   if (confirmDelete) {
-    axios.delete('http://localhost:3001/facility/deleteFaction?id=' + id)
+    axios.delete('http://localhost:3001/faction/deleteFaction?id=' + id)
     .then(() => {
       getFactions();
     })
