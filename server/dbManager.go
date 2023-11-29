@@ -205,7 +205,7 @@ func DBGetFactions() (result []faction) {
 
 }
 
-// Funkce pro dotažení smazání frakce
+// Funkce pro smazání frakce
 func DBdeleteFaction(id string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -225,6 +225,7 @@ func DBdeleteFaction(id string) {
 	log.Println("Frakce smazána")
 }
 
+// Funkce pro vytvoření detachmentu
 func DBcreateDetachment(faction_id string, name string, description string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -241,5 +242,5 @@ func DBcreateDetachment(faction_id string, name string, description string) {
 	}
 
 	defer insert.Close()
-	log.Println("Frakce založena")
+	log.Println("Detachment založen")
 }

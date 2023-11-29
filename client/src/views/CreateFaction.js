@@ -19,13 +19,13 @@ function CreateFaction() {
     getFactions()
   }, [])
 
-    /**
+   /**
    * Funkce která založí novou frakci
    * @param {*} event 
    */
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!createScreenName || !createDescription) {
+    if (!createScreenName || !createDescription || !createCodeName) {
       alert("Vyplňte prosím všechna pole.");
       return;
     }

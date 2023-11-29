@@ -1,18 +1,43 @@
 import React from 'react';
 import {Container, Form, Button, Card, Row, Col, Table, Modal} from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DetachmentsEntry from '../components/DetachmentsEntry';
+import axios from 'axios';
 
 function CreateDetachment() {
 
   const navigate = useNavigate();
   
+  const [createFactionId, setCreateFactionId] = useState();
+  const [createDetachmentName, setCreateDetachmentName] = useState();
+  const [createDescription, setCreateDescription] = useState();
+
+/**
+   * Funkce která založí novou frakci
+   * @param {*} event 
+   */
   const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!createDetachmentName || !createDescription) { //doplnit !createFactionId
+      alert("Vyplňte prosím všechna pole.");
+      return;
+    }
+    axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + createFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
+      .then(() => {
+        //getDetachments(); Doplnit
+        alert("Detachment založen.");
+        setCreateFactionId("");
+        setCreateDetachmentName("");
+        setCreateDescription("");
+    })
+      .catch( err => {
+          console.log(err)
+      })
   };
 
   const handleAdminPage = () => {
-      navigate("/adminPage");
+      navigate("/admin");
   };
 
   const [show, setShow] = useState(false);
@@ -46,16 +71,16 @@ function CreateDetachment() {
              </Modal.Header>
              <Modal.Body><Form.Group>
               <Form.Label>Vyberte frakci:</Form.Label>
-               <Form.Select aria-label="Volba frakce">
+               <Form.Select value={createFactionId} onChange={(e) => setCreateFactionId(e.target.value)} aria-label="Volba frakce">
                 <option selected>Výběr frakce</option>
                 <option value="1">Dotažen seznam frakcí z DB</option>
                </Form.Select>
                <Form.Label>Jméno detachmentu:</Form.Label>
-              <Form.Control type='text' placeholder='Jméno detachmentu'></Form.Control>
+               <Form.Control value={createDetachmentName} onChange={(e) => setCreateDetachmentName(e.target.value)} type='text' placeholder='Jméno detachmentu'></Form.Control>
                <Row>
                 <Col>
                  <Form.Label>Popis:</Form.Label>
-                  <Form.Control type='text' placeholder='Popis'></Form.Control>
+                 <Form.Control value={createDescription} onChange={(e) => setCreateDescription(e.target.value)} type='text' placeholder='Popis'></Form.Control>
                 </Col>
                </Row>
               </Form.Group></Modal.Body>
