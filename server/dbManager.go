@@ -25,7 +25,7 @@ type faction struct {
 
 type detachment struct {
 	Id          int    `json:id`
-	Factionid   int    `json:factionId`
+	FactionId   int    `json:factionId`
 	Name        string `json:name`
 	Description string `json:description`
 }
@@ -84,6 +84,7 @@ func DBcheckFacilityLogin(login string) (exists bool) {
 	return
 }
 
+// Funkce pro vytvoření herny
 func DBcreateFacility(login string, password string, facilityName string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -103,6 +104,7 @@ func DBcreateFacility(login string, password string, facilityName string) {
 	log.Println("Herna založena")
 }
 
+// Funkce pro dotažení všech heren
 func DBGetFacilities() (result []facility) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -134,6 +136,7 @@ func DBGetFacilities() (result []facility) {
 
 }
 
+// Funkce pro smazání herny
 func DBdeleteFacility(id string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -151,6 +154,27 @@ func DBdeleteFacility(id string) {
 
 	defer delete.Close()
 	log.Println("Herna smazána")
+}
+
+// Funkce pro kontrolu, zda se v tabulce factions již nachází stejný název
+func DBcheckFactionName(screenName string) (exists bool) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+	query := db.QueryRow("SELECT COUNT(*) FROM factions WHERE name=?", screenName)
+
+	var count int
+	query.Scan(&count)
+	if count != 0 {
+		exists = true
+		return
+	}
+	exists = false
+	return
 }
 
 // Funkce pro vytvoření frakce
@@ -243,4 +267,56 @@ func DBcreateDetachment(faction_id string, name string, description string) {
 
 	defer insert.Close()
 	log.Println("Detachment založen")
+}
+
+// Funkce pro dotažení všech detachmentů
+func DBGetDetachments() (result []detachment) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	query, err := db.Query("SELECT * FROM detachments")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	things := []detachment{}
+	for query.Next() {
+		var vec detachment
+		err := query.Scan(&vec.Id, &vec.FactionId, &vec.Name, &vec.Description)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		things = append(things, vec)
+	}
+
+	defer query.Close()
+	return things
+
+}
+
+// Funkce pro smazání detachmentu
+func DBdeleteDetachment(id string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	delete, err := db.Query("DELETE FROM detachments WHERE id = ?", id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer delete.Close()
+	log.Println("Detachment smazán")
 }

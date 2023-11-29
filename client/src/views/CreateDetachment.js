@@ -9,9 +9,26 @@ function CreateDetachment() {
 
   const navigate = useNavigate();
   
-  const [createFactionId, setCreateFactionId] = useState();
+  const [factions, setFactions] = useState();
+  const [detachments, setDetachments] = useState();
+  const [selectFactionId, setSelectFactionId] = useState();
   const [createDetachmentName, setCreateDetachmentName] = useState();
   const [createDescription, setCreateDescription] = useState();
+
+  useEffect(() => {
+    getDetachments()
+  }, [])
+
+  // Dotažení frakcí z DB pro zobrazení v drop down listu
+  useEffect(() => {
+    axios.get('http://localhost:3001/faction/getAllFaction')
+      .then(response => {
+        setFactions(response.data);
+      })
+      .catch(error => {
+        console.error("Chyba při načítání frakcí", error);
+      });
+  }, []);
 
 /**
    * Funkce která založí novou frakci
@@ -19,15 +36,15 @@ function CreateDetachment() {
    */
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!createDetachmentName || !createDescription) { //doplnit !createFactionId
+    if (!selectFactionId || !createDetachmentName || !createDescription) {
       alert("Vyplňte prosím všechna pole.");
       return;
     }
-    axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + createFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
+    axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + selectFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
       .then(() => {
-        //getDetachments(); Doplnit
+        getDetachments();
         alert("Detachment založen.");
-        setCreateFactionId("");
+        setSelectFactionId("");
         setCreateDetachmentName("");
         setCreateDescription("");
     })
@@ -35,6 +52,35 @@ function CreateDetachment() {
           console.log(err)
       })
   };
+
+ /**
+   * Funkce která získá existující detachmenty
+   * @param {*} event 
+   */
+ const getDetachments = async (event) => {
+  await axios.get('http://localhost:3001/detachment/getAllDetachment')
+    .then(res => {
+      setDetachments(res.data)
+      console.log(factions)
+    })
+}
+
+/**
+   * Funkce která smaže vybraný existující detachment
+   * @param {number} id -- ID detachmentu ke smazání
+   */
+const handleDeleteDetachment = (id) => {
+  const confirmDelete = window.confirm("Opravdu chcete smazat tento detachment?");
+  if (confirmDelete) {
+    axios.delete('http://localhost:3001/detachment/deleteDetachment?id=' + id)
+    .then(() => {
+      getDetachments();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
+}
 
   const handleAdminPage = () => {
       navigate("/admin");
@@ -44,26 +90,13 @@ function CreateDetachment() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  let detachments = [{
-    "ID":"1",
-    "factionName":"Frakce1",
-    "detachmentName":"Název1",
-    "description":"Popis1"
-  },
-  {
-    "ID":"2",
-    "factionName":"Frakce2",
-    "detachmentName":"Název2",
-    "description":"Popis2"
-  }];
-
-  return(
+   return(
 
     <div>
       <Container className='mt-4'>
         <Card>
           <Card.Header>
-            <h2>Správa detachmentů </h2> 
+            <h2>Správa detachmentů</h2> 
             <Button type='submit' onClick={handleShow}>Založení</Button>
             <Modal show={show} onHide={handleClose}>
              <Modal.Header closeButton>
@@ -71,9 +104,11 @@ function CreateDetachment() {
              </Modal.Header>
              <Modal.Body><Form.Group>
               <Form.Label>Vyberte frakci:</Form.Label>
-               <Form.Select value={createFactionId} onChange={(e) => setCreateFactionId(e.target.value)} aria-label="Volba frakce">
-                <option selected>Výběr frakce</option>
-                <option value="1">Dotažen seznam frakcí z DB</option>
+               <Form.Select value={selectFactionId} onChange={(e) => setSelectFactionId(e.target.value)} aria-label="Volba frakce">
+                  <option value="" disabled selected>Výběr frakce</option>
+                  {factions && factions.map(faction => (
+                  <option key={faction.Id} value={faction.Id}>{faction.Name}</option>
+                   ))}
                </Form.Select>
                <Form.Label>Jméno detachmentu:</Form.Label>
                <Form.Control value={createDetachmentName} onChange={(e) => setCreateDetachmentName(e.target.value)} type='text' placeholder='Jméno detachmentu'></Form.Control>
@@ -95,24 +130,7 @@ function CreateDetachment() {
             </Modal>
           </Card.Header>
           <Card.Body>
-          <Table striped bordered hover size="sm">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Jméno frakce</th>
-                      <th>Jméno detachmentu</th>
-                      <th>Popis detachmentu</th>
-                      <th>Akce</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                      {
-                        detachments.map((match,index) => (
-                          <DetachmentsEntry key={index} ID={match['ID']} factionName={match['factionName']} 
-                           detachmentName={match['detachmentName']} description={match['description']} />
-                        ))}
-                      </tbody>
-                </Table>  
+          {renderTable()}   
           </Card.Body>
           <Col>
             <Button type='submit'onClick={handleAdminPage}>Zpět</Button>
@@ -120,9 +138,54 @@ function CreateDetachment() {
         </Card>
       </Container>
     </div>
-
 )
 
+
+/**
+ * Funkce pro vykreslení tabulky s informacemi o etachmentech
+ * @function renderTable
+ * @returns {JSX.Element | null} - Vrací JSX element obsahující tabulku s informacemi o detachmentech a názvu frakce
+ */
+function renderTable() { 
+  if (detachments == undefined) { 
+    return null;
+  } else {
+    const tableData = detachments.map(detachment => {
+      const faction = factions.find(f => f.Id === detachment.FactionId);
+      return {
+        Id: detachment.Id,
+        FactionName: faction ? faction.Name : 'N/A',
+        DetachmentName: detachment.Name,
+        Description: detachment.Description,
+      };
+    });
+    return (
+      <Table striped bordered hover size="sm"> 
+      <thead> 
+        <tr> 
+          <th>ID</th> 
+          <th>Jméno frakce</th> 
+          <th>Jméno</th> 
+          <th>Popis</th>
+          <th>Akce</th>
+        </tr> 
+      </thead> 
+      <tbody> 
+      {tableData.map(data => (
+            <tr key={data.Id}>
+              <td>{data.Id}</td>
+              <td>{data.FactionName}</td>
+              <td>{data.DetachmentName}</td>
+              <td>{data.Description}</td>
+              <td>
+                <Button variant="secondary" onClick={() => handleDeleteDetachment(data.Id)}>
+                  Smazat
+                </Button>
+              </td>
+            </tr>
+          ))}
+      </tbody> 
+    </Table> ) } }
 }
 
 export default CreateDetachment

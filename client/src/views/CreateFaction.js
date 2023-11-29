@@ -23,27 +23,33 @@ function CreateFaction() {
    * Funkce která založí novou frakci
    * @param {*} event 
    */
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!createScreenName || !createDescription || !createCodeName) {
       alert("Vyplňte prosím všechna pole.");
       return;
     }
-    axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&codeName=' + createCodeName + '&description=' + createDescription)
-      .then(() => {
+    try {
+      const nameExists = await axios.get('http://localhost:3001/faction/checkFactionName?screenName=' + createScreenName);
+      if (nameExists.data.exists) {
+        alert("Zvolený název již existuje. Zvolte prosím jiný.");
+        return;
+      }
+       await axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&codeName=' + createCodeName + '&description=' + createDescription);
         getFactions();
         alert("Frakce založena.");
         setCreateScreenName("");
         setCreateCodeName("");
         setCreateDescription("");
-    })
-      .catch( err => {
-          console.log(err)
-      })
+    }
+    catch (err) {
+      console.log(err);
+      alert("Chyba při ověřování loginu.");
+    }
   };
 
  /**
-   * Funkce která ziská existující frakce
+   * Funkce která získá existující frakce
    * @param {*} event 
    */
  const getFactions = async (event) => {
@@ -56,7 +62,7 @@ function CreateFaction() {
 
  /**
    * Funkce která smaže vybranou existující frakci
-   * @param {number} id -- ID herny ke smazání
+   * @param {number} id -- ID frakce ke smazání
    */
  const handleDeleteFaction = (id) => {
   const confirmDelete = window.confirm("Opravdu chcete smazat tuto frakci?");
@@ -143,7 +149,8 @@ function renderTable() {
           <th>ID</th> 
           <th>Jméno frakce</th> 
           <th>codeName ???</th> 
-          <th>Ppopis</th> 
+          <th>Popis</th>
+          <th>Akce</th>
         </tr> 
       </thead> 
       <tbody> 

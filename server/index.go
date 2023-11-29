@@ -25,8 +25,11 @@ func main() {
 	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
 	http.HandleFunc("/faction/getAllFaction", HandleGetAllFaction)
 	http.HandleFunc("/faction/deleteFaction", HandleDeleteFaction)
+	http.HandleFunc("/faction/checkFactionName", HandleCheckFactionName)
 
 	http.HandleFunc("/detachment/createDetachment", HandleCreateDetachment)
+	http.HandleFunc("/detachment/getAllDetachment", HandleGetAllDetachment)
+	http.HandleFunc("/detachment/deleteDetachment", HandleDeleteDetachment)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -79,6 +82,7 @@ func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
+// Funkce pro dotažení všech heren
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
@@ -86,6 +90,7 @@ func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetFacilities())
 }
 
+// Funkce pro vytoření herny
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	var login = strings.Join(req.URL.Query()["login"], "")
@@ -95,11 +100,21 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(w, "SUCCESS")
 }
 
+// Funkce pro smazání herny
 func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteFacility(id)
 	fmt.Println(w, "SUCCESS")
+}
+
+// Funkce pro obsloužení požadavku na kontrolu existence jména frakce v tabulce frakcí
+func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var screenName = strings.Join(req.URL.Query()["screenName"], "")
+	exists := DBcheckFactionName(screenName)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
 // Funkce pro vytvoření frakce
@@ -152,5 +167,21 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
 	var description = strings.Join(req.URL.Query()["description"], "")
 	DBcreateDetachment(factionId, detachmentName, description)
+	fmt.Println(w, "SUCCESS")
+}
+
+// Funkce pro dotažení všech detachmentů
+func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(DBGetDetachments())
+}
+
+// Funkce pro smazání detachmentu
+func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var id = strings.Join(req.URL.Query()["id"], "")
+	DBdeleteDetachment(id)
 	fmt.Println(w, "SUCCESS")
 }
