@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useState } from 'react';
 import axios from "axios"
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../stores/userSlice';
 
 
 
 function LoginScreen() {
 
-    const count = useSelector(state => state.counter.value)
-    console.log(count)
+    //redux
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
+
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertText,setAlertText] = useState("");
@@ -54,8 +57,8 @@ function LoginScreen() {
                         break;
                     default:
 
-                        //SUCCESS
                         if(result.data){
+                            dispatch(loginUser({name: "DSADSA", id:69}))
                             navigate("/browseMatches");
                             console.log(result.data)
                         }
@@ -83,6 +86,7 @@ function LoginScreen() {
                     <Form onSubmit={handleSubmit}>
                         <Card.Header>
                             Přihlášení
+                            
                         </Card.Header>
                         <Card.Body>
 

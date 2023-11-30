@@ -2,9 +2,12 @@ import React from 'react';
 import {Button, Card, Container, Table, } from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
 import MatchEntry from '../components/MatchEntry';
+import { useSelector } from 'react-redux';
 function BrowseMatches() {
 
   const navigate = useNavigate();
+
+  const user = useSelector(state => state.user)
 
   let matches = [{
     "name":"Jmeno",
@@ -20,7 +23,7 @@ function BrowseMatches() {
   return (
     <Container className='mt-2'>
         <Card data-bs-theme="dark">
-            <Card.Header> Seznam her</Card.Header>
+            <Card.Header> {user.name} - Seznam her</Card.Header>
             <Card.Body>
                 <Table striped bordered hover size="sm">
                   <thead>

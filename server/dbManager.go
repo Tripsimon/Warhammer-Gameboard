@@ -30,6 +30,9 @@ type detachment struct {
 	Description string `json:description`
 }
 
+/**
+* Autentikace uživatele do systému
+**/
 func DBAuthenticateUser(login string, password string) (answer string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -63,7 +66,9 @@ func DBAuthenticateUser(login string, password string) (answer string) {
 	return
 }
 
-// Funkce pro kontrolu, zda se v tabulce facilities již nachází stejný login
+/**
+* Autentikace uživatele do systému
+**/
 func DBcheckFacilityLogin(login string) (exists bool) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
