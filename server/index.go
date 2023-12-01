@@ -30,6 +30,7 @@ func main() {
 	http.HandleFunc("/detachment/createDetachment", HandleCreateDetachment)
 	http.HandleFunc("/detachment/getAllDetachment", HandleGetAllDetachment)
 	http.HandleFunc("/detachment/deleteDetachment", HandleDeleteDetachment)
+	http.HandleFunc("/detachment/checkDetachmentName", HandleCheckDetachmentName)
 
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
@@ -184,4 +185,13 @@ func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteDetachment(id)
 	fmt.Println(w, "SUCCESS")
+}
+
+// Funkce pro obsloužení požadavku na kontrolu existence jména detachmentu v tabulce detachmentuů
+func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
+	exists := DBcheckDetachmentName(detachmentName)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }

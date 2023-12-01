@@ -9,7 +9,7 @@ function CreateDetachment() {
 
   const navigate = useNavigate();
   
-  const [factions, setFactions] = useState();
+  const [factions, setFactions] = useState([]);
   const [detachments, setDetachments] = useState();
   const [selectFactionId, setSelectFactionId] = useState();
   const [createDetachmentName, setCreateDetachmentName] = useState();
@@ -34,24 +34,30 @@ function CreateDetachment() {
    * Funkce která založí novou frakci
    * @param {*} event 
    */
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!selectFactionId || !createDetachmentName || !createDescription) {
       alert("Vyplňte prosím všechna pole.");
       return;
     }
-    axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + selectFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
-      .then(() => {
+    try {
+      const nameExists = await axios.get('http://localhost:3001/detachment/checkDetachmentName?detachmentName=' + createDetachmentName);
+      if (nameExists.data.exists) {
+        alert("Zvolený název již existuje. Zvolte prosím jiný.");
+        return;
+      }
+       await axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + selectFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
         getDetachments();
         alert("Detachment založen.");
         setSelectFactionId("");
         setCreateDetachmentName("");
         setCreateDescription("");
-    })
-      .catch( err => {
-          console.log(err)
-      })
-  };
+      }
+      catch (err) {
+        console.log(err);
+        alert("Chyba při ověřování názvu.");
+      }
+    };
 
  /**
    * Funkce která získá existující detachmenty
@@ -147,7 +153,7 @@ const handleDeleteDetachment = (id) => {
  * @returns {JSX.Element | null} - Vrací JSX element obsahující tabulku s informacemi o detachmentech a názvu frakce
  */
 function renderTable() { 
-  if (detachments == undefined) { 
+  if (detachments == undefined || factions === undefined) { 
     return null;
   } else {
     const tableData = detachments.map(detachment => {

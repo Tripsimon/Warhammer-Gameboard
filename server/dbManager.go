@@ -325,3 +325,24 @@ func DBdeleteDetachment(id string) {
 	defer delete.Close()
 	log.Println("Detachment smazán")
 }
+
+// Funkce pro kontrolu, zda se v tabulce detachments již nachází stejný název
+func DBcheckDetachmentName(detachmentName string) (exists bool) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+	query := db.QueryRow("SELECT COUNT(*) FROM detachments WHERE name=?", detachmentName)
+
+	var count int
+	query.Scan(&count)
+	if count != 0 {
+		exists = true
+		return
+	}
+	exists = false
+	return
+}
