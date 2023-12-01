@@ -52,9 +52,15 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 	var login = strings.Join(req.URL.Query()["login"], "")
 	var password = strings.Join(req.URL.Query()["password"], "")
 
-	result := DBAuthenticateUser(login, password)
-	log.Println(result)
-	switch result {
+	userID, err := DBAuthenticateUser(login, password)
+	if err != nil {
+		log.Println(err)
+		fmt.Fprint(res, "ERROR")
+		return
+	}
+
+	log.Println(userID)
+	switch userID {
 	case "User not found":
 		fmt.Fprint(res, "NOT FOUND")
 		break
@@ -64,14 +70,11 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 		break
 
 	default:
-
-		if len(result) > 0 {
-			fmt.Fprint(res, result)
+		if len(userID) > 0 {
+			fmt.Fprint(res, userID)
 		}
-
 		break
 	}
-
 }
 
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities

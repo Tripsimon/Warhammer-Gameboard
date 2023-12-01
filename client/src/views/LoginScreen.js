@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../stores/userSlice';
 
 
-
 function LoginScreen() {
 
     //redux
@@ -26,7 +25,7 @@ function LoginScreen() {
 
 
     // Autorizace pro přihlášení do systému
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (!Login) {
@@ -42,17 +41,17 @@ function LoginScreen() {
         }
         
         
-        axios.get("http://localhost:3001/loginAutenticate?login="+Login+"&password="+Password)
-            .then(result => {
-                console.log()
+        try {
+            const result = await axios.get('http://localhost:3001/loginAutenticate?login=' + Login + '&password=' + Password);
+        
                 switch (result.data) {
                     case "NOT FOUND":
-                        setAlertText("Tato kombinace loginu a hesla nebyla nalezena. Prosím, zkontrolujte zadaná data")
+                        setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.")
                         setShowAlert(true)
                         break;
 
                     case "WRONG PASSWORD":
-                        setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data")
+                        setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.")
                         setShowAlert(true)
                         break;
                     default:
@@ -65,14 +64,10 @@ function LoginScreen() {
 
                         break;
                 }
-
-            })
-            .catch(result => {
-                console.log(result.data)
-            })
-            
-
-    };
+            } catch (error) {
+                console.log(error);
+              }
+            };
 
     return (
 

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Typy
@@ -30,9 +31,9 @@ type detachment struct {
 	Description string `json:description`
 }
 
-/**
+/** OLD - ZATÍM NEMAŽU
 * Autentikace uživatele do systému
-**/
+
 func DBAuthenticateUser(login string, password string) (answer string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -65,9 +66,40 @@ func DBAuthenticateUser(login string, password string) (answer string) {
 
 	return
 }
+**/
+
+func DBAuthenticateUser(login string, password string) (userID string, err error) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		return "", err
+	}
+	defer db.Close()
+
+	var storedHashedPassword string
+	var Id int
+	row := db.QueryRow("SELECT id, password FROM facilities WHERE login=?", login)
+	if err := row.Scan(&Id, &storedHashedPassword); err != nil {
+		if err == sql.ErrNoRows {
+			return "User not found", nil
+		}
+		return "", err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(storedHashedPassword), []byte(password))
+	if err != nil {
+		if err == bcrypt.ErrMismatchedHashAndPassword {
+			return "Wrong Password", nil
+		}
+		return "", err
+	}
+
+	return strconv.Itoa(Id), nil
+}
 
 /**
-* Autentikace uživatele do systému
+* Kontrola proti duplicitně založenému loginu
 **/
 func DBcheckFacilityLogin(login string) (exists bool) {
 	log.Println("Připojuji se k DB")

@@ -1,7 +1,7 @@
 CREATE TABLE `facilities` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`login` VARCHAR(50) NOT NULL DEFAULT '0',
-	`password` VARCHAR(50) NOT NULL DEFAULT '0',
+	`password` VARCHAR(64) NOT NULL DEFAULT '0', /* zahashované heslo má 60 znaků */
 	`facilityName` VARCHAR(50) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
