@@ -138,9 +138,9 @@ const handleDeleteDetachment = (id) => {
           <Card.Body>
           {renderTable()}   
           </Card.Body>
-          <Col>
+          <Card.Footer>
             <Button type='submit'onClick={handleAdminPage}>Zpět</Button>
-            </Col>
+          </Card.Footer>
         </Card>
       </Container>
     </div>
