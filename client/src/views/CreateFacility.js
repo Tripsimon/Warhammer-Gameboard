@@ -101,7 +101,13 @@ function CreateFacility() {
     navigate("/admin");
   };
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setCreateScreenName("");
+    setCreateLogin("");
+    setCreatePassword("");
+    setConfirmPassword("");
+  }
   const handleShow = () => setShow(true);
 
  /**

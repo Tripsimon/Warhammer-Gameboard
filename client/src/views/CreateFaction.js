@@ -81,7 +81,12 @@ function CreateFaction() {
       navigate("/admin");
   };
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setCreateScreenName("");
+    setCreateCodeName("");
+    setCreateDescription("");
+  }
   const handleShow = () => setShow(true);
 
  return(

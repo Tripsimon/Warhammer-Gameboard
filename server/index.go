@@ -167,11 +167,29 @@ func headers(w http.ResponseWriter, req *http.Request) {
 // Funkce pro vytvoření detachmentu
 func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-	var factionId = strings.Join(req.URL.Query()["factionId"], "")
-	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
-	var description = strings.Join(req.URL.Query()["description"], "")
-	DBcreateDetachment(factionId, detachmentName, description)
-	fmt.Println(w, "SUCCESS")
+
+	switch req.Method {
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
+		return
+	case http.MethodPost:
+		var data map[string]string
+		err := json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		factionId := data["factionId"]
+		detachmentName := data["detachmentName"]
+		description := data["description"]
+
+		DBcreateDetachment(factionId, detachmentName, description)
+
+		fmt.Fprintln(w, "SUCCESS")
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
 }
 
 // Funkce pro dotažení všech detachmentů

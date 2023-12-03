@@ -46,8 +46,12 @@ function CreateDetachment() {
         alert("Zvolený název již existuje. Zvolte prosím jiný.");
         return;
       }
-       await axios.get('http://localhost:3001/detachment/createDetachment?factionId=' + selectFactionId + '&detachmentName=' + createDetachmentName + '&description=' + createDescription)
-        getDetachments();
+       await axios.post('http://localhost:3001/detachment/createDetachment', {
+        factionId: selectFactionId,
+        detachmentName: createDetachmentName,
+        description: createDescription
+       })
+        await getDetachments();
         alert("Detachment založen.");
         setSelectFactionId("");
         setCreateDetachmentName("");
@@ -93,7 +97,12 @@ const handleDeleteDetachment = (id) => {
   };
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => { 
+    setShow(false);
+    setSelectFactionId("");
+    setCreateDetachmentName("");
+    setCreateDescription("");
+  }
   const handleShow = () => setShow(true);
 
    return(
