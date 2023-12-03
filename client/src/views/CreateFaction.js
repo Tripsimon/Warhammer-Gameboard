@@ -35,8 +35,12 @@ function CreateFaction() {
         alert("Zvolený název již existuje. Zvolte prosím jiný.");
         return;
       }
-       await axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&codeName=' + createCodeName + '&description=' + createDescription);
-        getFactions();
+       await axios.post('http://localhost:3001/faction/createFaction', {
+        screenName: createScreenName,
+        codeName: createCodeName,
+        description: createDescription
+    })
+        await getFactions();
         alert("Frakce založena.");
         setCreateScreenName("");
         setCreateCodeName("");

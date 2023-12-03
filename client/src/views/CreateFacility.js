@@ -84,14 +84,19 @@ function CreateFacility() {
       }
       const hashedPassword = await bcrypt.hash(createPassword, saltRounds);
 
-      await axios.get('http://localhost:3001/facility/createFacility?screenName=' + createScreenName + '&login=' + createLogin + '&password=' + hashedPassword);
-      getFacilities();
-      alert("Herna založena.");
-      setCreateScreenName("");
-      setCreateLogin("");
-      setCreatePassword("");
-      setConfirmPassword("");
-    } catch (err) {
+      await axios.post('http://localhost:3001/facility/createFacility', {
+        screenName: createScreenName,
+        login: createLogin,
+        password: hashedPassword
+      })
+        await getFacilities();
+        alert("Herna založena.");
+        setCreateScreenName("");
+        setCreateLogin("");
+        setCreatePassword("");
+        setConfirmPassword("");
+    } 
+    catch (err) {
       console.log(err);
       alert("Chyba při ověřování loginu.");
     }

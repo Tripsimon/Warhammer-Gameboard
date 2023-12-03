@@ -97,11 +97,25 @@ func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 // Funkce pro vytoření herny
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-	var login = strings.Join(req.URL.Query()["login"], "")
-	var password = strings.Join(req.URL.Query()["password"], "")
-	var screenName = strings.Join(req.URL.Query()["screenName"], "")
-	DBcreateFacility(login, password, screenName)
-	fmt.Println(w, "SUCCESS")
+	switch req.Method {
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
+		return
+	case http.MethodPost:
+		var data map[string]string
+		err := json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		login := data["login"]
+		password := data["password"]
+		screenName := data["screenName"]
+		DBcreateFacility(login, password, screenName)
+		fmt.Fprintln(w, "SUCCESS")
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
 }
 
 // Funkce pro smazání herny
@@ -124,11 +138,25 @@ func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
 // Funkce pro vytvoření frakce
 func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-	var screenName = strings.Join(req.URL.Query()["screenName"], "")
-	var codeName = strings.Join(req.URL.Query()["codeName"], "")
-	var description = strings.Join(req.URL.Query()["description"], "")
-	DBcreateFaction(screenName, codeName, description)
-	fmt.Println(w, "SUCCESS")
+	switch req.Method {
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
+		return
+	case http.MethodPost:
+		var data map[string]string
+		err := json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		screenName := data["screenName"]
+		codeName := data["codeName"]
+		description := data["description"]
+		DBcreateFaction(screenName, codeName, description)
+		fmt.Fprintln(w, "SUCCESS")
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
 }
 
 // Funkce pro dotažení všech frakcí
@@ -167,7 +195,6 @@ func headers(w http.ResponseWriter, req *http.Request) {
 // Funkce pro vytvoření detachmentu
 func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-
 	switch req.Method {
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
@@ -179,13 +206,10 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-
 		factionId := data["factionId"]
 		detachmentName := data["detachmentName"]
 		description := data["description"]
-
 		DBcreateDetachment(factionId, detachmentName, description)
-
 		fmt.Fprintln(w, "SUCCESS")
 	default:
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
