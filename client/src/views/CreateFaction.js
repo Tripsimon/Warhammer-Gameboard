@@ -35,8 +35,12 @@ function CreateFaction() {
         alert("Zvolený název již existuje. Zvolte prosím jiný.");
         return;
       }
-       await axios.get('http://localhost:3001/faction/createFaction?screenName=' + createScreenName + '&codeName=' + createCodeName + '&description=' + createDescription);
-        getFactions();
+       await axios.post('http://localhost:3001/faction/createFaction', {
+        screenName: createScreenName,
+        codeName: createCodeName,
+        description: createDescription
+    })
+        await getFactions();
         alert("Frakce založena.");
         setCreateScreenName("");
         setCreateCodeName("");
@@ -81,7 +85,12 @@ function CreateFaction() {
       navigate("/admin");
   };
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setCreateScreenName("");
+    setCreateCodeName("");
+    setCreateDescription("");
+  }
   const handleShow = () => setShow(true);
 
  return(
@@ -126,9 +135,9 @@ function CreateFaction() {
           <Card.Body>
           {renderTable()}        
             </Card.Body>
-              <Col>
+            <Card.Footer>
                 <Button type='submit'onClick={handleAdminPage}>Zpět</Button>
-              </Col>
+            </Card.Footer>
             </Card>
       </Container>
     </div>
