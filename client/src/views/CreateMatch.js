@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { renderMatches, useNavigate } from "react-router-dom";
 import { Button, Card, CardGroup, Col, Container, Form, FormCheck, Row } from 'react-bootstrap'
 import axios from "axios";
-import { useState, componentDidMount } from 'react';
+import { useState } from 'react';
 
 
 function CreateMatch() {
@@ -14,16 +14,13 @@ function CreateMatch() {
 
   const [player1Name,setPlayer1Name] = useState("")
   const [player1Faction,SetPlayer1Faction] = useState("")
-  const [player1Detachment,setPlayer1Detachment] = useState("")
+  const [player1Detachment,setPlayer1Detachment] = useState(1)
 
   const [player2Name,setPlayer2Name] = useState("")
   const [player2Faction,SetPlayer2Faction] = useState("")
-  const [player2Detachment,setPlayer2Detachment] = useState("")
+  const [player2Detachment,setPlayer2Detachment] = useState(1)
 
   const navigate = useNavigate();
-
-
-
 
   const getData = (event) => {
    axios.get("http://localhost:3001/faction/getAllFaction")
@@ -38,6 +35,7 @@ function CreateMatch() {
     axios.get("http://localhost:3001/detachment/getAllDetachment")
     .then(res =>{
       setAvaliableDetachments1(res.data)
+      setAvaliableDetachments2(res.data)
       console.log(res.data)
     })
     .catch(err =>{
@@ -79,10 +77,15 @@ function CreateMatch() {
 
   // Vytvoření nového zápasu
   const handleSubmit = (event) => {
-      axios.get("http://localhost:3001/matches/createMatch")
+    event.preventDefault()
+    
+      axios.post("http://localhost:3001/matches/createMatch?name="+matchName+"&p1="+player1Name+"&p1f="+player1Faction+"&p1d="+player1Detachment+"&p2="+player2Name+"&p2f="+player2Faction+"&p2d="+player2Detachment)
         .then(res =>{
-          
+          if (res.status == 200) {
+            navigate("/browseMatches/")
+          }
         })
+        
   };
 
   return (
@@ -92,8 +95,9 @@ function CreateMatch() {
           <Card.Header>
             <h2> Tvorba zápasu </h2>
           </Card.Header>
+          <Form onSubmit={handleSubmit}>
           <Card.Body>
-            <Form onSubmit={handleSubmit}>
+
               <Form.Group>
                 <Form.Control type='text' placeholder='Jmnéno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
                 <Row className='mt-2'>
@@ -103,17 +107,17 @@ function CreateMatch() {
                   </Col>
                   <Col>
                   <label> 2. Hráč</label>
-                    <Form.Control type='text' placeholder='Jméno prvního hráče'></Form.Control>
+                    <Form.Control type='text' placeholder='Jméno druhého hráče' value={player2Name} onChange={(e) => setPlayer2Name(e.target.value)}></Form.Control>
                   </Col>
                 </Row>
                 <Row className='mt-2'>
                   <Col>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" value={player1Faction} onChange={(e) => SetPlayer1Faction(e.target.value)}>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
                   <Col>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" value={player2Faction} onChange={(e) => SetPlayer2Faction(e.target.value)}>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
@@ -121,23 +125,24 @@ function CreateMatch() {
 
                 <Row className='mt-2'>
                   <Col>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" value={player1Detachment} onChange={(e) => setPlayer1Detachment(e.target.value)}>
                     {renderDetachmentChoices()}
                   </Form.Select>
                   </Col>
                   <Col>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" value={player2Detachment} onChange={(e) => setPlayer2Detachment(e.target.value)}>
                     {renderDetachmentChoices()}
                   </Form.Select>
                   </Col>
                 </Row>
 
               </Form.Group>
-            </Form>
+
           </Card.Body>
           <Card.Footer>
                 <Button type='submit'>Založit</Button>
           </Card.Footer>
+          </Form>
         </Card>
       </Container>
     </div>

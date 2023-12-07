@@ -388,7 +388,7 @@ func DBcheckDetachmentName(detachmentName string) (exists bool) {
 }
 
 // Funkce pro vytvoření zápasu
-func DBcreateMatch(name string, playerOneName string, playerOneFaction int, playerOneDetachment int, playerTwoName string) {
+func DBcreateMatch(name string, playerOneName string, playerOneFaction int, playerOneDetachment int, playerTwoName string, playerTwoFaction int, playerTwoDetachment int) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -412,7 +412,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction int, play
 	}
 
 	var playerTwo int64
-	queryTwo, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerOneName, playerOneFaction, playerOneDetachment)
+	queryTwo, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerTwoName, playerTwoFaction, playerTwoDetachment)
 
 	if err != nil {
 		println("Exec err:", err.Error())
@@ -450,7 +450,7 @@ func DBGetMatches() (result []match) {
 	things := []match{}
 	for query.Next() {
 		var vec match
-		err := query.Scan(&vec.Id, &vec.Round, &vec.PlayerOne, &vec.PlayerTwo)
+		err := query.Scan(&vec.Id, &vec.Name, &vec.Round, &vec.PlayerOne, &vec.PlayerTwo)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -3,11 +3,42 @@ import {Button, Card, Container, Table, } from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
 import MatchEntry from '../components/MatchEntry';
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import axios from "axios";
+
+
 function BrowseMatches() {
+
+  const [avaliableMatches,setAvaliableMatches] = useState(false);
 
   const navigate = useNavigate();
 
   const user = useSelector(state => state.user)
+
+
+  const getData = (event) =>{
+    axios.get("http://localhost:3001/matches/getMatches")
+      .then(res =>{
+        setAvaliableMatches(res.data)
+      })
+  }
+
+
+  useEffect(() => {
+    getData()
+  }, []);
+
+  const renderMatchesOptions = (event) =>{
+    if (avaliableMatches == false) {
+      return
+    }else{
+      return(
+        avaliableMatches.map((match,index) => (
+          <MatchEntry key={match['Id']} name={match['Name']} state={"TODO"} />
+        ))
+      )
+    }
+  }
 
   let matches = [{
     "name":"Jmeno",
@@ -34,10 +65,7 @@ function BrowseMatches() {
                     </tr>
                   </thead>
                   <tbody>
-                      {
-                        matches.map((match,index) => (
-                          <MatchEntry key={index} name={match['name']} state={match['state']} />
-                        ))}
+                      {renderMatchesOptions()}
                       </tbody>
                 </Table>
                 <Button onClick={()=> navigate("/createMatch")} >Vytvořit zápas</Button>              

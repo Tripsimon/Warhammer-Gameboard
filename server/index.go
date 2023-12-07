@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -18,6 +19,7 @@ func main() {
 	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
 	http.HandleFunc("/matches/createMatch", HandleCreateMatch)
+	http.HandleFunc("/matches/getMatches", HandleGetMatches)
 
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
@@ -79,9 +81,37 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// Funkce pro obsloužení požadavku pro založení nové hry
 func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 	enableCors(&w)
-	DBcreateMatch("BItva Nejaka", "P1", 10, 10, "DSA")
+	switch req.Method {
+	case http.MethodOptions:
+		fmt.Fprintln(w, http.MethodOptions)
+		return
+	case http.MethodPost:
+		name := strings.Join(req.URL.Query()["name"], "")
+
+		p1 := strings.Join(req.URL.Query()["p1"], "")
+		p1f, _ := strconv.Atoi(strings.Join(req.URL.Query()["p1f"], ""))
+		p1d, _ := strconv.Atoi(strings.Join(req.URL.Query()["p1d"], ""))
+
+		p2 := strings.Join(req.URL.Query()["p2"], "")
+		p2f, _ := strconv.Atoi(strings.Join(req.URL.Query()["p2f"], ""))
+		p2d, _ := strconv.Atoi(strings.Join(req.URL.Query()["p2d"], ""))
+
+		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d)
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "SUCCESS")
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
+}
+
+func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(DBGetMatches())
 }
 
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities
