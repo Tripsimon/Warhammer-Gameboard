@@ -34,7 +34,7 @@ function BrowseMatches() {
     }else{
       return(
         avaliableMatches.map((match,index) => (
-          <MatchEntry key={match['Id']} name={match['Name']} state={"TODO"} />
+          <MatchEntry key={match['Id']} name={match['Name']} state={"TODO"} id={match['Id']} />
         ))
       )
     }

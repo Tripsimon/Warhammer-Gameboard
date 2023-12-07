@@ -39,6 +39,15 @@ type match struct {
 	PlayerTwo int    `json:playerTwo`
 }
 
+type matchPlayer struct {
+	Id         int    `json:id`
+	Name       string `json:name`
+	Faction    int    `json:faction`
+	Detachment int    `json:detachment`
+	Role       string `json:role`
+	Cp         int    `json:cp`
+}
+
 /** OLD - ZATÍM NEMAŽU
 * Autentikace uživatele do systému
 
@@ -461,4 +470,43 @@ func DBGetMatches() (result []match) {
 	defer query.Close()
 	return things
 
+}
+
+func DBGetMatchData(id int) (result match) {
+
+	type matchDataResponse struct {
+		Name   string `json:name`
+		P1Name string `json:p1name`
+	}
+
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	var matchData match
+
+	err = db.QueryRow("SELECT * FROM matches WHERE id = ?", id).Scan(&matchData.Id, &matchData.Name, &matchData.Round, &matchData.PlayerOne, &matchData.PlayerTwo)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var p1Data matchPlayer
+	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerOne).Scan(&p1Data.Id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var p2Data matchPlayer
+	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerTwo).Scan(&p2Data.Id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	log.Println(p1Data.Id)
+
+	return (matchData)
 }

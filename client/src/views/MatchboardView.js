@@ -1,17 +1,37 @@
 import { Container, Card, Row, Col, Button, Image } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import CP from "../components/CommandPoint.js"
 import VP from "../components/VictoryPoint.js"
-import { useState } from "react";
 
 import left from '../imgs/bg_adeptusMechanicus.jpg'
 import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
 
 function MatchboardView() {
 
+    const [matchData,setMatchData] = useState({
+        id:12,
+        name:"KEKW",
+    
+    });
     const [roundCounter, setroundCounter] = useState(1);
 
-    const nextRound = () => {
+
+
+    const getData = (event) => {
+        axios.get('http://localhost:3001/matches/getMatchData?id=14')
+            .then(res =>{
+                setMatchData(res.data[0])
+            })
+
+    };
+
+    useEffect(() => {
+        getData()
+    }, []);
+
+      const nextRound = () => {
         if (roundCounter < 5) {
             setroundCounter(roundCounter + 1)
         }

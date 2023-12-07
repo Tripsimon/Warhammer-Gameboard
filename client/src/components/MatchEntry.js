@@ -7,7 +7,7 @@ function MatchEntry(props) {
     const navigate = useNavigate();
 
     const handleEntry = () => {
-        navigate("/match")
+        navigate("/match?key="+props.id)
     }
   return (
     <tr>
