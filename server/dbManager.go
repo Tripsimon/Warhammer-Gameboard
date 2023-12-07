@@ -31,6 +31,14 @@ type detachment struct {
 	Description string `json:description`
 }
 
+type match struct {
+	Id        int    `json:id`
+	Name      string `json:name`
+	Round     int    `json:round`
+	PlayerOne int    `json:playerOne`
+	PlayerTwo int    `json:playerTwo`
+}
+
 /** OLD - ZATÍM NEMAŽU
 * Autentikace uživatele do systému
 
@@ -377,4 +385,80 @@ func DBcheckDetachmentName(detachmentName string) (exists bool) {
 	}
 	exists = false
 	return
+}
+
+// Funkce pro vytvoření zápasu
+func DBcreateMatch(name string, playerOneName string, playerOneFaction int, playerOneDetachment int, playerTwoName string) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	var playerOne int64
+	queryOne, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerOneName, playerOneFaction, playerOneDetachment)
+
+	if err != nil {
+		println("Exec err:", err.Error())
+	} else {
+		playoerOneID, err := queryOne.LastInsertId()
+		if err != nil {
+			println("Error:", err.Error())
+		} else {
+			playerOne = playoerOneID
+		}
+	}
+
+	var playerTwo int64
+	queryTwo, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerOneName, playerOneFaction, playerOneDetachment)
+
+	if err != nil {
+		println("Exec err:", err.Error())
+	} else {
+		playerTwoID, err := queryTwo.LastInsertId()
+		if err != nil {
+			println("Error:", err.Error())
+		} else {
+			playerTwo = playerTwoID
+		}
+	}
+
+	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo) VALUES (?,0,?,?)", name, playerOne, playerTwo)
+
+	defer insert.Close()
+	log.Println("Herní místnost založena")
+}
+
+// Získá seznam zápasů
+func DBGetMatches() (result []match) {
+	log.Println("Připojuji se k DB")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	query, err := db.Query("SELECT * FROM matches")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	things := []match{}
+	for query.Next() {
+		var vec match
+		err := query.Scan(&vec.Id, &vec.Round, &vec.PlayerOne, &vec.PlayerTwo)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		things = append(things, vec)
+	}
+
+	defer query.Close()
+	return things
+
 }

@@ -17,6 +17,8 @@ func main() {
 
 	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
+	http.HandleFunc("/matches/createMatch", HandleCreateMatch)
+
 	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
 	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
 	http.HandleFunc("/facility/deleteFacility", HandleDeleteFacility)
@@ -75,6 +77,11 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 		}
 		break
 	}
+}
+
+func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+	DBcreateMatch("BItva Nejaka", "P1", 10, 10, "DSA")
 }
 
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities

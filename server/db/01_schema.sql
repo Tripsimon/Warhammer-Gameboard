@@ -46,6 +46,7 @@ COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `matches` (
 	`id` INT NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(50) NOT NULL DEFAULT 'Bitva',
 	`round` INT NOT NULL DEFAULT '0',
 	`playerOne` INT NOT NULL DEFAULT '0',
 	`playerTwo` INT NOT NULL DEFAULT '0',
@@ -55,7 +56,7 @@ COLLATE='cp1250_czech_cs';
 
 CREATE TABLE `matchPlayers` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`name` INT NOT NULL DEFAULT '0',
+	`name` VARCHAR(50) NOT NULL DEFAULT '0',
 	`faction` INT NOT NULL DEFAULT '0',
 	`detachment` INT NOT NULL DEFAULT '0',
 	`role` INT NOT NULL DEFAULT '0',
@@ -71,7 +72,9 @@ CREATE TABLE `matchPlayers` (
 	`vpSecondary4` INT NOT NULL DEFAULT '0',
 	`vpSecondary5` INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
-)
-COLLATE='cp1250_czech_cs'
-;
+);
+COLLATE='cp1250_czech_cs';
+
+
+
 

@@ -1,28 +1,88 @@
-import React from 'react'
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef } from 'react'
+import { renderMatches, useNavigate } from "react-router-dom";
 import { Button, Card, CardGroup, Col, Container, Form, FormCheck, Row } from 'react-bootstrap'
 import axios from "axios";
+import { useState, componentDidMount } from 'react';
+
 
 function CreateMatch() {
+  const [avaliableFactions,setAvaliableFactions] = useState(false);
+  const [avaliableDetachments1,setAvaliableDetachments1] = useState(false);
+  const [avaliableDetachments2,setAvaliableDetachments2] = useState(false);
+
+  const [matchName,setMatchName] = useState("")
+
+  const [player1Name,setPlayer1Name] = useState("")
+  const [player1Faction,SetPlayer1Faction] = useState("")
+  const [player1Detachment,setPlayer1Detachment] = useState("")
+
+  const [player2Name,setPlayer2Name] = useState("")
+  const [player2Faction,SetPlayer2Faction] = useState("")
+  const [player2Detachment,setPlayer2Detachment] = useState("")
 
   const navigate = useNavigate();
-  var avaliableFactions = [{id:0, name: "DSA"}]
-  var avaliableDetachments1 = [{id:0, name: "DSA"}]
-  var avaliableDetachments2 = [{id:0, name: "DSA"}]
+
+
+
 
   const getData = (event) => {
    axios.get("http://localhost:3001/faction/getAllFaction")
-  .then(res =>{
-    avaliableFactions = res.data
-    console.log(avaliableFactions)
-  })
+    .then(res =>{
+      setAvaliableFactions(res.data)
+    })
+    .catch(err =>{
+      console.log(err)
+      setAvaliableFactions(false)
+    })
+
+    axios.get("http://localhost:3001/detachment/getAllDetachment")
+    .then(res =>{
+      setAvaliableDetachments1(res.data)
+      console.log(res.data)
+    })
+    .catch(err =>{
+      console.log(err)
+      setAvaliableDetachments1(false)
+    })
+
   };
 
-  getData();
+  
+  useEffect(() => {
+    getData()
+  }, []);
+
+
+  const renderFactionChoices = () =>{
+    if(avaliableFactions == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    return(
+      avaliableFactions.map(faction =>(
+        <option key={faction.Id} value={faction.Id}>{faction.Name}</option>
+      ))
+    )
+  }
+
+
+  const renderDetachmentChoices = () =>{
+    if(avaliableDetachments1 == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    return(
+      
+      avaliableDetachments1.map(detachment =>(
+        <option key={detachment.Id} value={detachment.Id}>{detachment.Name}</option>
+      ))
+      
+    )
+  }
+
+
+
 
   // Vytvoření nového zápasu
   const handleSubmit = (event) => {
-
+      axios.get("http://localhost:3001/matches/createMatch")
+        .then(res =>{
+          
+        })
   };
 
   return (
@@ -35,11 +95,11 @@ function CreateMatch() {
           <Card.Body>
             <Form onSubmit={handleSubmit}>
               <Form.Group>
-                <Form.Control type='text' placeholder='Jmnéno zápasu'></Form.Control>
+                <Form.Control type='text' placeholder='Jmnéno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
                 <Row className='mt-2'>
                   <Col>
                   <label> 1. Hráč</label>
-                    <Form.Control type='text' placeholder='Jméno prvního hráče'></Form.Control>
+                    <Form.Control type='text' placeholder='Jméno prvního hráče' value={player1Name} onChange={(e) => setPlayer1Name(e.target.value)}></Form.Control>
                   </Col>
                   <Col>
                   <label> 2. Hráč</label>
@@ -48,39 +108,27 @@ function CreateMatch() {
                 </Row>
                 <Row className='mt-2'>
                   <Col>
-                    <Form.Select aria-label="Default select example">
-                      <option disabled>Vybrat</option>
-                      {avaliableFactions.map(faction => ( 
-                        <option value={faction.id}> {faction.name}</option>
-                      ))}
-                    </Form.Select>
+                  <Form.Select aria-label="Default select example">
+                    {renderFactionChoices()}
+                  </Form.Select>
                   </Col>
                   <Col>
                   <Form.Select aria-label="Default select example">
-                      <option disabled>Vybrat</option>
-                      {avaliableFactions.map(faction => ( 
-                        <option value={faction.id}> {faction.name}</option>
-                      ))}
-                    </Form.Select>
+                    {renderFactionChoices()}
+                  </Form.Select>
                   </Col>
                 </Row>
 
                 <Row className='mt-2'>
                   <Col>
-                    <Form.Select aria-label="Default select example">
-                      <option disabled>Vybrat</option>
-                      {avaliableFactions.map(faction => ( 
-                        <option value={faction.id}> {faction.name}</option>
-                      ))}
-                    </Form.Select>
+                  <Form.Select aria-label="Default select example">
+                    {renderDetachmentChoices()}
+                  </Form.Select>
                   </Col>
                   <Col>
                   <Form.Select aria-label="Default select example">
-                      <option disabled>Vybrat</option>
-                      {avaliableFactions.map(faction => ( 
-                        <option value={faction.id}> {faction.name}</option>
-                      ))}
-                    </Form.Select>
+                    {renderDetachmentChoices()}
+                  </Form.Select>
                   </Col>
                 </Row>
 
