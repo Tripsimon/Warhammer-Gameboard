@@ -41,6 +41,7 @@ function CreateMatch() {
     .catch(err =>{
       console.log(err)
       setAvaliableDetachments1(false)
+      setAvaliableDetachments2(false)
     })
 
   };
@@ -99,25 +100,30 @@ function CreateMatch() {
           <Card.Body>
 
               <Form.Group>
-                <Form.Control type='text' placeholder='Jmnéno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
+              <label>Jméno zápasu:</label>
+                <Form.Control type='text' placeholder='Jméno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
                 <Row className='mt-2'>
                   <Col>
-                  <label> 1. Hráč</label>
+                  <label>1. Hráč</label>
                     <Form.Control type='text' placeholder='Jméno prvního hráče' value={player1Name} onChange={(e) => setPlayer1Name(e.target.value)}></Form.Control>
                   </Col>
                   <Col>
-                  <label> 2. Hráč</label>
+                  <label>2. Hráč</label>
                     <Form.Control type='text' placeholder='Jméno druhého hráče' value={player2Name} onChange={(e) => setPlayer2Name(e.target.value)}></Form.Control>
                   </Col>
                 </Row>
                 <Row className='mt-2'>
                   <Col>
+                  <label>Výběr frakce 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Faction} onChange={(e) => SetPlayer1Faction(e.target.value)}>
+                  <option value="" disabled selected>Výběr frakce</option>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
                   <Col>
+                  <label>Výběr frakce 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Faction} onChange={(e) => SetPlayer2Faction(e.target.value)}>
+                  <option value="" disabled selected>Výběr frakce</option>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
@@ -125,12 +131,16 @@ function CreateMatch() {
 
                 <Row className='mt-2'>
                   <Col>
+                  <label>Výběr detachmentu 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Detachment} onChange={(e) => setPlayer1Detachment(e.target.value)}>
+                  <option value="" disabled selected>Výběr detachmentu</option>
                     {renderDetachmentChoices()}
                   </Form.Select>
                   </Col>
                   <Col>
+                  <label>Výběr detachmentu 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Detachment} onChange={(e) => setPlayer2Detachment(e.target.value)}>
+                  <option value="" disabled selected>Výběr detachmentu</option>
                     {renderDetachmentChoices()}
                   </Form.Select>
                   </Col>
