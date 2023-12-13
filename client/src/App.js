@@ -10,6 +10,7 @@ import CreateDetachment from './views/CreateDetachment';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar.js'
+import PrivateRoutes from './utils/PrivateRoutes'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -18,9 +19,11 @@ function App() {
     <Navbar></Navbar>
   <Routes>
     <Route path="/" element={<LoginScreen />}></Route>
-    <Route path="/browseMatches" element={<BrowseMatches />}></Route>
-    <Route path='/match' element={<MatchboardView />}></Route>
-    <Route path="/createMatch" element={<CreateMatch />}></Route>
+    <Route element={<PrivateRoutes />}>
+      <Route path="/browseMatches" element={<BrowseMatches />}></Route>
+      <Route path='/match' element={<MatchboardView />}></Route>
+      <Route path="/createMatch" element={<CreateMatch />}></Route>
+    </Route>
     <Route path="/admin" element={<AdminPage/>}></Route>
     <Route path="/createFacility" element={<CreateFacility/>}></Route>
     <Route path="/createFaction" element={<CreateFaction/>}></Route>
