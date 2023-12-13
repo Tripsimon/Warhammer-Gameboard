@@ -45,15 +45,22 @@ func main() {
 
 }
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+func enableCors(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 }
 
 /**
 * Funkce pro obsloužení požadavku na přihlášení
 **/
 func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
-	enableCors(&res)
+	enableCors(res, req)
 	var login = strings.Join(req.URL.Query()["login"], "")
 	var password = strings.Join(req.URL.Query()["password"], "")
 
@@ -84,7 +91,7 @@ func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
 
 // Funkce pro obsloužení požadavku pro založení nové hry
 func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
 		fmt.Fprintln(w, http.MethodOptions)
@@ -109,7 +116,7 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 }
 
 func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	id, _ := strconv.Atoi(strings.Join(req.URL.Query()["id"], ""))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -117,7 +124,7 @@ func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 }
 
 func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetMatches())
@@ -125,7 +132,7 @@ func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities
 func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var login = strings.Join(req.URL.Query()["login"], "")
 	exists := DBcheckFacilityLogin(login)
 	w.Header().Set("Content-Type", "application/json")
@@ -134,7 +141,7 @@ func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro dotažení všech heren
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetFacilities())
@@ -142,7 +149,7 @@ func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro vytoření herny
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
@@ -166,7 +173,7 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro smazání herny
 func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteFacility(id)
 	fmt.Println(w, "SUCCESS")
@@ -174,7 +181,7 @@ func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro obsloužení požadavku na kontrolu existence jména frakce v tabulce frakcí
 func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
 	exists := DBcheckFactionName(screenName)
 	w.Header().Set("Content-Type", "application/json")
@@ -183,7 +190,7 @@ func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro vytvoření frakce
 func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
@@ -207,7 +214,7 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro dotažení všech frakcí
 func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetFactions())
@@ -215,14 +222,14 @@ func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro smazání frakce
 func HandleDeleteFaction(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteFaction(id)
 	fmt.Println(w, "SUCCESS")
 }
 
 func hello(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	fmt.Fprintf(w, "hello\n")
 }
 
@@ -240,7 +247,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro vytvoření detachmentu
 func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
@@ -264,7 +271,7 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro dotažení všech detachmentů
 func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetDetachments())
@@ -272,7 +279,7 @@ func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro smazání detachmentu
 func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
 	DBdeleteDetachment(id)
 	fmt.Println(w, "SUCCESS")
@@ -280,7 +287,7 @@ func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
 
 // Funkce pro obsloužení požadavku na kontrolu existence jména detachmentu v tabulce detachmentuů
 func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
+	enableCors(w, req)
 	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
 	exists := DBcheckDetachmentName(detachmentName)
 	w.Header().Set("Content-Type", "application/json")
