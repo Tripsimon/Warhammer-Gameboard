@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import FacilitiesEntry from '../components/FacilitiesEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import bcrypt from 'bcryptjs';
 
 function CreateFacility() {
 
@@ -13,7 +12,6 @@ function CreateFacility() {
   const [createLogin, setCreateLogin] = useState();
   const [createPassword, setCreatePassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
-  const saltRounds = 10; //10 rund saltingu hesla
 
   const navigate = useNavigate();
 
@@ -82,12 +80,11 @@ function CreateFacility() {
         alert("Přihlašovací jméno (login) již existuje. Zvolte prosím jiné.");
         return;
       }
-      const hashedPassword = await bcrypt.hash(createPassword, saltRounds);
 
       await axios.post('http://localhost:3001/facility/createFacility', {
         screenName: createScreenName,
         login: createLogin,
-        password: hashedPassword
+        password: createPassword
       })
         await getFacilities();
         alert("Herna založena.");

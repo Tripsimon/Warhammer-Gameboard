@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func main() {
@@ -152,7 +154,6 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
-		w.WriteHeader(http.StatusOK)
 		return
 	case http.MethodPost:
 		var data map[string]string
@@ -164,7 +165,13 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 		login := data["login"]
 		password := data["password"]
 		screenName := data["screenName"]
-		DBcreateFacility(login, password, screenName)
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		DBcreateFacility(login, string(hashedPassword), screenName)
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintln(w, "SUCCESS")
 	default:
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
