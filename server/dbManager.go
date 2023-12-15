@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"strconv"
 
@@ -85,34 +86,44 @@ func DBAuthenticateUser(login string, password string) (answer string) {
 }
 **/
 
-func DBAuthenticateUser(login string, password string) (userID string, err error) {
+func DBAuthenticateUser(login string, password string) (userID string, isAdmin bool, err error) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
-		return "", err
+		return "", false, err
 	}
 	defer db.Close()
 
 	var storedHashedPassword string
 	var Id int
-	row := db.QueryRow("SELECT id, password FROM facilities WHERE login=?", login)
+	var tableName string
+
+	if login == "admin" {
+		tableName = "settings"
+		isAdmin = true
+	} else {
+		tableName = "facilities"
+		isAdmin = false
+	}
+
+	row := db.QueryRow(fmt.Sprintf("SELECT id, password FROM %s WHERE login=?", tableName), login)
 	if err := row.Scan(&Id, &storedHashedPassword); err != nil {
 		if err == sql.ErrNoRows {
-			return "User not found", nil
+			return "User not found", isAdmin, nil
 		}
-		return "", err
+		return "", isAdmin, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(storedHashedPassword), []byte(password))
 	if err != nil {
 		if err == bcrypt.ErrMismatchedHashAndPassword {
-			return "Wrong Password", nil
+			return "Wrong Password", isAdmin, nil
 		}
-		return "", err
+		return "", isAdmin, err
 	}
 
-	return strconv.Itoa(Id), nil
+	return strconv.Itoa(Id), isAdmin, nil
 }
 
 /**

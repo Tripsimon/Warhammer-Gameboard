@@ -43,8 +43,11 @@ function LoginScreen() {
         
         
         try {
-            const result = await axios.get('http://localhost:3001/loginAutenticate?login=' + Login + '&password=' + Password);
-        
+            const result = await axios.post('http://localhost:3001/loginAutenticate', {
+                login: Login,
+                password: Password
+            })
+     
                 switch (result.data) {
                     case "NOT FOUND":
                         setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.")

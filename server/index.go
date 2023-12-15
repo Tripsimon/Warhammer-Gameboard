@@ -61,33 +61,50 @@ func enableCors(w http.ResponseWriter, r *http.Request) {
 /**
 * Funkce pro obsloužení požadavku na přihlášení
 **/
-func HandleLoginAuthenticate(res http.ResponseWriter, req *http.Request) {
-	enableCors(res, req)
-	var login = strings.Join(req.URL.Query()["login"], "")
-	var password = strings.Join(req.URL.Query()["password"], "")
-
-	userID, err := DBAuthenticateUser(login, password)
-	if err != nil {
-		log.Println(err)
-		fmt.Fprint(res, "ERROR")
+func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
+	enableCors(w, req)
+	switch req.Method {
+	case http.MethodOptions:
 		return
-	}
-
-	log.Println(userID)
-	switch userID {
-	case "User not found":
-		fmt.Fprint(res, "NOT FOUND")
-		break
-
-	case "Wrong Password":
-		fmt.Fprint(res, "WRONG PASSWORD")
-		break
-
-	default:
-		if len(userID) > 0 {
-			fmt.Fprint(res, userID)
+	case http.MethodPost:
+		var data map[string]string
+		err := json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
-		break
+		login := data["login"]
+		password := data["password"]
+
+		userID, isAdmin, err := DBAuthenticateUser(login, password)
+		if err != nil {
+			log.Println(err)
+			fmt.Fprint(w, "ERROR")
+			return
+		}
+
+		log.Println(userID)
+		switch userID {
+		case "User not found":
+			fmt.Fprint(w, "NOT FOUND")
+			break
+
+		case "Wrong Password":
+			fmt.Fprint(w, "WRONG PASSWORD")
+			break
+
+		default:
+			if len(userID) > 0 {
+				if isAdmin {
+					fmt.Fprint(w, userID+" ADMIN")
+				} else {
+					fmt.Fprint(w, userID)
+				}
+			}
+			break
+		}
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
 
