@@ -1,15 +1,53 @@
 import React, {useState, useEffect} from 'react';
-import {Container, Form, Button, Card, Row, Col} from 'react-bootstrap';
+import { Alert, Container, Form, Button, Card, Row, Col} from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
+import axios from "axios"
+import { useSelector } from 'react-redux';
+import { loginUser } from '../stores/userSlice';
+import { useLogin } from '../hooks/useLogin';
+import { selectIsAdminLoggedIn } from '../stores/userSlice';
 
 function AdminPage() {
 
-    const password = "abc";
-    const [isPasswordCorrect, setIsPasswordCorrect] = useState(false);
-    const [input, setInput] = useState("");
-    const checkPassword = () => {
-      return input === password;
-    }
+  const [Password,setPassword] = useState()
+  const user = useSelector(state => state.user)
+  const login = useLogin();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText,setAlertText] = useState("");
+  const isAdminLoggedIn = useSelector(selectIsAdminLoggedIn);
+
+    // Autorizace pro přihlášení do systému
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+
+      if (!Password) {
+          setAlertText("Prosím, doplňte heslo.")
+          setShowAlert(true)
+          return
+      }
+      
+      try {
+          const result = await axios.post('http://localhost:3001/loginAutenticate', {
+              login: "admin",
+              password: Password
+          })
+   
+          if (result.data.notFound) {
+            setAlertText("Tento login neexistuje, prosím zkontrolujte databázi.");
+            setShowAlert(true);
+        } else if (result.data.wrongPassword) {
+            setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.");
+            setShowAlert(true);
+        } else {
+            if (result.data) {
+                login(result.data);
+            }
+        }
+          } catch (error) {
+              console.log(error);
+            }
+          };
+
     const navigate = useNavigate();
     const handleFacilities = () => {
     navigate("/createFacility");
@@ -20,25 +58,6 @@ function AdminPage() {
     const handleDetachments = () => {
     navigate("/createDetachment");
 };
-
-const handleSubmit = () => {
-  if (checkPassword()) {
-    setIsPasswordCorrect(true);
-    sessionStorage.setItem("password", input);
-  }
-  else
-  {
-    alert("Chybné heslo!");
-  }
-}
-
-useEffect(() => {
-  var password = sessionStorage.getItem("password");
-  if (password) {
-    setInput(password);
-    setIsPasswordCorrect(true);
-  }
-}, []);
 
 const renderContent = () => {
  
@@ -80,14 +99,16 @@ const renderContent = () => {
         </Card>
       </Container>
     </div>
-
 )
 }
 
-return ( isPasswordCorrect ? 
+return ( isAdminLoggedIn ? 
   renderContent() 
   : 
   <Container className='mt-4'>
+     <Alert show={showAlert} variant='danger' >
+        <h3>{alertText}</h3>
+      </Alert>
         <Card>
           <Card.Header>
             <h2> Admin správa </h2>
@@ -96,7 +117,7 @@ return ( isPasswordCorrect ?
             <Form>
               <Form.Group>
                 <h4>Zadejte heslo:</h4>
-                <Form.Control type="password" placeholder="Heslo" value={input} onChange={(e) => setInput(e.target.value)} />            
+                <Form.Control type='password' placeholder='Heslo' value={Password} onChange={(e) => setPassword(e.target.value)} className='mt-2'></Form.Control>          
                 <Button type='submit' onClick={handleSubmit}>Odeslat</Button>
               </Form.Group>
               </Form>

@@ -76,33 +76,43 @@ func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
 		login := data["login"]
 		password := data["password"]
 
-		userID, isAdmin, err := DBAuthenticateUser(login, password)
+		authResult, err := DBAuthenticateUser(login, password)
 		if err != nil {
 			log.Println(err)
-			fmt.Fprint(w, "ERROR")
+			http.Error(w, "ERROR", http.StatusInternalServerError)
 			return
 		}
 
-		log.Println(userID)
-		switch userID {
-		case "User not found":
-			fmt.Fprint(w, "NOT FOUND")
-			break
-
-		case "Wrong Password":
-			fmt.Fprint(w, "WRONG PASSWORD")
-			break
-
-		default:
-			if len(userID) > 0 {
-				if isAdmin {
-					fmt.Fprint(w, userID+" ADMIN")
-				} else {
-					fmt.Fprint(w, userID)
-				}
-			}
-			break
+		if authResult.NotFound {
+			jsonResponse, _ := json.Marshal(map[string]bool{"notFound": true})
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(jsonResponse)
+			return
 		}
+
+		if authResult.WrongPassword {
+			jsonResponse, _ := json.Marshal(map[string]bool{"wrongPassword": true})
+			w.Header().Set("Content-Type", "application/json")
+			w.Write(jsonResponse)
+			return
+		}
+
+		log.Println("UserID: " + authResult.UserID)
+		log.Println("Username: " + authResult.Username)
+		responseData := map[string]interface{}{
+			"userID":   authResult.UserID,
+			"username": authResult.Username,
+			"isAdmin":  authResult.IsAdmin,
+		}
+
+		jsonResponse, err := json.Marshal(responseData)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(jsonResponse)
 	default:
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}

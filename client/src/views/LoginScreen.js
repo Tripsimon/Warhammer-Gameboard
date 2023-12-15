@@ -14,15 +14,10 @@ function LoginScreen() {
     const user = useSelector(state => state.user)
     const login = useLogin();
 
-
     const [showAlert, setShowAlert] = useState(false);
     const [alertText,setAlertText] = useState("");
-
     const [Login,setLogin] = useState()
     const [Password,setPassword] = useState()
-
-    const navigate = useNavigate();
-
 
 
     // Autorizace pro přihlášení do systému
@@ -40,32 +35,25 @@ function LoginScreen() {
             setShowAlert(true)
             return
         }
-        
-        
+                
         try {
             const result = await axios.post('http://localhost:3001/loginAutenticate', {
                 login: Login,
                 password: Password
-            })
-     
-                switch (result.data) {
-                    case "NOT FOUND":
-                        setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.")
-                        setShowAlert(true)
-                        break;
-
-                    case "WRONG PASSWORD":
-                        setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.")
-                        setShowAlert(true)
-                        break;
-                    default:
-
-                        if(result.data){
-                            login(result.data)
-                        }
-
-                        break;
+            });
+        
+            if (result.data.notFound) {
+                setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.");
+                setShowAlert(true);
+            } else if (result.data.wrongPassword) {
+                setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.");
+                setShowAlert(true);
+            } else {
+                if (result.data) {
+                    login(result.data);
+                    loginUser(result.data);
                 }
+            }
             } catch (error) {
                 console.log(error);
               }
@@ -89,7 +77,7 @@ function LoginScreen() {
 
                             <Form.Group>
                                 <Form.Control value={Login} onChange={(e) => setLogin(e.target.value)} type='text' placeholder='Login' ></Form.Control>
-                                <Form.Control value={Password} onChange={(e) => setPassword(e.target.value)} type='text' placeholder='Heslo' className='mt-2'></Form.Control>
+                                <Form.Control value={Password} onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Heslo' className='mt-2'></Form.Control>
 
                             </Form.Group>
 

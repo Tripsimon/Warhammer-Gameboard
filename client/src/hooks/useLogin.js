@@ -9,9 +9,14 @@ export const useLogin = () => {
     const cookies = new Cookies(null, {path: '/'});
 
     const login = (resultData) => {
-    dispatch(loginUser({name: "DSADSA", id:69}))
-    navigate("/browseMatches");
-    cookies.set("username", "DSADSA")
+    dispatch(loginUser(resultData))
+    if (resultData.username !== 'admin') {
+        navigate("/browseMatches");
+    }
+
+    cookies.set("username", resultData.username, { path: '/' });
+    cookies.set("userID", resultData.userID, { path: '/' });
+    cookies.set("isAdmin", resultData.isAdmin, { path: '/' });
     console.log(resultData)
 }
 return login
