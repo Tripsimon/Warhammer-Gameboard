@@ -72,9 +72,20 @@ CREATE TABLE `matchPlayers` (
 	`vpSecondary4` INT NOT NULL DEFAULT '0',
 	`vpSecondary5` INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
-);
+)
 COLLATE='cp1250_czech_cs';
 
+ /* 
+ Tabulka pro různá nastavení, je zde uloženo admin heslo
+ */
+CREATE TABLE `settings` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`key` VARCHAR(50) NOT NULL DEFAULT '0',
+	`value1` VARCHAR(64) NOT NULL DEFAULT '0', /* zahashované heslo má 60 znaků */
+	`value2` VARCHAR(50) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+)
+COLLATE='cp1250_czech_cs';
 
 
 
