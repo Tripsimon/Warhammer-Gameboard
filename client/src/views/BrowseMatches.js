@@ -15,7 +15,7 @@ function BrowseMatches() {
 
   const user = useSelector(state => state.user)
 
-
+/*
   const getData = (event) =>{
     axios.get("http://localhost:3001/matches/getMatches")
       .then(res =>{
@@ -27,7 +27,7 @@ function BrowseMatches() {
   useEffect(() => {
     getData()
   }, []);
-
+*/
   const renderMatchesOptions = (event) =>{
     if (avaliableMatches == false) {
       return

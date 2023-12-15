@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useState } from 'react';
 import axios from "axios"
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { loginUser } from '../stores/userSlice';
+import { useLogin } from '../hooks/useLogin';
 
 
 function LoginScreen() {
 
     //redux
     const user = useSelector(state => state.user)
-    const dispatch = useDispatch()
+    const login = useLogin();
 
 
     const [showAlert, setShowAlert] = useState(false);
@@ -57,9 +58,7 @@ function LoginScreen() {
                     default:
 
                         if(result.data){
-                            dispatch(loginUser({name: "DSADSA", id:69}))
-                            navigate("/browseMatches");
-                            console.log(result.data)
+                            login(result.data)
                         }
 
                         break;

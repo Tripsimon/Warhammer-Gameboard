@@ -1,12 +1,18 @@
 import {Navbar, Container, Nav, Button} from 'react-bootstrap'
 import { useSelector, useDispatch  } from 'react-redux';
 import { selectUserName, logoutUser } from '../stores/userSlice';
+import Cookies from 'universal-cookie';
+
 
 function NavbarComponent(){
   const userName = useSelector(selectUserName);
+  const cookies = new Cookies(null, {path: '/'});
+  const usernameCookie = cookies.get("username")
+  const isLoggedIn = userName || usernameCookie
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutUser());
+    cookies.remove("username")
   };
 
     return (
@@ -21,7 +27,7 @@ function NavbarComponent(){
           <Nav.Link href="/">Gameboard</Nav.Link>
         </Nav>
         <Nav className="me-auto">
-          {userName ? (
+          {isLoggedIn ? (
             <Button variant="secondary" onClick={handleLogout}>
                Odhlášení
             </Button>
