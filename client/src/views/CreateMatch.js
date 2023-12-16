@@ -51,7 +51,7 @@ function CreateMatch() {
   }, []);
 
   const renderFactionChoices = () =>{
-    if(avaliableFactions == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    if(avaliableFactions === false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
     return(
       avaliableFactions.map(faction =>(
         <option key={faction.Id} value={faction.Id}>{faction.Name}</option>
@@ -102,6 +102,10 @@ function CreateMatch() {
   // Vytvoření nového zápasu
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!matchName || !player1Name || !player1Faction || !player1Detachment || !player2Name || !player2Faction || !player2Detachment) {
+      alert("Vyplňte prosím všechna pole.");
+      return;
+    }
     try {
       const res = await axios.post(
         'http://localhost:3001/matches/createMatch',

@@ -25,11 +25,12 @@ function App() {
       <Route path="/createMatch" element={<CreateMatch />}></Route>
     </Route>
     <Route element={<AdminRoutes />}>
-        <Route path="/admin" element={<AdminPage/>}></Route>
-        <Route path="/createFacility" element={<CreateFacility/>}></Route>
-        <Route path="/createFaction" element={<CreateFaction/>}></Route>
-        <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
+      <Route path="/admin" element={<AdminPage/>}></Route>
+      <Route path="/createFacility" element={<CreateFacility/>}></Route>
+      <Route path="/createFaction" element={<CreateFaction/>}></Route>
+      <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
     </Route>
+    <Route path="*" element={<LoginScreen />}></Route>
   </Routes>
 </BrowserRouter>
   );
