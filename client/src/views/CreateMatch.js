@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
-import { renderMatches, useNavigate } from "react-router-dom";
-import { Button, Card, CardGroup, Col, Container, Form, FormCheck, Row } from 'react-bootstrap'
+import React, { useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import axios from "axios";
 import { useState } from 'react';
 import getAuthToken from '../hooks/getToken';
@@ -45,14 +45,11 @@ function CreateMatch() {
       setAvaliableDetachments1(false)
       setAvaliableDetachments2(false)
     })
-
   };
 
-  
-  useEffect(() => {
+    useEffect(() => {
     getData()
   }, []);
-
 
   const renderFactionChoices = () =>{
     if(avaliableFactions == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
@@ -63,19 +60,34 @@ function CreateMatch() {
     )
   }
 
-
-  const renderDetachmentChoices = () =>{
-    if(avaliableDetachments1 == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
-    return(
-      
-      avaliableDetachments1.map(detachment =>(
-        <option key={detachment.Id} value={detachment.Id}>{detachment.Name}</option>
+  const renderDetachmentChoices1 = () => {
+    if (avaliableDetachments1 === false) 
+      return 
+        <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    const filteredDetachments1 = avaliableDetachments1.filter(avaliableDetachments1 => avaliableDetachments1.FactionId === parseInt(player1Faction, 10));
+    return (
+      filteredDetachments1.length === 0
+      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      : filteredDetachments1.map(avaliableDetachments1 => (
+        <option key={avaliableDetachments1.Id} value={avaliableDetachments1.Id}>{avaliableDetachments1.Name}</option>
       ))
-      
-    )
+    );
   }
 
-  
+  const renderDetachmentChoices2 = () => {
+    if (avaliableDetachments1 === false) 
+      return 
+        <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    const filteredDetachments2 = avaliableDetachments2.filter(avaliableDetachments2 => avaliableDetachments2.FactionId === parseInt(player2Faction, 10));
+    return (
+      filteredDetachments2.length === 0
+      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      : filteredDetachments2.map(avaliableDetachments2 => (
+        <option key={avaliableDetachments2.Id} value={avaliableDetachments2.Id}>{avaliableDetachments2.Name}</option>
+      ))
+    );
+  }
+
   // Vytvoření nového zápasu
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -120,7 +132,6 @@ function CreateMatch() {
           </Card.Header>
           <Form onSubmit={handleSubmit}>
           <Card.Body>
-
               <Form.Group>
               <label>Jméno zápasu:</label>
                 <Form.Control type='text' placeholder='Jméno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
@@ -150,29 +161,26 @@ function CreateMatch() {
                   </Form.Select>
                   </Col>
                 </Row>
-
                 <Row className='mt-2'>
                   <Col>
                   <label>Výběr detachmentu 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Detachment} onChange={(e) => setPlayer1Detachment(e.target.value)}>
                   <option value="" disabled selected>Výběr detachmentu</option>
-                    {renderDetachmentChoices()}
+                    {renderDetachmentChoices1()}
                   </Form.Select>
                   </Col>
                   <Col>
                   <label>Výběr detachmentu 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Detachment} onChange={(e) => setPlayer2Detachment(e.target.value)}>
                   <option value="" disabled selected>Výběr detachmentu</option>
-                    {renderDetachmentChoices()}
+                    {renderDetachmentChoices2()}
                   </Form.Select>
                   </Col>
                 </Row>
-
               </Form.Group>
-
           </Card.Body>
           <Card.Footer>
-                <Button type='submit'>Založit</Button>
+             <Button type='submit'>Založit</Button>
           </Card.Footer>
           </Form>
         </Card>
