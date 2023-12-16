@@ -7,10 +7,10 @@ import AdminPage from './views/AdminPage.js';
 import CreateFacility from './views/CreateFacility';
 import CreateFaction from './views/CreateFaction';
 import CreateDetachment from './views/CreateDetachment';
-
+import AdminRoutes from './utils/AdminRoutes';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Navbar from './components/Navbar.js'
-import PrivateRoutes from './utils/PrivateRoutes'
+import Navbar from './components/Navbar.js';
+import PrivateRoutes from './utils/PrivateRoutes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -24,10 +24,12 @@ function App() {
       <Route path='/match' element={<MatchboardView />}></Route>
       <Route path="/createMatch" element={<CreateMatch />}></Route>
     </Route>
-    <Route path="/admin" element={<AdminPage/>}></Route>
-    <Route path="/createFacility" element={<CreateFacility/>}></Route>
-    <Route path="/createFaction" element={<CreateFaction/>}></Route>
-    <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
+    <Route element={<AdminRoutes />}>
+        <Route path="/admin" element={<AdminPage/>}></Route>
+        <Route path="/createFacility" element={<CreateFacility/>}></Route>
+        <Route path="/createFaction" element={<CreateFaction/>}></Route>
+        <Route path="/createDetachment" element={<CreateDetachment/>}></Route>
+    </Route>
   </Routes>
 </BrowserRouter>
   );

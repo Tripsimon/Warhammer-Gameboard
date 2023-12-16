@@ -48,43 +48,6 @@ type matchPlayer struct {
 	Cp         int    `json:cp`
 }
 
-/** OLD - ZATÍM NEMAŽU
-* Autentikace uživatele do systému
-
-func DBAuthenticateUser(login string, password string) (answer string) {
-	log.Println("Připojuji se k DB")
-	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
-
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-
-	auth := db.QueryRow("SELECT * FROM facilities WHERE login=?", login)
-
-	result := facility{}
-
-	auth.Scan(&result.Id, &result.Login, &result.Password, &result.ScreenName)
-
-	if result.Id == 0 {
-		answer = "User not found"
-		return
-	}
-
-	if result.Password != password {
-		answer = "Wrong Password"
-		return
-	}
-
-	if result.Password == password {
-		answer = strconv.Itoa(result.Id)
-		return
-	}
-
-	return
-}
-**/
-
 type AuthenticationResult struct {
 	UserID        string
 	Username      string
@@ -459,6 +422,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction int, play
 
 	defer insert.Close()
 	log.Println("Herní místnost založena")
+
 }
 
 // Získá seznam zápasů

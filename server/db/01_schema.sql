@@ -80,7 +80,7 @@ COLLATE='cp1250_czech_cs';
  */
 CREATE TABLE `settings` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`key` VARCHAR(50) NOT NULL DEFAULT '0',
+	`key1` VARCHAR(50) NOT NULL DEFAULT '0',
 	`value1` VARCHAR(64) NOT NULL DEFAULT '0', /* zahashované heslo má 60 znaků */
 	`value2` VARCHAR(50) NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)

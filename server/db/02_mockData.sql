@@ -9,6 +9,6 @@ INSERT INTO `WH`.`factions` (`name`, `codeName`, `description`) VALUES ('Chaos D
 INSERT INTO `WH`.`factions` (`name`, `codeName`, `description`) VALUES ('Ultramarines', 'spaceMarines', 'Placeholder Popis');
 
 
-INSERT INTO `WH`.`detachments` (`name`, `description`) VALUES ('Index Detachment', 'placeholder');
+INSERT INTO `WH`.`detachments` (`faction_id`, `name`, `description`) VALUES ('1', 'Index Detachment', 'placeholder');
 
-INSERT INTO `WH`.`settings` (`key`, `value1`) VALUES ('admin', '$2a$10$98mmJBA4OX2MYWzVMY88cupwTLJuchW9vi6L8n25iMQr3H0oHjGbG'); 
+INSERT INTO `WH`.`settings` (`key1`, `value1`) VALUES ('admin', '$2a$10$98mmJBA4OX2MYWzVMY88cupwTLJuchW9vi6L8n25iMQr3H0oHjGbG'); 

@@ -7,9 +7,12 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+var jwtManager *JWTManager
 
 func main() {
 	log.Println("Server se zapíná")
@@ -39,6 +42,8 @@ func main() {
 	http.HandleFunc("/detachment/deleteDetachment", HandleDeleteDetachment)
 	http.HandleFunc("/detachment/checkDetachmentName", HandleCheckDetachmentName)
 
+	http.HandleFunc("/verifyToken", HandleTokenVerification)
+
 	http.HandleFunc("/hello", hello)
 	http.HandleFunc("/headers", headers)
 
@@ -50,11 +55,54 @@ func main() {
 func enableCors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 	if r.Method == "OPTIONS" {
 		w.WriteHeader(http.StatusOK)
 		return
+	}
+}
+
+type TokenVerificationResponse struct {
+	Success bool `json:"success"`
+	IsAdmin bool `json:"isAdmin"`
+}
+
+func HandleTokenVerification(w http.ResponseWriter, req *http.Request) {
+	enableCors(w, req)
+	switch req.Method {
+	case http.MethodOptions:
+		fmt.Fprintln(w, http.MethodOptions)
+		return
+	case http.MethodPost:
+		authToken := req.Header.Get("Authorization")
+		if authToken == "" {
+			http.Error(w, "Unauthorized-missing token", http.StatusUnauthorized)
+			return
+		}
+
+		claims, err := VerifyToken(authToken[7:])
+		if err != nil {
+			http.Error(w, "Unauthorized-false token", http.StatusUnauthorized)
+			return
+		}
+
+		// Odeslat odpověď na klienta
+		response := TokenVerificationResponse{
+			Success: true,
+			IsAdmin: claims["isAdmin"].(bool), // Přidání informace o roli
+		}
+		jsonResponse, err := json.Marshal(response)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(jsonResponse)
+
+	default:
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -76,36 +124,43 @@ func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
 		login := data["login"]
 		password := data["password"]
 
-		authResult, err := DBAuthenticateUser(login, password)
+		result, err := DBAuthenticateUser(login, password)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "ERROR", http.StatusInternalServerError)
 			return
 		}
 
-		if authResult.NotFound {
+		if result.NotFound {
 			jsonResponse, _ := json.Marshal(map[string]bool{"notFound": true})
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(jsonResponse)
 			return
 		}
 
-		if authResult.WrongPassword {
+		if result.WrongPassword {
 			jsonResponse, _ := json.Marshal(map[string]bool{"wrongPassword": true})
 			w.Header().Set("Content-Type", "application/json")
 			w.Write(jsonResponse)
 			return
 		}
 
-		log.Println("UserID: " + authResult.UserID)
-		log.Println("Username: " + authResult.Username)
-		responseData := map[string]interface{}{
-			"userID":   authResult.UserID,
-			"username": authResult.Username,
-			"isAdmin":  authResult.IsAdmin,
+		jwtManager := NewJWTManager("your-secret-key", 24*time.Hour)
+		token, err := jwtManager.Generate(result.UserID, result.Username, result.IsAdmin)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "ERROR", http.StatusInternalServerError)
+			return
 		}
 
-		jsonResponse, err := json.Marshal(responseData)
+		response := map[string]interface{}{
+			"token":    token,
+			"userID":   result.UserID,
+			"username": result.Username,
+			"isAdmin":  result.IsAdmin,
+		}
+
+		jsonResponse, err := json.Marshal(response)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -126,17 +181,37 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintln(w, http.MethodOptions)
 		return
 	case http.MethodPost:
-		name := strings.Join(req.URL.Query()["name"], "")
 
-		p1 := strings.Join(req.URL.Query()["p1"], "")
-		p1f, _ := strconv.Atoi(strings.Join(req.URL.Query()["p1f"], ""))
-		p1d, _ := strconv.Atoi(strings.Join(req.URL.Query()["p1d"], ""))
+		authToken := req.Header.Get("Authorization")
+		if authToken == "" {
+			http.Error(w, "Unauthorized-missing token", http.StatusUnauthorized)
+			return
+		}
 
-		p2 := strings.Join(req.URL.Query()["p2"], "")
-		p2f, _ := strconv.Atoi(strings.Join(req.URL.Query()["p2f"], ""))
-		p2d, _ := strconv.Atoi(strings.Join(req.URL.Query()["p2d"], ""))
+		_, err := VerifyToken(authToken[7:]) // Ořezání "Bearer "
+		if err != nil {
+			http.Error(w, "Unauthorized-false token", http.StatusUnauthorized)
+			return
+		}
 
-		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d)
+		// Přečtení dat z těla požadavku
+		var data map[string]interface{}
+		err = json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		name, _ := data["name"].(string)
+		p1, _ := data["p1"].(string)
+		p1f, _ := data["p1f"].(float64)
+		p1d, _ := data["p1d"].(float64)
+		p2, _ := data["p2"].(string)
+		p2f, _ := data["p2f"].(float64)
+		p2d, _ := data["p2d"].(float64)
+
+		DBcreateMatch(name, p1, int(p1f), int(p1d), p2, int(p2f), int(p2d))
+
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintln(w, "SUCCESS")
 	default:

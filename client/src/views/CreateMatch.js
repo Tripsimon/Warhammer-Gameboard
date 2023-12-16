@@ -3,7 +3,7 @@ import { renderMatches, useNavigate } from "react-router-dom";
 import { Button, Card, CardGroup, Col, Container, Form, FormCheck, Row } from 'react-bootstrap'
 import axios from "axios";
 import { useState } from 'react';
-
+import getAuthToken from '../hooks/getToken';
 
 function CreateMatch() {
   const [avaliableFactions,setAvaliableFactions] = useState(false);
@@ -19,6 +19,8 @@ function CreateMatch() {
   const [player2Name,setPlayer2Name] = useState("")
   const [player2Faction,SetPlayer2Faction] = useState("")
   const [player2Detachment,setPlayer2Detachment] = useState(1)
+
+  const authToken = getAuthToken();
 
   const navigate = useNavigate();
 
@@ -73,23 +75,43 @@ function CreateMatch() {
     )
   }
 
-
-
-
+  
   // Vytvoření nového zápasu
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    
-      axios.post("http://localhost:3001/matches/createMatch?name="+matchName+"&p1="+player1Name+"&p1f="+player1Faction+"&p1d="+player1Detachment+"&p2="+player2Name+"&p2f="+player2Faction+"&p2d="+player2Detachment)
-        .then(res =>{
-          if (res.status == 200) {
-            navigate("/browseMatches/")
-          }
-        })
-        
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const res = await axios.post(
+        'http://localhost:3001/matches/createMatch',
+        {
+          name: matchName,
+          p1: player1Name,
+          p1f: player1Faction,
+          p1d: player1Detachment,
+          p2: player2Name,
+          p2f: player2Faction,
+          p2d: player2Detachment
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+  
+      if (res.status === 200) {
+        navigate('/browseMatches/');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error('Invalid token');
+      } else {
+        console.error(error);
+      }
+      alert('Chyba při vytváření herny.');
+    }
   };
 
-  return (
+    return (
     <div>
       <Container className='mt-4'>
         <Card>

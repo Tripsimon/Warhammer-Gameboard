@@ -74,6 +74,10 @@ function CreateFacility() {
       alert("Hesla se neshodují. Zkontrolujte prosím zadání.");
       return;
     }
+    if (createLogin == "admin") {
+      alert("Nepovolené jméno herny.");
+      return;
+    }
     try {
       const loginExists = await axios.get('http://localhost:3001/facility/checkFacilityLogin?login=' + createLogin);
       if (loginExists.data.exists) {
@@ -166,9 +170,6 @@ function CreateFacility() {
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                   Zavřít
-                </Button>
-                <Button variant="secondary" onClick={() => getFacilities()} >
-                  Reload
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
                   Založit

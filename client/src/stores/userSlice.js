@@ -6,7 +6,6 @@ export const userSlice = createSlice({
         name: null,
         id: null,
         isAdmin: false
-
     },
 
     reducers: {
@@ -31,7 +30,6 @@ export const userSlice = createSlice({
   export const selectUserName = (state) => state.user.name;
   export const selectUserId = (state) => state.user.id;
   export const selectIsAdmin = (state) => state.user.isAdmin;
-  
   export const selectIsAdminLoggedIn = (state) => state.user.isAdmin && state.user.id !== null;
 
   export default userSlice.reducer
