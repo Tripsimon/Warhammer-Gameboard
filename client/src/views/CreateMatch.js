@@ -38,7 +38,6 @@ function CreateMatch() {
     .then(res =>{
       setAvaliableDetachments1(res.data)
       setAvaliableDetachments2(res.data)
-      console.log(res.data)
     })
     .catch(err =>{
       console.log(err)
@@ -64,7 +63,13 @@ function CreateMatch() {
     if (avaliableDetachments1 === false) 
       return 
         <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+
+        if (!player1Faction) {
+          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+        }
+
     const filteredDetachments1 = avaliableDetachments1.filter(avaliableDetachments1 => avaliableDetachments1.FactionId === parseInt(player1Faction, 10));
+
     return (
       filteredDetachments1.length === 0
       ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
@@ -78,7 +83,13 @@ function CreateMatch() {
     if (avaliableDetachments1 === false) 
       return 
         <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+
+        if (!player2Faction) {
+          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+        }
+
     const filteredDetachments2 = avaliableDetachments2.filter(avaliableDetachments2 => avaliableDetachments2.FactionId === parseInt(player2Faction, 10));
+
     return (
       filteredDetachments2.length === 0
       ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
