@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import axios from 'axios';
 import getAuthToken from '../hooks/getToken';
 import { useState, useEffect } from 'react';
+import requests from '../utils/Requests';
 
 const AdminRoutes = () => {
     const authToken = getAuthToken();
@@ -16,11 +16,7 @@ const AdminRoutes = () => {
         }
 
         // Odeslání tokenu k ověření
-        axios.post('http://localhost:3001/verifyToken', {}, {
-            headers: {
-                Authorization: `Bearer ${authToken}`,
-            },
-        })
+        requests.post('/verifyToken')
         .then(response => {
             if (response.data.success && response.data.isAdmin) {
                 setIsVerified(true);

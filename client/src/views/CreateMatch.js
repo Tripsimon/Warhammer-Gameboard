@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
-import axios from "axios";
 import { useState } from 'react';
 import requests from '../utils/Requests';
 
@@ -23,7 +22,7 @@ function CreateMatch() {
   const navigate = useNavigate();
 
   const getData = (event) => {
-   axios.get("http://localhost:3001/faction/getAllFaction")
+    requests.get("/faction/getAllFaction")
     .then(res =>{
       setAvaliableFactions(res.data)
     })
@@ -32,7 +31,7 @@ function CreateMatch() {
       setAvaliableFactions(false)
     })
 
-    axios.get("http://localhost:3001/detachment/getAllDetachment")
+    requests.get("/detachment/getAllDetachment")
     .then(res =>{
       setAvaliableDetachments1(res.data)
       setAvaliableDetachments2(res.data)

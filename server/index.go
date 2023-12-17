@@ -23,24 +23,24 @@ func main() {
 
 	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
-	http.HandleFunc("/matches/createMatch", HandleCreateMatch)
-	http.HandleFunc("/matches/getMatches", HandleGetMatches)
-	http.HandleFunc("/matches/getMatchData", HandleGetMatchData)
+	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch))
+	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches))
+	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData))
 
-	http.HandleFunc("/facility/createFacility", HandleCreateFacility)
-	http.HandleFunc("/facility/getAllFacility", HandleGetAllFacility)
-	http.HandleFunc("/facility/deleteFacility", HandleDeleteFacility)
-	http.HandleFunc("/facility/checkFacilityLogin", HandleCheckFacilityLogin)
+	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility))
+	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility))
+	http.HandleFunc("/facility/deleteFacility", VerifyTokenMiddleware(HandleDeleteFacility))
+	http.HandleFunc("/facility/checkFacilityLogin", VerifyTokenMiddleware(HandleCheckFacilityLogin))
 
-	http.HandleFunc("/faction/createFaction", HandleCreateFaction)
-	http.HandleFunc("/faction/getAllFaction", HandleGetAllFaction)
-	http.HandleFunc("/faction/deleteFaction", HandleDeleteFaction)
-	http.HandleFunc("/faction/checkFactionName", HandleCheckFactionName)
+	http.HandleFunc("/faction/createFaction", VerifyTokenMiddleware(HandleCreateFaction))
+	http.HandleFunc("/faction/getAllFaction", VerifyTokenMiddleware(HandleGetAllFaction))
+	http.HandleFunc("/faction/deleteFaction", VerifyTokenMiddleware(HandleDeleteFaction))
+	http.HandleFunc("/faction/checkFactionName", VerifyTokenMiddleware(HandleCheckFactionName))
 
-	http.HandleFunc("/detachment/createDetachment", HandleCreateDetachment)
-	http.HandleFunc("/detachment/getAllDetachment", HandleGetAllDetachment)
-	http.HandleFunc("/detachment/deleteDetachment", HandleDeleteDetachment)
-	http.HandleFunc("/detachment/checkDetachmentName", HandleCheckDetachmentName)
+	http.HandleFunc("/detachment/createDetachment", VerifyTokenMiddleware(HandleCreateDetachment))
+	http.HandleFunc("/detachment/getAllDetachment", VerifyTokenMiddleware(HandleGetAllDetachment))
+	http.HandleFunc("/detachment/deleteDetachment", VerifyTokenMiddleware(HandleDeleteDetachment))
+	http.HandleFunc("/detachment/checkDetachmentName", VerifyTokenMiddleware(HandleCheckDetachmentName))
 
 	http.HandleFunc("/verifyToken", HandleTokenVerification)
 
@@ -182,21 +182,8 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 		return
 	case http.MethodPost:
 
-		authToken := req.Header.Get("Authorization")
-		if authToken == "" {
-			http.Error(w, "Unauthorized-missing token", http.StatusUnauthorized)
-			return
-		}
-
-		_, err := VerifyToken(authToken[7:]) // Ořezání "Bearer "
-		if err != nil {
-			http.Error(w, "Unauthorized-false token", http.StatusUnauthorized)
-			return
-		}
-
-		// Přečtení dat z těla požadavku
 		var data map[string]interface{}
-		err = json.NewDecoder(req.Body).Decode(&data)
+		err := json.NewDecoder(req.Body).Decode(&data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -47,4 +49,25 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 	}
 
 	return nil, fmt.Errorf("Token is not valid")
+}
+
+func VerifyTokenMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		enableCors(w, req)
+		tokenString := req.Header.Get("Authorization")
+
+		if tokenString == "" {
+			http.Error(w, "Authorization header is missing", http.StatusUnauthorized)
+			return
+		}
+
+		claims, err := VerifyToken(tokenString[7:])
+		if err != nil {
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		ctx := context.WithValue(req.Context(), "claims", claims)
+		next.ServeHTTP(w, req.WithContext(ctx))
+	}
 }
