@@ -1,6 +1,6 @@
 import { Container, Card, Row, Col, Button, Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import requests from '../utils/Requests';
 
 import CP from "../components/CommandPoint.js"
 import VP from "../components/VictoryPoint.js"
@@ -20,7 +20,7 @@ function MatchboardView() {
 
 
     const getData = (event) => {
-        axios.get('http://localhost:3001/matches/getMatchData?id=14')
+        requests.get('/matches/getMatchData?id=14')
             .then(res =>{
                 setMatchData(res.data[0])
             })

@@ -2,10 +2,10 @@ import React from 'react'
 import { useFetcher, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
-import axios from "axios"
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser, selectUserName, selectIsAdmin, selectUserId } from '../stores/userSlice';
 import { useLogin } from '../hooks/useLogin';
+import requests from '../utils/Requests';
 
 function LoginScreen() {
 
@@ -40,7 +40,7 @@ function LoginScreen() {
         }
                 
         try {
-            const result = await axios.post('http://localhost:3001/loginAutenticate', {
+            const result = await requests.post('/loginAutenticate', {
                 login: Login,
                 password: Password
             });

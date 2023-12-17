@@ -4,18 +4,18 @@ import { useNavigate  } from "react-router-dom";
 import MatchEntry from '../components/MatchEntry';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import axios from "axios";
+import requests from '../utils/Requests';
 
 
 function BrowseMatches() {
 
-  const [avaliableMatches,setAvaliableMatches] = useState(false);
+  const [avaliableMatches, setAvaliableMatches] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(state => state.user)
 
 /*
   const getData = (event) =>{
-    axios.get("http://localhost:3001/matches/getMatches")
+    requests.get("/matches/getMatches")
       .then(res =>{
         setAvaliableMatches(res.data)
       })

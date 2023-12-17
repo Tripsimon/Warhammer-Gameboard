@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import axios from "axios";
 import { useState } from 'react';
-import getAuthToken from '../hooks/getToken';
+import requests from '../utils/Requests';
 
 function CreateMatch() {
   const [avaliableFactions,setAvaliableFactions] = useState(false);
@@ -19,8 +19,6 @@ function CreateMatch() {
   const [player2Name,setPlayer2Name] = useState("")
   const [player2Faction,SetPlayer2Faction] = useState("")
   const [player2Detachment,setPlayer2Detachment] = useState(1)
-
-  const authToken = getAuthToken();
 
   const navigate = useNavigate();
 
@@ -107,8 +105,8 @@ function CreateMatch() {
       return;
     }
     try {
-      const res = await axios.post(
-        'http://localhost:3001/matches/createMatch',
+      const res = await requests.post(
+        '/matches/createMatch',
         {
           name: matchName,
           p1: player1Name,
@@ -117,11 +115,6 @@ function CreateMatch() {
           p2: player2Name,
           p2f: player2Faction,
           p2d: player2Detachment
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
         }
       );
   
