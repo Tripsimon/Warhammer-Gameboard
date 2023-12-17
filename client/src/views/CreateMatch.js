@@ -138,6 +138,10 @@ function CreateMatch() {
     }
   };
 
+  const handleBrowse = () => {
+    navigate("/browseMatches");
+};
+
     return (
     <div>
       <Container className='mt-4'>
@@ -194,8 +198,9 @@ function CreateMatch() {
                 </Row>
               </Form.Group>
           </Card.Body>
-          <Card.Footer>
-             <Button type='submit'>Založit</Button>
+          <Card.Footer className="mt-3">
+            <Button variant="secondary" onClick={handleBrowse} className="me-2">Přehled zápasů</Button>
+            <Button type='submit'>Založit</Button>
           </Card.Footer>
           </Form>
         </Card>

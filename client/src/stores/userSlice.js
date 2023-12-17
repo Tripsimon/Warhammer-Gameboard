@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit"
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+const getCookieValue = (cookieName) => cookies.get(cookieName);
 
 export const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-        name: null,
-        id: null,
-        isAdmin: false
-    },
+  name: 'user',
+  initialState: {
+    name: getCookieValue('username') || null,
+    id: getCookieValue('userID') || null,
+    isAdmin: getCookieValue('isAdmin') || false,
+  },
 
     reducers: {
         logoutUser: (state) =>{

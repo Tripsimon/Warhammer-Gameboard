@@ -1,10 +1,10 @@
 import React from 'react'
-import { useNavigate } from "react-router-dom";
+import { useFetcher, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 import axios from "axios"
 import { useSelector, useDispatch } from 'react-redux';
-import { loginUser, selectUserName, selectIsAdmin } from '../stores/userSlice';
+import { loginUser, selectUserName, selectIsAdmin, selectUserId } from '../stores/userSlice';
 import { useLogin } from '../hooks/useLogin';
 
 function LoginScreen() {
@@ -21,6 +21,7 @@ function LoginScreen() {
     const [Password, setPassword] = useState()
     const userName = useSelector(selectUserName);
     const isAdmin = useSelector(selectIsAdmin);
+    const id = useSelector(selectUserId);
 
     // Autorizace pro přihlášení do systému
     const handleSubmit = async (event) => {
@@ -66,8 +67,16 @@ function LoginScreen() {
             }
             };
 
-
-        
+            useEffect(() => {
+                if (userName) {
+                  if (isAdmin) {
+                    navigate("/admin");
+                  } else {
+                    navigate("/browseMatches");
+                  }
+                }
+              }, [userName, isAdmin, navigate]);
+              
             return  (
 
             <Container className='mt-4'>
