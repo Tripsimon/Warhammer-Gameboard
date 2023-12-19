@@ -48,71 +48,55 @@ type matchPlayer struct {
 	Cp         int    `json:cp`
 }
 
-/** OLD - ZATÍM NEMAŽU
-* Autentikace uživatele do systému
-
-func DBAuthenticateUser(login string, password string) (answer string) {
-	log.Println("Připojuji se k DB")
-	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
-
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-
-	auth := db.QueryRow("SELECT * FROM facilities WHERE login=?", login)
-
-	result := facility{}
-
-	auth.Scan(&result.Id, &result.Login, &result.Password, &result.ScreenName)
-
-	if result.Id == 0 {
-		answer = "User not found"
-		return
-	}
-
-	if result.Password != password {
-		answer = "Wrong Password"
-		return
-	}
-
-	if result.Password == password {
-		answer = strconv.Itoa(result.Id)
-		return
-	}
-
-	return
+type AuthenticationResult struct {
+	UserID        string
+	Username      string
+	IsAdmin       bool
+	NotFound      bool
+	WrongPassword bool
 }
-**/
 
-func DBAuthenticateUser(login string, password string) (userID string, err error) {
+func DBAuthenticateUser(login string, password string) (result AuthenticationResult, err error) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
-		return "", err
+		return AuthenticationResult{}, err
 	}
 	defer db.Close()
 
 	var storedHashedPassword string
 	var Id int
-	row := db.QueryRow("SELECT id, password FROM facilities WHERE login=?", login)
-	if err := row.Scan(&Id, &storedHashedPassword); err != nil {
+	var query string
+
+	if login == "admin" {
+		query = "SELECT id, key1, value1 FROM settings WHERE key1=?"
+		result.IsAdmin = true
+	} else {
+		query = "SELECT id, login, password FROM facilities WHERE login=?"
+		result.IsAdmin = false
+	}
+
+	row := db.QueryRow(query, login)
+	if err := row.Scan(&Id, &result.Username, &storedHashedPassword); err != nil {
 		if err == sql.ErrNoRows {
-			return "User not found", nil
+			result.NotFound = true
+			return result, nil
 		}
-		return "", err
+		return AuthenticationResult{}, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(storedHashedPassword), []byte(password))
 	if err != nil {
 		if err == bcrypt.ErrMismatchedHashAndPassword {
-			return "Wrong Password", nil
+			result.WrongPassword = true
+			return result, nil
 		}
-		return "", err
+		return AuthenticationResult{}, err
 	}
 
-	return strconv.Itoa(Id), nil
+	result.UserID = strconv.Itoa(Id)
+	return result, nil
 }
 
 /**
@@ -438,6 +422,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction int, play
 
 	defer insert.Close()
 	log.Println("Herní místnost založena")
+
 }
 
 // Získá seznam zápasů

@@ -1,28 +1,27 @@
 import React from 'react'
-import { useNavigate } from "react-router-dom";
+import { useFetcher, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap'
-import { useState } from 'react';
-import axios from "axios"
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../stores/userSlice';
-
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, selectUserName, selectIsAdmin, selectUserId } from '../stores/userSlice';
+import { useLogin } from '../hooks/useLogin';
+import requests from '../utils/Requests';
 
 function LoginScreen() {
 
     //redux
     const user = useSelector(state => state.user)
-    const dispatch = useDispatch()
-
+    const login = useLogin();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [showAlert, setShowAlert] = useState(false);
-    const [alertText,setAlertText] = useState("");
-
-    const [Login,setLogin] = useState()
-    const [Password,setPassword] = useState()
-
-    const navigate = useNavigate();
-
-
+    const [alertText, setAlertText] = useState("");
+    const [Login, setLogin] = useState()
+    const [Password, setPassword] = useState()
+    const userName = useSelector(selectUserName);
+    const isAdmin = useSelector(selectIsAdmin);
+    const id = useSelector(selectUserId);
 
     // Autorizace pro přihlášení do systému
     const handleSubmit = async (event) => {
@@ -39,58 +38,61 @@ function LoginScreen() {
             setShowAlert(true)
             return
         }
-        
-        
+                
         try {
-            const result = await axios.get('http://localhost:3001/loginAutenticate?login=' + Login + '&password=' + Password);
+            const result = await requests.post('/loginAutenticate', {
+                login: Login,
+                password: Password
+            });
         
-                switch (result.data) {
-                    case "NOT FOUND":
-                        setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.")
-                        setShowAlert(true)
-                        break;
-
-                    case "WRONG PASSWORD":
-                        setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.")
-                        setShowAlert(true)
-                        break;
-                    default:
-
-                        if(result.data){
-                            dispatch(loginUser({name: "DSADSA", id:69}))
-                            navigate("/browseMatches");
-                            console.log(result.data)
-                        }
-
-                        break;
+            if (result.data.notFound) {
+                setAlertText("Tento login neexistuje, prosím zkontrolujte zadaná data.");
+                setShowAlert(true);
+            } else if (result.data.wrongPassword) {
+                setAlertText("Nesprávné heslo. Prosím, zkontrolujte zadaná data.");
+                setShowAlert(true);
+            } else {
+                if (result.data) {
+                    login(result.data);
+                    dispatch(loginUser({
+                        username: result.data.username,
+                        id: result.data.userID,
+                        isAdmin: result.data.isAdmin}))
                 }
+            }
             } catch (error) {
                 console.log(error);
-              }
+                setAlertText("Došlo k chybě při přihlašování. Zkuste to prosím znovu.");
+                setShowAlert(true);
+            }
             };
 
-    return (
+            useEffect(() => {
+                if (userName) {
+                  if (isAdmin) {
+                    navigate("/admin");
+                  } else {
+                    navigate("/browseMatches");
+                  }
+                }
+              }, [userName, isAdmin, navigate]);
+              
+            return  (
 
-            
             <Container className='mt-4'>
                 <Alert show={showAlert} variant='danger' >
                     <h3>{alertText}</h3>
                 </Alert>
-                <Card>
-                 
+                <Card>                
                     <Form onSubmit={handleSubmit}>
                         <Card.Header>
                             Přihlášení
-                            
                         </Card.Header>
                         <Card.Body>
-
                             <Form.Group>
                                 <Form.Control value={Login} onChange={(e) => setLogin(e.target.value)} type='text' placeholder='Login' ></Form.Control>
-                                <Form.Control value={Password} onChange={(e) => setPassword(e.target.value)} type='text' placeholder='Heslo' className='mt-2'></Form.Control>
-
+                                <Form.Control value={Password} onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Heslo' className='mt-2'></Form.Control>
                             </Form.Group>
-
                         </Card.Body>
                         <Card.Footer>
                             <Button type='submit'>Připojit</Button>

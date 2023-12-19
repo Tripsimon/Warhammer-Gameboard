@@ -1,22 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit"
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+const getCookieValue = (cookieName) => cookies.get(cookieName);
 
 export const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-        name: "TODO",
-        id: null
-
-    },
+  name: 'user',
+  initialState: {
+    name: getCookieValue('username') || null,
+    id: getCookieValue('userID') || null,
+    isAdmin: getCookieValue('isAdmin') || false,
+  },
 
     reducers: {
         logoutUser: (state) =>{
             state.name = null;
-            state.id = null
+            state.id = null;
+            state.isAdmin = false;
         },
 
         loginUser: (state, action) => {
-            state.name = action.payload.name
-            state.id = action.payload.id
+            const { username, id, isAdmin } = action.payload;
+            state.name = username;
+            state.id = id;
+            state.isAdmin = isAdmin;
         }
     }
   })
@@ -26,5 +33,7 @@ export const userSlice = createSlice({
 
   export const selectUserName = (state) => state.user.name;
   export const selectUserId = (state) => state.user.id;
-  
+  export const selectIsAdmin = (state) => state.user.isAdmin;
+  export const selectIsAdminLoggedIn = (state) => state.user.isAdmin && state.user.id !== null;
+
   export default userSlice.reducer

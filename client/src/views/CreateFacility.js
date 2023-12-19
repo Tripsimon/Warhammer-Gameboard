@@ -3,7 +3,7 @@ import { Container, Form, Button, Card, Row, Col, Table, Modal } from 'react-boo
 import { useNavigate } from "react-router-dom";
 import FacilitiesEntry from '../components/FacilitiesEntry';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import requests from '../utils/Requests';
 
 function CreateFacility() {
 
@@ -53,7 +53,7 @@ function CreateFacility() {
    * @param {*} event 
    */
   const getFacilities = async (event) => {
-    await axios.get('http://localhost:3001/facility/getAllFacility')
+    await requests.get('/facility/getAllFacility')
       .then(res => {
         setFacilities(res.data)
         console.log(facilities)
@@ -74,14 +74,18 @@ function CreateFacility() {
       alert("Hesla se neshodují. Zkontrolujte prosím zadání.");
       return;
     }
+    if (createLogin == "admin") {
+      alert("Nepovolené jméno herny.");
+      return;
+    }
     try {
-      const loginExists = await axios.get('http://localhost:3001/facility/checkFacilityLogin?login=' + createLogin);
+      const loginExists = await requests.get('/facility/checkFacilityLogin?login=' + createLogin);
       if (loginExists.data.exists) {
         alert("Přihlašovací jméno (login) již existuje. Zvolte prosím jiné.");
         return;
       }
 
-      await axios.post('http://localhost:3001/facility/createFacility', {
+      await requests.post('/facility/createFacility', {
         screenName: createScreenName,
         login: createLogin,
         password: createPassword
@@ -119,7 +123,7 @@ function CreateFacility() {
   const handleDeleteFacility = (id) => {
     const confirmDelete = window.confirm("Opravdu chcete smazat tuto hernu?");
     if (confirmDelete) {
-      axios.delete('http://localhost:3001/facility/deleteFacility?id=' + id)
+      requests.delete('/facility/deleteFacility?id=' + id)
       .then(() => {
         getFacilities();
       })
@@ -166,9 +170,6 @@ function CreateFacility() {
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                   Zavřít
-                </Button>
-                <Button variant="secondary" onClick={() => getFacilities()} >
-                  Reload
                 </Button>
                 <Button variant="primary" onClick={handleSubmit}>
                   Založit

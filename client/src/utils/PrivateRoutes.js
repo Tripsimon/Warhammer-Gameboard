@@ -1,12 +1,43 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux';
-import { selectUserName } from '../stores/userSlice';
+import getAuthToken from '../hooks/getToken';
+import { useState, useEffect } from 'react';
+import requests from '../utils/Requests';
 
 const PrivateRoutes = () => {
-const userName = useSelector(selectUserName);
-    return(
-        userName ? <Outlet/> : <Navigate to="/"/>
-    )
-}
+    const authToken = getAuthToken();
+    const [isVerified, setIsVerified] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+        if (!authToken) {
+            setIsLoading(false);
+            return;
+        }
+      
+        // Odeslání tokenu k ověření
+        requests.post('/verifyToken')
+        .then(response => {
+            if (response.data.success) {
+                setIsVerified(true);
+            }
+        })
+        .catch(error => {
+            console.error('Chyba při ověření tokenu:', error);
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+    }, [authToken]);
+  
+    if (isLoading) {
+        return //tady by se mohlo něco přidat, kdyby se to dlouho načítalo
+    }
 
-export default PrivateRoutes
+    if (isVerified) {
+        return <Outlet />;
+    } else {
+        return <Navigate to="/" />;
+    }
+};
+  
+export default PrivateRoutes;

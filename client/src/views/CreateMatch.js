@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react'
-import { renderMatches, useNavigate } from "react-router-dom";
-import { Button, Card, CardGroup, Col, Container, Form, FormCheck, Row } from 'react-bootstrap'
-import axios from "axios";
+import React, { useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import { useState } from 'react';
-
+import requests from '../utils/Requests';
 
 function CreateMatch() {
   const [avaliableFactions,setAvaliableFactions] = useState(false);
@@ -23,7 +22,7 @@ function CreateMatch() {
   const navigate = useNavigate();
 
   const getData = (event) => {
-   axios.get("http://localhost:3001/faction/getAllFaction")
+    requests.get("/faction/getAllFaction")
     .then(res =>{
       setAvaliableFactions(res.data)
     })
@@ -32,28 +31,24 @@ function CreateMatch() {
       setAvaliableFactions(false)
     })
 
-    axios.get("http://localhost:3001/detachment/getAllDetachment")
+    requests.get("/detachment/getAllDetachment")
     .then(res =>{
       setAvaliableDetachments1(res.data)
       setAvaliableDetachments2(res.data)
-      console.log(res.data)
     })
     .catch(err =>{
       console.log(err)
       setAvaliableDetachments1(false)
       setAvaliableDetachments2(false)
     })
-
   };
 
-  
-  useEffect(() => {
+    useEffect(() => {
     getData()
   }, []);
 
-
   const renderFactionChoices = () =>{
-    if(avaliableFactions == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
+    if(avaliableFactions === false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
     return(
       avaliableFactions.map(faction =>(
         <option key={faction.Id} value={faction.Id}>{faction.Name}</option>
@@ -61,35 +56,85 @@ function CreateMatch() {
     )
   }
 
+  const renderDetachmentChoices1 = () => {
+    if (avaliableDetachments1 === false) 
+      return 
+        <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
 
-  const renderDetachmentChoices = () =>{
-    if(avaliableDetachments1 == false) return <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
-    return(
-      
-      avaliableDetachments1.map(detachment =>(
-        <option key={detachment.Id} value={detachment.Id}>{detachment.Name}</option>
+        if (!player1Faction) {
+          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+        }
+
+    const filteredDetachments1 = avaliableDetachments1.filter(avaliableDetachments1 => avaliableDetachments1.FactionId === parseInt(player1Faction, 10));
+
+    return (
+      filteredDetachments1.length === 0
+      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      : filteredDetachments1.map(avaliableDetachments1 => (
+        <option key={avaliableDetachments1.Id} value={avaliableDetachments1.Id}>{avaliableDetachments1.Name}</option>
       ))
-      
-    )
+    );
   }
 
+  const renderDetachmentChoices2 = () => {
+    if (avaliableDetachments1 === false) 
+      return 
+        <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
 
+        if (!player2Faction) {
+          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+        }
 
+    const filteredDetachments2 = avaliableDetachments2.filter(avaliableDetachments2 => avaliableDetachments2.FactionId === parseInt(player2Faction, 10));
+
+    return (
+      filteredDetachments2.length === 0
+      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      : filteredDetachments2.map(avaliableDetachments2 => (
+        <option key={avaliableDetachments2.Id} value={avaliableDetachments2.Id}>{avaliableDetachments2.Name}</option>
+      ))
+    );
+  }
 
   // Vytvoření nového zápasu
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    
-      axios.post("http://localhost:3001/matches/createMatch?name="+matchName+"&p1="+player1Name+"&p1f="+player1Faction+"&p1d="+player1Detachment+"&p2="+player2Name+"&p2f="+player2Faction+"&p2d="+player2Detachment)
-        .then(res =>{
-          if (res.status == 200) {
-            navigate("/browseMatches/")
-          }
-        })
-        
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!matchName || !player1Name || !player1Faction || !player1Detachment || !player2Name || !player2Faction || !player2Detachment) {
+      alert("Vyplňte prosím všechna pole.");
+      return;
+    }
+    try {
+      const res = await requests.post(
+        '/matches/createMatch',
+        {
+          name: matchName,
+          p1: player1Name,
+          p1f: player1Faction,
+          p1d: player1Detachment,
+          p2: player2Name,
+          p2f: player2Faction,
+          p2d: player2Detachment
+        }
+      );
+  
+      if (res.status === 200) {
+        navigate('/browseMatches/');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error('Invalid token');
+      } else {
+        console.error(error);
+      }
+      alert('Chyba při vytváření herny.');
+    }
   };
 
-  return (
+  const handleBrowse = () => {
+    navigate("/browseMatches");
+};
+
+    return (
     <div>
       <Container className='mt-4'>
         <Card>
@@ -98,7 +143,6 @@ function CreateMatch() {
           </Card.Header>
           <Form onSubmit={handleSubmit}>
           <Card.Body>
-
               <Form.Group>
               <label>Jméno zápasu:</label>
                 <Form.Control type='text' placeholder='Jméno zápasu' value={matchName} onChange={(e) => setMatchName(e.target.value)}></Form.Control>
@@ -128,29 +172,27 @@ function CreateMatch() {
                   </Form.Select>
                   </Col>
                 </Row>
-
                 <Row className='mt-2'>
                   <Col>
                   <label>Výběr detachmentu 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Detachment} onChange={(e) => setPlayer1Detachment(e.target.value)}>
                   <option value="" disabled selected>Výběr detachmentu</option>
-                    {renderDetachmentChoices()}
+                    {renderDetachmentChoices1()}
                   </Form.Select>
                   </Col>
                   <Col>
                   <label>Výběr detachmentu 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Detachment} onChange={(e) => setPlayer2Detachment(e.target.value)}>
                   <option value="" disabled selected>Výběr detachmentu</option>
-                    {renderDetachmentChoices()}
+                    {renderDetachmentChoices2()}
                   </Form.Select>
                   </Col>
                 </Row>
-
               </Form.Group>
-
           </Card.Body>
-          <Card.Footer>
-                <Button type='submit'>Založit</Button>
+          <Card.Footer className="mt-3">
+            <Button variant="secondary" onClick={handleBrowse} className="me-2">Přehled zápasů</Button>
+            <Button type='submit'>Založit</Button>
           </Card.Footer>
           </Form>
         </Card>

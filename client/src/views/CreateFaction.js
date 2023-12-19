@@ -3,7 +3,7 @@ import {Container, Form, Button, Card, Row, Col, Table, Modal} from 'react-boots
 import { useNavigate  } from "react-router-dom";
 import FactionsEntry from '../components/FactionsEntry';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import requests from '../utils/Requests';
 
 function CreateFaction() {
 
@@ -30,12 +30,12 @@ function CreateFaction() {
       return;
     }
     try {
-      const nameExists = await axios.get('http://localhost:3001/faction/checkFactionName?screenName=' + createScreenName);
+      const nameExists = await requests.get('/faction/checkFactionName?screenName=' + createScreenName);
       if (nameExists.data.exists) {
         alert("Zvolený název již existuje. Zvolte prosím jiný.");
         return;
       }
-       await axios.post('http://localhost:3001/faction/createFaction', {
+       await requests.post('/faction/createFaction', {
         screenName: createScreenName,
         codeName: createCodeName,
         description: createDescription
@@ -57,7 +57,7 @@ function CreateFaction() {
    * @param {*} event 
    */
  const getFactions = async (event) => {
-  await axios.get('http://localhost:3001/faction/getAllFaction')
+  await requests.get('/faction/getAllFaction')
     .then(res => {
       setFactions(res.data)
       console.log(factions)
@@ -71,7 +71,7 @@ function CreateFaction() {
  const handleDeleteFaction = (id) => {
   const confirmDelete = window.confirm("Opravdu chcete smazat tuto frakci?");
   if (confirmDelete) {
-    axios.delete('http://localhost:3001/faction/deleteFaction?id=' + id)
+    requests.delete('/faction/deleteFaction?id=' + id)
     .then(() => {
       getFactions();
     })

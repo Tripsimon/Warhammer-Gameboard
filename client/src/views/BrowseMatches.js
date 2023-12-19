@@ -1,23 +1,21 @@
 import React from 'react';
-import {Button, Card, Container, Table, } from 'react-bootstrap';
+import { Button, Card, Container, Table } from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
 import MatchEntry from '../components/MatchEntry';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import axios from "axios";
+import requests from '../utils/Requests';
 
 
 function BrowseMatches() {
 
-  const [avaliableMatches,setAvaliableMatches] = useState(false);
-
+  const [avaliableMatches, setAvaliableMatches] = useState(false);
   const navigate = useNavigate();
-
   const user = useSelector(state => state.user)
 
-
+/*
   const getData = (event) =>{
-    axios.get("http://localhost:3001/matches/getMatches")
+    requests.get("/matches/getMatches")
       .then(res =>{
         setAvaliableMatches(res.data)
       })
@@ -27,7 +25,7 @@ function BrowseMatches() {
   useEffect(() => {
     getData()
   }, []);
-
+*/
   const renderMatchesOptions = (event) =>{
     if (avaliableMatches == false) {
       return
@@ -49,12 +47,10 @@ function BrowseMatches() {
     "state":"Stav3"
   }];
 
-
-
   return (
     <Container className='mt-2'>
         <Card data-bs-theme="dark">
-            <Card.Header> {user.name} - Seznam her</Card.Header>
+            <Card.Header> {user.name} - {user.id} - Seznam her</Card.Header>
             <Card.Body>
                 <Table striped bordered hover size="sm">
                   <thead>

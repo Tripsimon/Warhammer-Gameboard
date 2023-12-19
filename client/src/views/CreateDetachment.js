@@ -3,7 +3,7 @@ import {Container, Form, Button, Card, Row, Col, Table, Modal} from 'react-boots
 import { useNavigate  } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import DetachmentsEntry from '../components/DetachmentsEntry';
-import axios from 'axios';
+import requests from '../utils/Requests';
 
 function CreateDetachment() {
 
@@ -21,7 +21,7 @@ function CreateDetachment() {
 
   // Dotažení frakcí z DB pro zobrazení v drop down listu
   useEffect(() => {
-    axios.get('http://localhost:3001/faction/getAllFaction')
+    requests.get('/faction/getAllFaction')
       .then(response => {
         setFactions(response.data);
       })
@@ -41,12 +41,12 @@ function CreateDetachment() {
       return;
     }
     try {
-      const nameExists = await axios.get('http://localhost:3001/detachment/checkDetachmentName?detachmentName=' + createDetachmentName);
+      const nameExists = await requests.get('/detachment/checkDetachmentName?detachmentName=' + createDetachmentName);
       if (nameExists.data.exists) {
         alert("Zvolený název již existuje. Zvolte prosím jiný.");
         return;
       }
-       await axios.post('http://localhost:3001/detachment/createDetachment', {
+       await requests.post('/detachment/createDetachment', {
         factionId: selectFactionId,
         detachmentName: createDetachmentName,
         description: createDescription
@@ -68,7 +68,7 @@ function CreateDetachment() {
    * @param {*} event 
    */
  const getDetachments = async (event) => {
-  await axios.get('http://localhost:3001/detachment/getAllDetachment')
+  await requests.get('/detachment/getAllDetachment')
     .then(res => {
       setDetachments(res.data)
       console.log(factions)
@@ -82,7 +82,7 @@ function CreateDetachment() {
 const handleDeleteDetachment = (id) => {
   const confirmDelete = window.confirm("Opravdu chcete smazat tento detachment?");
   if (confirmDelete) {
-    axios.delete('http://localhost:3001/detachment/deleteDetachment?id=' + id)
+    requests.delete('/detachment/deleteDetachment?id=' + id)
     .then(() => {
       getDetachments();
     })
