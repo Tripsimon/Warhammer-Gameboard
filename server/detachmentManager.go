@@ -44,7 +44,7 @@ func DBGetDetachments() (result []detachment) {
 	}
 	defer db.Close()
 
-	query, err := db.Query("SELECT * FROM detachments")
+	query, err := db.Query("SELECT id, faction_id, name, description FROM detachments")
 
 	if err != nil {
 		panic(err.Error())

@@ -44,7 +44,7 @@ func DBGetFacilities() (result []facility) {
 	}
 	defer db.Close()
 
-	query, err := db.Query("SELECT * FROM facilities")
+	query, err := db.Query("SELECT id, login, facilityName FROM facilities")
 
 	if err != nil {
 		panic(err.Error())
@@ -53,7 +53,7 @@ func DBGetFacilities() (result []facility) {
 	things := []facility{}
 	for query.Next() {
 		var vec facility
-		err := query.Scan(&vec.Id, &vec.Login, &vec.Password, &vec.ScreenName)
+		err := query.Scan(&vec.Id, &vec.Login, &vec.ScreenName)
 		if err != nil {
 			log.Fatal(err)
 		}

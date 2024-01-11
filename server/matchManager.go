@@ -79,7 +79,7 @@ func DBGetMatches() (result []match) {
 	}
 	defer db.Close()
 
-	query, err := db.Query("SELECT * FROM matches")
+	query, err := db.Query("SELECT id, name, round, playerOne, playerTwo FROM matches")
 
 	if err != nil {
 		panic(err.Error())
@@ -118,7 +118,7 @@ func DBGetMatchData(id int) (result match) {
 
 	var matchData match
 
-	err = db.QueryRow("SELECT * FROM matches WHERE id = ?", id).Scan(&matchData.Id, &matchData.Name, &matchData.Round, &matchData.PlayerOne, &matchData.PlayerTwo)
+	err = db.QueryRow("SELECT id, name, round, playerOne, playerTwo FROM matches WHERE id = ?", id).Scan(&matchData.Id, &matchData.Name, &matchData.Round, &matchData.PlayerOne, &matchData.PlayerTwo)
 	if err != nil {
 		panic(err.Error())
 	}

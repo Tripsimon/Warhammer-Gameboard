@@ -65,7 +65,7 @@ func DBGetFactions() (result []faction) {
 	}
 	defer db.Close()
 
-	query, err := db.Query("SELECT * FROM factions")
+	query, err := db.Query("SELECT id, name, codeName, description FROM factions")
 
 	if err != nil {
 		panic(err.Error())
