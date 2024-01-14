@@ -23,24 +23,30 @@ func main() {
 
 	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
+<<<<<<< HEAD
 	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch))
 	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches))
 	http.HandleFunc("/matches/getMatchData", HandleGetMatchData)
+=======
+	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch, false))
+	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches, false))
+	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData, false))
+>>>>>>> 110f637aede72304d1b38dc8ebe337344f9ae053
 
-	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility))
-	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility))
-	http.HandleFunc("/facility/deleteFacility", VerifyTokenMiddleware(HandleDeleteFacility))
-	http.HandleFunc("/facility/checkFacilityLogin", VerifyTokenMiddleware(HandleCheckFacilityLogin))
+	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility, true))
+	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility, true))
+	http.HandleFunc("/facility/deleteFacility", VerifyTokenMiddleware(HandleDeleteFacility, true))
+	http.HandleFunc("/facility/checkFacilityLogin", VerifyTokenMiddleware(HandleCheckFacilityLogin, true))
 
-	http.HandleFunc("/faction/createFaction", VerifyTokenMiddleware(HandleCreateFaction))
-	http.HandleFunc("/faction/getAllFaction", VerifyTokenMiddleware(HandleGetAllFaction))
-	http.HandleFunc("/faction/deleteFaction", VerifyTokenMiddleware(HandleDeleteFaction))
-	http.HandleFunc("/faction/checkFactionName", VerifyTokenMiddleware(HandleCheckFactionName))
+	http.HandleFunc("/faction/createFaction", VerifyTokenMiddleware(HandleCreateFaction, true))
+	http.HandleFunc("/faction/getAllFaction", VerifyTokenMiddleware(HandleGetAllFaction, false))
+	http.HandleFunc("/faction/deleteFaction", VerifyTokenMiddleware(HandleDeleteFaction, true))
+	http.HandleFunc("/faction/checkFactionName", VerifyTokenMiddleware(HandleCheckFactionName, true))
 
-	http.HandleFunc("/detachment/createDetachment", VerifyTokenMiddleware(HandleCreateDetachment))
-	http.HandleFunc("/detachment/getAllDetachment", VerifyTokenMiddleware(HandleGetAllDetachment))
-	http.HandleFunc("/detachment/deleteDetachment", VerifyTokenMiddleware(HandleDeleteDetachment))
-	http.HandleFunc("/detachment/checkDetachmentName", VerifyTokenMiddleware(HandleCheckDetachmentName))
+	http.HandleFunc("/detachment/createDetachment", VerifyTokenMiddleware(HandleCreateDetachment, true))
+	http.HandleFunc("/detachment/getAllDetachment", VerifyTokenMiddleware(HandleGetAllDetachment, false))
+	http.HandleFunc("/detachment/deleteDetachment", VerifyTokenMiddleware(HandleDeleteDetachment, true))
+	http.HandleFunc("/detachment/checkDetachmentName", VerifyTokenMiddleware(HandleCheckDetachmentName, true))
 
 	http.HandleFunc("/verifyToken", HandleTokenVerification)
 
