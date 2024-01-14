@@ -11,4 +11,7 @@ INSERT INTO `WH`.`factions` (`name`, `codeName`, `description`) VALUES ('Ultrama
 
 INSERT INTO `WH`.`detachments` (`faction_id`, `name`, `description`) VALUES ('1', 'Index Detachment', 'placeholder');
 
+INSERT INTO `WH`.`stratagems` (`detachment_id`, `name`, `ability`, `price`) VALUES ('-1', 'Tactical Re-Roll', 'Dovolí uživately znovu hodit jednu kostku', '1');
+INSERT INTO `WH`.`stratagems` (`detachment_id`, `name`, `ability`, `price`) VALUES ('1', 'Miracle', 'Gain one more Miracle dice', '2');
+
 INSERT INTO `WH`.`settings` (`key1`, `value1`) VALUES ('admin', '$2a$10$98mmJBA4OX2MYWzVMY88cupwTLJuchW9vi6L8n25iMQr3H0oHjGbG'); 

@@ -119,8 +119,6 @@ func DBGetMatches() (result []match) {
 
 //Získá data zápasu na základě jeho ID
 func DBGetMatchData(id int) (result matchDataResponse) {
-
-
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -130,6 +128,7 @@ func DBGetMatchData(id int) (result matchDataResponse) {
 	defer db.Close()
 
 	var matchData match
+	// Lepsi by bylo asi řešit JOINem ale ja si chtěl zkusit skládání structů
 
 	err = db.QueryRow("SELECT id, name, round, playerOne, playerTwo FROM matches WHERE id = ?", id).Scan(&matchData.Id, &matchData.Name, &matchData.Round, &matchData.PlayerOne, &matchData.PlayerTwo)
 	if err != nil {
@@ -156,4 +155,20 @@ func DBGetMatchData(id int) (result matchDataResponse) {
 	res.P1 = p1Data
 	res.P2 = p2Data
 	return (res)
+}
+
+func DBSyncMatchData(id string, round string){
+	log.Println("DB Akce: Uprava dat zápasu")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_,err = db.Query("UPDATE matches SET `round` = ? WHERE id = ? ", round, id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
 }

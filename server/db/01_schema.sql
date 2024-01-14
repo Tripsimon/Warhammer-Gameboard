@@ -30,7 +30,8 @@ CREATE TABLE `stratagems` (
 	`detachment_id` INT NOT NULL DEFAULT 0,
 	`name` VARCHAR(50) NOT NULL DEFAULT '0',
 	`ability` VARCHAR(50) NOT NULL DEFAULT '0',
-	`description` VARCHAR(50) NOT NULL DEFAULT '0',
+	`price` int NOT NULL DEFAULT '0',
+	
 	PRIMARY KEY (`id`)
 )
 COLLATE='cp1250_czech_cs';

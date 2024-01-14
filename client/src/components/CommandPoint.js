@@ -4,23 +4,12 @@ import { useState, useEffect } from "react"
 function CommandPoint(props) {
     const [cpCounter, setCpCounter] = useState(0)
 
-    function reduceCP() {
-        if (cpCounter > 0) {
-            setCpCounter(cpCounter - 1);
-        }
-    }
-
-    function increaseCP() {
-        setCpCounter(cpCounter + 1);
-    }
-
     useEffect(() => {
-        console.log(props.CP)
         setCpCounter(props.CP)
     }, []);
 
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header><h2 className="text-center" >Command Points: {cpCounter} </h2></Card.Header>
+        <Card.Header><h2 className="text-center" >Command Points: {props.CP} </h2></Card.Header>
         <Card.Body>
             <Card.Title> Použít Stratagem: </Card.Title>
             <Card.Text>
@@ -38,7 +27,7 @@ function CommandPoint(props) {
 
         </Card.Body>
         <Card.Footer>
-            <Button>Použít</Button>
+            <Button onClick={() => props.payCP(props.player,5)}>Použít</Button>
             </Card.Footer>
     </Card>;
 }

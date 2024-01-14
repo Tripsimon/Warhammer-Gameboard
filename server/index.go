@@ -23,15 +23,10 @@ func main() {
 
 	http.HandleFunc("/loginAutenticate", HandleLoginAuthenticate)
 
-<<<<<<< HEAD
-	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch))
-	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches))
-	http.HandleFunc("/matches/getMatchData", HandleGetMatchData)
-=======
 	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch, false))
 	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches, false))
 	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData, false))
->>>>>>> 110f637aede72304d1b38dc8ebe337344f9ae053
+	http.HandleFunc("/matches/syncMatchData", VerifyTokenMiddleware(HandleSyncMatchData, false))
 
 	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility, true))
 	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility, true))
@@ -47,6 +42,8 @@ func main() {
 	http.HandleFunc("/detachment/getAllDetachment", VerifyTokenMiddleware(HandleGetAllDetachment, false))
 	http.HandleFunc("/detachment/deleteDetachment", VerifyTokenMiddleware(HandleDeleteDetachment, true))
 	http.HandleFunc("/detachment/checkDetachmentName", VerifyTokenMiddleware(HandleCheckDetachmentName, true))
+
+	http.HandleFunc("/stratagem/getStratagemsForDetachment", HandleGetStratagemsForDetachment)
 
 	http.HandleFunc("/verifyToken", HandleTokenVerification)
 
@@ -226,6 +223,15 @@ func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetMatches())
 }
 
+//Uprava dat zápasu
+func HandleSyncMatchData(w http.ResponseWriter, req *http.Request)  {
+	enableCors(w, req)
+
+	var id = strings.Join(req.URL.Query()["id"], "")
+	var round = strings.Join(req.URL.Query()["round"], "")
+	DBSyncMatchData(id,round)
+}
+
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities
 func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
@@ -393,4 +399,12 @@ func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
 	exists := DBcheckDetachmentName(detachmentName)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
+}
+
+func HandleGetStratagemsForDetachment(w http.ResponseWriter, req *http.Request){
+	enableCors(w, req)
+
+	var detachmentId = strings.Join(req.URL.Query()["detachmentId"], "");
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(DBGetStratagemsForDetachment(detachmentId))
 }

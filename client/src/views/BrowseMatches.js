@@ -67,8 +67,10 @@ function BrowseMatches() {
                       {renderMatchesOptions()}
                       </tbody>
                 </Table>
-                <Button onClick={()=> navigate("/createMatch")} >Vytvořit zápas</Button>              
             </Card.Body>
+            <Card.Footer>
+              <Button onClick={()=> navigate("/createMatch")} >Vytvořit zápas</Button>        
+            </Card.Footer>
         </Card> 
     </Container>
   )

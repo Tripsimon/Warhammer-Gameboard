@@ -7,6 +7,7 @@ import VP from "../components/VictoryPoint.js"
 
 import left from '../imgs/bg_adeptusMechanicus.jpg'
 import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
+import axios from "axios";
 
 function MatchboardView() {
 
@@ -23,7 +24,7 @@ function MatchboardView() {
 
     const [p1,setP1] = useState(
     {
-        "Cp":0,
+        Cp:0,
         "Detachment":0,
         "Faction":0,
         "Id":0,
@@ -41,8 +42,7 @@ function MatchboardView() {
         "VpSecondary5":0,
     });
 
-    const [p2,setP2] = useState(
-    {
+    const [p2,setP2] = useState({
         "Cp":0,
         "Detachment":0,
         "Faction":0,
@@ -72,7 +72,7 @@ function MatchboardView() {
     };
 
     const updateMatchData = (event) =>{
-        //Nejak to zapisovat
+        axios.get("http://localhost:3001/matches/syncMatchData?id="+matchData.Id+"&round="+matchData.Round)
     }
 
     const updatePlayerData = (event) =>{
@@ -81,7 +81,6 @@ function MatchboardView() {
 
     useEffect(() => {
         getData()
-        console.log(p1);
     }, []);
 
     const nextRound = () => {
@@ -90,10 +89,15 @@ function MatchboardView() {
         var data = matchData
         data.Round++
         setMatchData(data)
+        updateMatchData()
     }}
 
-    const generateVictoryPointsHolders = ()=>{
-        return  <Row><Col><VP VP={p1.vpPrimary1}></VP></Col><Col><VP></VP></Col></Row> 
+    const payCP = (player, cp) =>{
+        if (player == 1) {
+            setP1(p =>({...p, Cp: p1.Cp - cp}))
+        }else if( player == 2){
+            setP2(p =>({...p, Cp: p2.Cp - cp}))
+        }
     }
 
     return (
@@ -127,14 +131,18 @@ function MatchboardView() {
                 </Card>
                 <Row>
                     <Col>
-                        <CP CP={p1.Cp}></CP>
+                        <CP CP={p1.Cp} player={1} payCP={payCP}></CP>
                     </Col>
                     <Col>
-                        <CP CP={p2.Cp}></CP>
+                        <CP CP={p2.Cp} player={2} payCP={payCP}></CP>
                     </Col>
                 </Row>
-
-                    {generateVictoryPointsHolders()}
+                <Row>
+                    <Col>
+                        <VP VP={p1.vpPrimary1}>
+                        </VP>
+                    </Col><Col><VP></VP></Col>
+                </Row> 
 
             </Container>
         </div>

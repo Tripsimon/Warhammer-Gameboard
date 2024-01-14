@@ -69,7 +69,7 @@ function CreateMatch() {
 
     return (
       filteredDetachments1.length === 0
-      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      ? <option value="" disabled>Tato frakce nemá žádný detachment</option>
       : filteredDetachments1.map(avaliableDetachments1 => (
         <option key={avaliableDetachments1.Id} value={avaliableDetachments1.Id}>{avaliableDetachments1.Name}</option>
       ))
@@ -82,7 +82,7 @@ function CreateMatch() {
         <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
 
         if (!player2Faction) {
-          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+          return <option value="" disabled >Vyberte nejprve frakci</option>;
         }
 
     const filteredDetachments2 = avaliableDetachments2.filter(avaliableDetachments2 => avaliableDetachments2.FactionId === parseInt(player2Faction, 10));
