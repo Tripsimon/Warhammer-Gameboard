@@ -23,18 +23,42 @@ function MatchboardView() {
 
     const [p1,setP1] = useState(
     {
+        "Cp":0,
+        "Detachment":0,
+        "Faction":0,
         "Id":0,
-        "Name":"NaN",
-        "PlayerOne":-1,
-        "PlayerTwo":-1
+        "Name":"PlayerNotFound",
+        "Role":0,
+        "VpPrimary1":0,
+        "VpPrimary2":0,
+        "VpPrimary3":0,
+        "VpPrimary4":0,
+        "VpPrimary5":0,
+        "VpSecondary1":0,
+        "VpSecondary2":0,
+        "VpSecondary3":0,
+        "VpSecondary4":0,
+        "VpSecondary5":0,
     });
 
     const [p2,setP2] = useState(
     {
+        "Cp":0,
+        "Detachment":0,
+        "Faction":0,
         "Id":0,
-        "Name":"NaN",
-        "PlayerOne":-1,
-        "PlayerTwo":-1
+        "Name":"PlayerNotFound",
+        "Role":0,
+        "VpPrimary1":0,
+        "VpPrimary2":0,
+        "VpPrimary3":0,
+        "VpPrimary4":0,
+        "VpPrimary5":0,
+        "VpSecondary1":0,
+        "VpSecondary2":0,
+        "VpSecondary3":0,
+        "VpSecondary4":0,
+        "VpSecondary5":0,
     });
 
     const getData = (event) => {
@@ -57,17 +81,19 @@ function MatchboardView() {
 
     useEffect(() => {
         getData()
-        console.log(matchData)
+        console.log(p1);
     }, []);
 
-      const nextRound = () => {
-        if (roundCounter < 5) {
-            setRoundCounter(roundCounter + 1)
-        }
-    }
+    const nextRound = () => {
+    if (roundCounter < 5) {
+        setRoundCounter(roundCounter + 1)
+        var data = matchData
+        data.Round++
+        setMatchData(data)
+    }}
 
     const generateVictoryPointsHolders = ()=>{
-        return  <Row><Col><VP></VP></Col><Col><VP></VP></Col></Row> 
+        return  <Row><Col><VP VP={p1.vpPrimary1}></VP></Col><Col><VP></VP></Col></Row> 
     }
 
     return (
@@ -83,16 +109,16 @@ function MatchboardView() {
                 <Card>
                     <Card.Header>
                         <Row>
-                            <Col><h1 className="text-center" >Kropec</h1></Col>
+                            <Col><h1 className="text-center" >{p1.Name}</h1></Col>
                             <Col><h1 className="text-center" >VS</h1></Col>
-                            <Col><h1 className="text-center" >Blengl boy</h1></Col>
+                            <Col><h1 className="text-center" >{p2.Name}</h1></Col>
                         </Row>
                     </Card.Header>
                     <Card.Body>
                         <Row>
-                            <Col className="text-center">VP: </Col>
+                            <Col className="text-center">VP: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</Col>
                             <Col><h3 className="text-center">Aktuální kolo: {roundCounter}</h3></Col>
-                            <Col className="text-center">VP:</Col>
+                            <Col className="text-center">VP: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</Col>
                         </Row>
                     </Card.Body>
                     <Card.Footer>
@@ -101,10 +127,10 @@ function MatchboardView() {
                 </Card>
                 <Row>
                     <Col>
-                        <CP></CP>
+                        <CP CP={p1.Cp}></CP>
                     </Col>
                     <Col>
-                        <CP></CP>
+                        <CP CP={p2.Cp}></CP>
                     </Col>
                 </Row>
 

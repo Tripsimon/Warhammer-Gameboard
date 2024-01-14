@@ -1,25 +1,29 @@
 import { Card, Col, Form, Row, Button } from "react-bootstrap";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-function CommandPoint() {
-    const [cpCounter, setcpCounter] = useState(0)
+function CommandPoint(props) {
+    const [cpCounter, setCpCounter] = useState(0)
 
     function reduceCP() {
         if (cpCounter > 0) {
-            setcpCounter(cpCounter - 1);
+            setCpCounter(cpCounter - 1);
         }
     }
 
     function increaseCP() {
-        setcpCounter(cpCounter + 1);
+        setCpCounter(cpCounter + 1);
     }
 
+    useEffect(() => {
+        console.log(props.CP)
+        setCpCounter(props.CP)
+    }, []);
+
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header><h2 className="text-center" >Command Point: {cpCounter} </h2></Card.Header>
+        <Card.Header><h2 className="text-center" >Command Points: {cpCounter} </h2></Card.Header>
         <Card.Body>
             <Card.Title> Použít Stratagem: </Card.Title>
             <Card.Text>
-                <Row>
                     <Col xs="10">
                         <Form.Select aria-label="Default select example">
                             <option>Vybrat</option>
@@ -30,13 +34,12 @@ function CommandPoint() {
                             <option value="3">Three</option>
                         </Form.Select>
                     </Col>
-
-                    <Col>
-                            <Button>Přidat</Button>
-                    </Col>
-                </Row>
             </Card.Text>
+
         </Card.Body>
+        <Card.Footer>
+            <Button>Použít</Button>
+            </Card.Footer>
     </Card>;
 }
 
