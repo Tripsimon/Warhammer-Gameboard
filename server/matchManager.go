@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"log"
-
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -22,6 +21,23 @@ type matchPlayer struct {
 	Detachment int    `json:detachment`
 	Role       string `json:role`
 	Cp         int    `json:cp`
+	VpPrimary1 int 	  `json:vpPrimary1`
+	VpPrimary2 int 	  `json:vpPrimary2`
+	VpPrimary3 int 	  `json:vpPrimary3`
+	VpPrimary4 int 	  `json:vpPrimary4`
+	VpPrimary5 int 	  `json:vpPrimary5`
+	VpSecondary1 int  `json:vpSecondary1`
+	VpSecondary2 int  `json:vpSecondary2`
+	VpSecondary3 int  `json:vpSecondary3`
+	VpSecondary4 int  `json:vpSecondary4`
+	VpSecondary5 int  `json:vpSecondary5`
+}
+
+
+type matchDataResponse struct {
+	Match match   `json:match`
+	P1  matchPlayer `json:p1`
+	P2  matchPlayer `json:p2`
 }
 
 // Funkce pro vytvoření zápasu
@@ -101,12 +117,9 @@ func DBGetMatches() (result []match) {
 
 }
 
-func DBGetMatchData(id int) (result match) {
+//Získá data zápasu na základě jeho ID
+func DBGetMatchData(id int) (result matchDataResponse) {
 
-	type matchDataResponse struct {
-		Name   string `json:name`
-		P1Name string `json:p1name`
-	}
 
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -124,18 +137,23 @@ func DBGetMatchData(id int) (result match) {
 	}
 
 	var p1Data matchPlayer
-	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerOne).Scan(&p1Data.Id)
+	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerOne).Scan(&p1Data.Id, &p1Data.Name, &p1Data.Faction, &p1Data.Detachment, &p1Data.Role, &p1Data.Cp, &p1Data.VpPrimary1, &p1Data.VpPrimary2, &p1Data.VpPrimary3, &p1Data.VpPrimary4, &p1Data.VpPrimary5, &p1Data.VpSecondary1, &p1Data.VpSecondary2, &p1Data.VpSecondary3, &p1Data.VpSecondary4, &p1Data.VpSecondary5 )
 	if err != nil {
 		panic(err.Error())
 	}
 
+	
 	var p2Data matchPlayer
-	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerTwo).Scan(&p2Data.Id)
+	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerTwo).Scan(&p2Data.Id, &p2Data.Name, &p2Data.Faction, &p2Data.Detachment, &p2Data.Role, &p2Data.Cp, &p2Data.VpPrimary1, &p2Data.VpPrimary2, &p2Data.VpPrimary3, &p2Data.VpPrimary4, &p2Data.VpPrimary5, &p2Data.VpSecondary1, &p2Data.VpSecondary2, &p2Data.VpSecondary3, &p2Data.VpSecondary4, &p2Data.VpSecondary5)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	log.Println(p1Data.Id)
+	
 
-	return (matchData)
+	var res matchDataResponse
+	res.Match = matchData
+	res.P1 = p1Data
+	res.P2 = p2Data
+	return (res)
 }

@@ -10,30 +10,59 @@ import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
 
 function MatchboardView() {
 
-    const [matchData,setMatchData] = useState({
-        id:12,
-        name:"KEKW",
-    
+    const [matchData,setMatchData] = useState(
+    {
+        "Id":0,
+        "Name":"NaN",
+        "Round":1,
+        "PlayerOne":-1,
+        "PlayerTwo":-1
     });
-    const [roundCounter, setroundCounter] = useState(1);
 
+    const [roundCounter, setRoundCounter] = useState(1);
 
+    const [p1,setP1] = useState(
+    {
+        "Id":0,
+        "Name":"NaN",
+        "PlayerOne":-1,
+        "PlayerTwo":-1
+    });
+
+    const [p2,setP2] = useState(
+    {
+        "Id":0,
+        "Name":"NaN",
+        "PlayerOne":-1,
+        "PlayerTwo":-1
+    });
 
     const getData = (event) => {
-        requests.get('/matches/getMatchData?id=14')
+        requests.get('/matches/getMatchData?id=1')
             .then(res =>{
-                setMatchData(res.data[0])
+                setMatchData(res.data.Match)
+                setRoundCounter(res.data.Match.Round)
+                setP1(res.data.P1)
+                setP2(res.data.P2)
             })
-
     };
+
+    const updateMatchData = (event) =>{
+        //Nejak to zapisovat
+    }
+
+    const updatePlayerData = (event) =>{
+        //Nejak to zapisovat
+    }
 
     useEffect(() => {
         getData()
+        console.log(matchData)
     }, []);
 
       const nextRound = () => {
         if (roundCounter < 5) {
-            setroundCounter(roundCounter + 1)
+            setRoundCounter(roundCounter + 1)
         }
     }
 
@@ -50,11 +79,7 @@ function MatchboardView() {
                 </Image>
             </div>
 
-            <Container>
-
-                <Image src="../../public/imgs/bg_ig.jpg">
-
-                </Image>
+            <Container className="pt-3">
                 <Card>
                     <Card.Header>
                         <Row>
@@ -65,7 +90,7 @@ function MatchboardView() {
                     </Card.Header>
                     <Card.Body>
                         <Row>
-                            <Col className="text-center">VP:</Col>
+                            <Col className="text-center">VP: </Col>
                             <Col><h3 className="text-center">Aktuální kolo: {roundCounter}</h3></Col>
                             <Col className="text-center">VP:</Col>
                         </Row>

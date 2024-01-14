@@ -24,7 +24,7 @@ function VictoryPoint() {
 
     return <Card style={{ marginTop: '2%' }}>
         <Card.Header> 
-            <div>Round: 1</div>
+            Round: 1
         </Card.Header>
 
         <Card.Body>

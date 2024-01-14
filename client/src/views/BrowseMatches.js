@@ -13,11 +13,14 @@ function BrowseMatches() {
   const navigate = useNavigate();
   const user = useSelector(state => state.user)
 
-/*
+
+  //Získá si data jednotlivých zápasů
   const getData = (event) =>{
+
     requests.get("/matches/getMatches")
       .then(res =>{
         setAvaliableMatches(res.data)
+        console.log(res.data)
       })
   }
 
@@ -25,14 +28,14 @@ function BrowseMatches() {
   useEffect(() => {
     getData()
   }, []);
-*/
+
   const renderMatchesOptions = (event) =>{
     if (avaliableMatches == false) {
       return
     }else{
       return(
         avaliableMatches.map((match,index) => (
-          <MatchEntry key={match['Id']} name={match['Name']} state={"TODO"} id={match['Id']} />
+          <MatchEntry key={match['Id']} name={match['Name']} state={match["Round"] == 5 ?   "DOKONčENO": match["Round"] } id={match['Id']} />
         ))
       )
     }

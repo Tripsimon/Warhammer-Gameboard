@@ -25,7 +25,7 @@ func main() {
 
 	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch))
 	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches))
-	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData))
+	http.HandleFunc("/matches/getMatchData", HandleGetMatchData)
 
 	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility))
 	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility))
@@ -206,15 +206,14 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
+func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	id, _ := strconv.Atoi(strings.Join(req.URL.Query()["id"], ""))
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(DBGetMatchData(id))
 }
 
-func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
+func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
