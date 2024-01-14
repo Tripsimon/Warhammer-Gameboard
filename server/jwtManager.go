@@ -51,7 +51,7 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 	return nil, fmt.Errorf("Token is not valid")
 }
 
-func VerifyTokenMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func VerifyTokenMiddleware(next http.HandlerFunc, adminOnly bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		enableCors(w, req)
 		tokenString := req.Header.Get("Authorization")
@@ -65,6 +65,14 @@ func VerifyTokenMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
+		}
+
+		if adminOnly {
+			isAdmin, ok := claims["isAdmin"].(bool)
+			if !ok || !isAdmin {
+				http.Error(w, "Invalid token - admin rights required", http.StatusUnauthorized)
+				return
+			}
 		}
 
 		ctx := context.WithValue(req.Context(), "claims", claims)
