@@ -27,6 +27,7 @@ func main() {
 	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches, false))
 	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData, false))
 	http.HandleFunc("/matches/syncMatchData", VerifyTokenMiddleware(HandleSyncMatchData, false))
+	http.HandleFunc("/matches/syncPlayerData", HandleSyncPlayerData)
 
 	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility, true))
 	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility, true))
@@ -223,13 +224,34 @@ func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetMatches())
 }
 
-//Uprava dat zápasu
-func HandleSyncMatchData(w http.ResponseWriter, req *http.Request)  {
+// Uprava dat zápasu
+func HandleSyncMatchData(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 
 	var id = strings.Join(req.URL.Query()["id"], "")
 	var round = strings.Join(req.URL.Query()["round"], "")
-	DBSyncMatchData(id,round)
+	DBSyncMatchData(id, round)
+}
+
+// Uprava dat hrace
+func HandleSyncPlayerData(w http.ResponseWriter, req *http.Request) {
+	enableCors(w, req)
+
+	var id = strings.Join(req.URL.Query()["id"], "")
+	var cp = strings.Join(req.URL.Query()["cp"], "")
+	var VpPrimary1 = strings.Join(req.URL.Query()["vp1"], "")
+	var VpPrimary2 = strings.Join(req.URL.Query()["vp2"], "")
+	var VpPrimary3 = strings.Join(req.URL.Query()["vp3"], "")
+	var VpPrimary4 = strings.Join(req.URL.Query()["vp4"], "")
+	var VpPrimary5 = strings.Join(req.URL.Query()["vp5"], "")
+
+	var VpSecondary1 = strings.Join(req.URL.Query()["vs1"], "")
+	var VpSecondary2 = strings.Join(req.URL.Query()["vs2"], "")
+	var VpSecondary3 = strings.Join(req.URL.Query()["vs3"], "")
+	var VpSecondary4 = strings.Join(req.URL.Query()["vs4"], "")
+	var VpSecondary5 = strings.Join(req.URL.Query()["vs5"], "")
+
+	DBSyncPlayerData(id, cp, VpPrimary1, VpPrimary2, VpPrimary3, VpPrimary4, VpPrimary5, VpSecondary1, VpSecondary2, VpSecondary3, VpSecondary4, VpSecondary5)
 }
 
 // Funkce pro obsloužení požadavku na kontrolu existence loginu v tabulce facilities
@@ -401,10 +423,10 @@ func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
-func HandleGetStratagemsForDetachment(w http.ResponseWriter, req *http.Request){
+func HandleGetStratagemsForDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 
-	var detachmentId = strings.Join(req.URL.Query()["detachmentId"], "");
+	var detachmentId = strings.Join(req.URL.Query()["detachmentId"], "")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(DBGetStratagemsForDetachment(detachmentId))
 }

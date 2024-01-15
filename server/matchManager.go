@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -15,29 +16,28 @@ type match struct {
 }
 
 type matchPlayer struct {
-	Id         int    `json:id`
-	Name       string `json:name`
-	Faction    int    `json:faction`
-	Detachment int    `json:detachment`
-	Role       string `json:role`
-	Cp         int    `json:cp`
-	VpPrimary1 int 	  `json:vpPrimary1`
-	VpPrimary2 int 	  `json:vpPrimary2`
-	VpPrimary3 int 	  `json:vpPrimary3`
-	VpPrimary4 int 	  `json:vpPrimary4`
-	VpPrimary5 int 	  `json:vpPrimary5`
-	VpSecondary1 int  `json:vpSecondary1`
-	VpSecondary2 int  `json:vpSecondary2`
-	VpSecondary3 int  `json:vpSecondary3`
-	VpSecondary4 int  `json:vpSecondary4`
-	VpSecondary5 int  `json:vpSecondary5`
+	Id           int    `json:id`
+	Name         string `json:name`
+	Faction      int    `json:faction`
+	Detachment   int    `json:detachment`
+	Role         string `json:role`
+	Cp           int    `json:cp`
+	VpPrimary1   int    `json:vpPrimary1`
+	VpPrimary2   int    `json:vpPrimary2`
+	VpPrimary3   int    `json:vpPrimary3`
+	VpPrimary4   int    `json:vpPrimary4`
+	VpPrimary5   int    `json:vpPrimary5`
+	VpSecondary1 int    `json:vpSecondary1`
+	VpSecondary2 int    `json:vpSecondary2`
+	VpSecondary3 int    `json:vpSecondary3`
+	VpSecondary4 int    `json:vpSecondary4`
+	VpSecondary5 int    `json:vpSecondary5`
 }
 
-
 type matchDataResponse struct {
-	Match match   `json:match`
-	P1  matchPlayer `json:p1`
-	P2  matchPlayer `json:p2`
+	Match match       `json:match`
+	P1    matchPlayer `json:p1`
+	P2    matchPlayer `json:p2`
 }
 
 // Funkce pro vytvoření zápasu
@@ -117,7 +117,7 @@ func DBGetMatches() (result []match) {
 
 }
 
-//Získá data zápasu na základě jeho ID
+// Získá data zápasu na základě jeho ID
 func DBGetMatchData(id int) (result matchDataResponse) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -136,19 +136,16 @@ func DBGetMatchData(id int) (result matchDataResponse) {
 	}
 
 	var p1Data matchPlayer
-	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerOne).Scan(&p1Data.Id, &p1Data.Name, &p1Data.Faction, &p1Data.Detachment, &p1Data.Role, &p1Data.Cp, &p1Data.VpPrimary1, &p1Data.VpPrimary2, &p1Data.VpPrimary3, &p1Data.VpPrimary4, &p1Data.VpPrimary5, &p1Data.VpSecondary1, &p1Data.VpSecondary2, &p1Data.VpSecondary3, &p1Data.VpSecondary4, &p1Data.VpSecondary5 )
+	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerOne).Scan(&p1Data.Id, &p1Data.Name, &p1Data.Faction, &p1Data.Detachment, &p1Data.Role, &p1Data.Cp, &p1Data.VpPrimary1, &p1Data.VpPrimary2, &p1Data.VpPrimary3, &p1Data.VpPrimary4, &p1Data.VpPrimary5, &p1Data.VpSecondary1, &p1Data.VpSecondary2, &p1Data.VpSecondary3, &p1Data.VpSecondary4, &p1Data.VpSecondary5)
 	if err != nil {
 		panic(err.Error())
 	}
 
-	
 	var p2Data matchPlayer
 	err = db.QueryRow("SELECT * FROM matchPlayers WHERE id = ?", matchData.PlayerTwo).Scan(&p2Data.Id, &p2Data.Name, &p2Data.Faction, &p2Data.Detachment, &p2Data.Role, &p2Data.Cp, &p2Data.VpPrimary1, &p2Data.VpPrimary2, &p2Data.VpPrimary3, &p2Data.VpPrimary4, &p2Data.VpPrimary5, &p2Data.VpSecondary1, &p2Data.VpSecondary2, &p2Data.VpSecondary3, &p2Data.VpSecondary4, &p2Data.VpSecondary5)
 	if err != nil {
 		panic(err.Error())
 	}
-
-	
 
 	var res matchDataResponse
 	res.Match = matchData
@@ -157,7 +154,7 @@ func DBGetMatchData(id int) (result matchDataResponse) {
 	return (res)
 }
 
-func DBSyncMatchData(id string, round string){
+func DBSyncMatchData(id string, round string) {
 	log.Println("DB Akce: Uprava dat zápasu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -165,10 +162,24 @@ func DBSyncMatchData(id string, round string){
 		panic(err.Error())
 	}
 
-	_,err = db.Query("UPDATE matches SET `round` = ? WHERE id = ? ", round, id)
+	_, err = db.Query("UPDATE matches SET `round` = ? WHERE id = ? ", round, id)
+
+	if err != nil {
+		panic(err.Error())
+	}
+}
+
+func DBSyncPlayerData(id string, cp string, VpPrimary1 string, VpPrimary2 string, VpPrimary3 string, VpPrimary4 string, VpPrimary5 string, VpSecondary1 string, VpSecondary2 string, VpSecondary3 string, VpSecondary4 string, VpSecondary5 string) {
+	log.Println("DB Akce: Uprava dat hráče")
+	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
 		panic(err.Error())
 	}
 
+	_, err = db.Query("UPDATE matchPlayers SET cp = ?, vpPrimary1 = ?, vpPrimary2 = ?, vpPrimary3 = ?, vpPrimary4 = ?, vpPrimary5 = ?,  vpSecondary1 = ?, vpSecondary2 = ?, vpSecondary3 = ?, vpSecondary4 = ?, vpSecondary5 = ? WHERE id = ?", cp, VpPrimary1, VpPrimary2, VpPrimary3, VpPrimary4, VpPrimary5, VpSecondary1, VpSecondary2, VpSecondary3, VpSecondary4, VpSecondary5, id)
+
+	if err != nil {
+		panic(err.Error())
+	}
 }

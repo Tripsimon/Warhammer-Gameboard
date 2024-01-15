@@ -82,12 +82,20 @@ function MatchboardView() {
             })
     };
 
-    const updateMatchData = (event) =>{
+    const syncMatchData = () =>{
         axios.get("http://localhost:3001/matches/syncMatchData?id="+matchData.Id+"&round="+matchData.Round)
     }
 
-    const updatePlayerData = (event) =>{
-        //Nejak to zapisovat
+    const syncPlayerData = (player) =>{
+        var player;
+        if(player == 1){
+            player = p1
+        }else if(player == 2){
+            player = p2
+        }else{
+            return
+        }
+        axios.get("http://localhost:3001/matches/syncPlayerData?id="+player.Id+"&cp="+player.Cp+"&vp1="+player.VpPrimary1+"&vp2="+player.VpPrimary2+"&vp3="+player.VpPrimary3+"&vp4="+player.VpPrimary4+"&vp5="+player.VpPrimary5+"&vs1="+player.VpSecondary1+"&vs2="+player.VpSecondary2+"&vs3="+player.VpSecondary3+"&vs4="+player.VpSecondary4+"&vs5="+player.VpSecondary5)
     }
 
     useEffect(() => {
@@ -100,9 +108,10 @@ function MatchboardView() {
         var data = matchData
         data.Round++
         setMatchData(data)
-        updateMatchData()
+        syncMatchData()
     }}
 
+    //Hrač zaplatí CP za Stratagem
     const payCP = (player, cp) =>{
         if (player == 1) {
             setP1(p =>({...p, Cp: p1.Cp - cp}))
@@ -110,6 +119,26 @@ function MatchboardView() {
             setP2(p =>({...p, Cp: p2.Cp - cp}))
         }
     }
+
+    //Hrač získá jedno CP (Zatim nemužeme omezit na kolo kvuli Leviathanu)
+    //TODO:: Tyhle 2 funkce dát dohromady. Třeba tak že cena v DB bude zaporna
+    const getCP = (player) =>{
+        if (player == 1) {
+            setP1(p =>({...p, Cp: p1.Cp + 1}))
+        }else if( player == 2){
+            setP2(p =>({...p, Cp: p2.Cp + 1}))
+        }
+    }
+
+    useEffect(() =>{
+        syncPlayerData(1)
+    },[p1])
+
+    useEffect(() =>{
+        console.log("Tady jsme")
+        syncPlayerData(2)
+    },[p2])
+
 
     return (
         <div>
@@ -142,10 +171,10 @@ function MatchboardView() {
                 </Card>
                 <Row>
                     <Col>
-                        <CP CP={p1.Cp} player={1} payCP={payCP} stratagems={p1Stratagems}></CP>
+                        <CP CP={p1.Cp} player={1} payCP={payCP} getCP={getCP} stratagems={p1Stratagems}></CP>
                     </Col>
                     <Col>
-                        <CP CP={p2.Cp} player={2} payCP={payCP} stratagems={p2Stratagems}></CP>
+                        <CP CP={p2.Cp} player={2} payCP={payCP} getCP={getCP} stratagems={p2Stratagems}></CP>
                     </Col>
                 </Row>
                 <Row>
