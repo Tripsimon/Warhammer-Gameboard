@@ -262,6 +262,24 @@ function MatchboardView() {
         )
     }
 
+    const renderActualScore = () =>{
+        if (matchData.Round == -1) {
+            let p1Points = p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5 + p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5;
+            let p2Points = p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5 + p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5;
+            let winner;
+            if(p1Points > p2Points){winner = p1.Name}else if(p1Points < p2Points){winner = p2.Name}else{winner = "Remíza"}
+            return(<div>
+                <h3> Hra uzavřena</h3>
+                <br></br>
+                <h3> Vítěz: {winner} </h3>
+                </div>
+            )
+        }else{
+            return <h3>Aktuální kolo: {matchData.Round}</h3>
+        }
+        return
+    }
+
     return (
         <div>
             <div className="bgWrap">
@@ -283,7 +301,7 @@ function MatchboardView() {
                     <Card.Body>
                         <Row>
                             <Col className="text-center"><h3>Vítězné body: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</h3></Col>
-                            <Col><h3 className="text-center">Aktuální kolo: {roundCounter > 0 ? roundCounter : "Hra uzavřena"}</h3></Col>
+                            <Col><h3 className="text-center"> {renderActualScore()}</h3></Col>
                             <Col className="text-center"><h3>Vítězné body: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</h3></Col>
                         </Row>
                     </Card.Body>
