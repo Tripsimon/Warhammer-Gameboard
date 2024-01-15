@@ -249,7 +249,7 @@ function MatchboardView() {
 
     const renderNextRoundControls = () =>{
         let response = null;
-        if (matchData.Round < 0 && matchData.Round > 5) {
+        if (matchData.Round > 0 && matchData.Round < 5) {
             response = <Button onClick={nextRound} className="btn btn-success" >Další kolo</Button>;
         }else if(matchData.Round == 5){
             response = <Button onClick={closeGame} className="btn btn-danger">Uzavřít hru</Button>}
