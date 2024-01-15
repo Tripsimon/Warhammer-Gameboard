@@ -61,13 +61,24 @@ function MatchboardView() {
         "VpSecondary5":0,
     });
 
+    const  [p1Stratagems, setP1Stratagems] = useState([{"Name":"Not Loaded yet"}])
+    const  [p2Stratagems, setP2Stratagems] = useState([{"Name":"Not Loaded yet"}])
+
     const getData = (event) => {
-        requests.get('/matches/getMatchData?id=1')
+        requests.get('http://localhost:3001/matches/getMatchData?id=1')
             .then(res =>{
                 setMatchData(res.data.Match)
                 setRoundCounter(res.data.Match.Round)
                 setP1(res.data.P1)
                 setP2(res.data.P2)
+
+                axios.get("http://localhost:3001/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P1.Detachment).then(detRes =>{
+                    setP1Stratagems(detRes.data);
+                })
+
+                axios.get("http://localhost:3001/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P2.Detachment).then(detRes =>{
+                    setP2Stratagems(detRes.data);
+                })
             })
     };
 
@@ -131,10 +142,10 @@ function MatchboardView() {
                 </Card>
                 <Row>
                     <Col>
-                        <CP CP={p1.Cp} player={1} payCP={payCP}></CP>
+                        <CP CP={p1.Cp} player={1} payCP={payCP} stratagems={p1Stratagems}></CP>
                     </Col>
                     <Col>
-                        <CP CP={p2.Cp} player={2} payCP={payCP}></CP>
+                        <CP CP={p2.Cp} player={2} payCP={payCP} stratagems={p2Stratagems}></CP>
                     </Col>
                 </Row>
                 <Row>

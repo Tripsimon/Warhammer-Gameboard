@@ -41,14 +41,6 @@ function BrowseMatches() {
     }
   }
 
-  let matches = [{
-    "name":"Jmeno",
-    "state":"Stav"
-  },
-  {
-    "name":"Jmeno2",
-    "state":"Stav3"
-  }];
 
   return (
     <Container className='mt-2'>
