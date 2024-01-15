@@ -20,7 +20,6 @@ function BrowseMatches() {
     requests.get("/matches/getMatches?id=" + user.id)
       .then(res =>{
         setAvaliableMatches(res.data)
-        console.log(res.data)
       })
   }
 
