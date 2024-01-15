@@ -17,7 +17,7 @@ function BrowseMatches() {
   //Získá si data jednotlivých zápasů
   const getData = (event) =>{
 
-    requests.get("/matches/getMatches")
+    requests.get("/matches/getMatches?id=" + user.id)
       .then(res =>{
         setAvaliableMatches(res.data)
         console.log(res.data)

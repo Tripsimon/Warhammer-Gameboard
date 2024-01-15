@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import { useState } from 'react';
 import requests from '../utils/Requests';
+import { useSelector } from 'react-redux';
 
 function CreateMatch() {
   const [avaliableFactions,setAvaliableFactions] = useState(false);
@@ -18,6 +19,8 @@ function CreateMatch() {
   const [player2Name,setPlayer2Name] = useState("")
   const [player2Faction,SetPlayer2Faction] = useState("")
   const [player2Detachment,setPlayer2Detachment] = useState("")
+
+  const user = useSelector(state => state.user)
 
   const navigate = useNavigate();
 
@@ -113,7 +116,8 @@ function CreateMatch() {
           p1d: player1Detachment,
           p2: player2Name,
           p2f: player2Faction,
-          p2d: player2Detachment
+          p2d: player2Detachment,
+          fId: user.id
         }
       );
   

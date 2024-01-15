@@ -135,7 +135,7 @@ function MatchboardView() {
     }
 
     /**
-     * Funce pro změnu výtězných bodů hráče
+     * Funce pro změnu vítězných bodů hráče
      * @param {*} round - číslo kola
      * @param {*} player - Pozice hráče. 1 nebo 2
      * @param {*} type  - Primary nebo Secondary
@@ -279,9 +279,9 @@ function MatchboardView() {
                     </Card.Header>
                     <Card.Body>
                         <Row>
-                            <Col className="text-center"><h3>Výtězné body: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</h3></Col>
+                            <Col className="text-center"><h3>Vítězné body: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</h3></Col>
                             <Col><h3 className="text-center">Aktuální kolo: {roundCounter > 0 ? roundCounter : "Hra uzavřena"}</h3></Col>
-                            <Col className="text-center"><h3>Výtězné body: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</h3></Col>
+                            <Col className="text-center"><h3>Vítězné body: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</h3></Col>
                         </Row>
                     </Card.Body>
                     <Card.Footer>
