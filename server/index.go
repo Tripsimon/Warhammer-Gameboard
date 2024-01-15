@@ -195,13 +195,13 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 
 		name, _ := data["name"].(string)
 		p1, _ := data["p1"].(string)
-		p1f, _ := data["p1f"].(float64)
-		p1d, _ := data["p1d"].(float64)
+		p1f, _ := data["p1f"].(string)
+		p1d, _ := data["p1d"].(string)
 		p2, _ := data["p2"].(string)
-		p2f, _ := data["p2f"].(float64)
-		p2d, _ := data["p2d"].(float64)
+		p2f, _ := data["p2f"].(string)
+		p2d, _ := data["p2d"].(string)
 
-		DBcreateMatch(name, p1, int(p1f), int(p1d), p2, int(p2f), int(p2d))
+		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d)
 
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintln(w, "SUCCESS")

@@ -13,11 +13,11 @@ function CreateMatch() {
 
   const [player1Name,setPlayer1Name] = useState("")
   const [player1Faction,SetPlayer1Faction] = useState("")
-  const [player1Detachment,setPlayer1Detachment] = useState(1)
+  const [player1Detachment,setPlayer1Detachment] = useState("")
 
   const [player2Name,setPlayer2Name] = useState("")
   const [player2Faction,SetPlayer2Faction] = useState("")
-  const [player2Detachment,setPlayer2Detachment] = useState(1)
+  const [player2Detachment,setPlayer2Detachment] = useState("")
 
   const navigate = useNavigate();
 
@@ -160,14 +160,14 @@ function CreateMatch() {
                   <Col>
                   <label>Výběr frakce 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Faction} onChange={(e) => SetPlayer1Faction(e.target.value)}>
-                  <option value="" disabled selected>Výběr frakce</option>
+                  <option value="" disabled defaultValue={-1}>Výběr frakce</option>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
                   <Col>
                   <label>Výběr frakce 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Faction} onChange={(e) => SetPlayer2Faction(e.target.value)}>
-                  <option value="" disabled selected>Výběr frakce</option>
+                  <option value="" disabled defaultValue={-1}>Výběr frakce</option>
                     {renderFactionChoices()}
                   </Form.Select>
                   </Col>
@@ -176,14 +176,14 @@ function CreateMatch() {
                   <Col>
                   <label>Výběr detachmentu 1. hráče</label>
                   <Form.Select aria-label="Default select example" value={player1Detachment} onChange={(e) => setPlayer1Detachment(e.target.value)}>
-                  <option value="" disabled selected>Výběr detachmentu</option>
+                  <option value="" disabled defaultValue={-1}>Výběr detachmentu</option>
                     {renderDetachmentChoices1()}
                   </Form.Select>
                   </Col>
                   <Col>
                   <label>Výběr detachmentu 2. hráče</label>
                   <Form.Select aria-label="Default select example" value={player2Detachment} onChange={(e) => setPlayer2Detachment(e.target.value)}>
-                  <option value="" disabled selected>Výběr detachmentu</option>
+                  <option value="" disabled defaultValue={-1}>Výběr detachmentu</option>
                     {renderDetachmentChoices2()}
                   </Form.Select>
                   </Col>
