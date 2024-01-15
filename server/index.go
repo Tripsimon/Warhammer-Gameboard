@@ -48,7 +48,7 @@ func main() {
 
 	http.HandleFunc("/verifyToken", HandleTokenVerification)
 
-	http.HandleFunc("/hello", hello)
+	http.HandleFunc("/hello", HandleHelloWorld)
 	http.HandleFunc("/headers", headers)
 
 	log.Println("Server naslouchá na portu 3001")
@@ -352,9 +352,9 @@ func HandleDeleteFaction(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(w, "SUCCESS")
 }
 
-func hello(w http.ResponseWriter, req *http.Request) {
+func HandleHelloWorld(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
-	fmt.Fprintf(w, "hello\n")
+	fmt.Fprintf(w, "Hello World !")
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
