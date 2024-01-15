@@ -111,6 +111,10 @@ function MatchboardView() {
         syncMatchData()
     }}
 
+    const closeGame = () =>{
+
+    }
+
     //Hrač zaplatí CP za Stratagem
     const payCP = (player, cp) =>{
         if (player == 1) {
@@ -130,18 +134,123 @@ function MatchboardView() {
         }
     }
 
+    /**
+     * Funce pro změnu výtězných bodů hráče
+     * @param {*} round - číslo kola
+     * @param {*} player - Pozice hráče. 1 nebo 2
+     * @param {*} type  - Primary nebo Secondary
+     * @param {*} ammount - o kolik se změní. Odečet pošle zaporné číslo
+     * Tohle by mohla byt asi o dost lépe udělaná funkce ale je to co to je
+     */
     const changePoints = (round, player, type, ammount) =>{
-        console.log(round,player,type,ammount);
+        console.log(p1)
+        if(player == 1){
+            switch (round) {
+                case 1:
+                    if (type == "Primary") {
+                        setP1(p =>({...p, VpPrimary1: p1.VpPrimary1 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP1(p =>({...p, VpSecondary1: p1.VpSecondary1 + ammount}))
+                    }
+                break;
+
+                case 2:
+                    if (type == "Primary") {
+                        setP1(p =>({...p, VpPrimary2: p1.VpPrimary2 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP1(p =>({...p, VpSecondary2: p1.VpSecondary2 + ammount}))
+                    }
+                break;
+
+                case 3:
+                    if (type == "Primary") {
+                        setP1(p =>({...p, VpPrimary3: p1.VpPrimary3 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP1(p =>({...p, VpSecondary3: p1.VpSecondary3 + ammount}))
+                    }
+                break;
+
+                case 4:
+                    if (type == "Primary") {
+                        setP1(p =>({...p, VpPrimary4: p1.VpPrimary4 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP1(p =>({...p, VpSecondary4: p1.VpSecondary4 + ammount}))
+                    }
+                break;
+
+                case 5:
+                    if (type == "Primary") {
+                        setP1(p =>({...p, VpPrimary5: p1.VpPrimary5 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP1(p =>({...p, VpSecondary5: p1.VpSecondary5 + ammount}))
+                    }
+                break;
+            
+                default:
+                    break;
+            }
+        }else if(player == 2){
+            switch (round) {
+                case 1:
+                    if (type == "Primary") {
+                        setP2(p =>({...p, VpPrimary1: p2.VpPrimary1 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP2(p =>({...p, VpSecondary1: p2.VpSecondary1 + ammount}))
+                    }
+                break;
+
+                case 2:
+                    if (type == "Primary") {
+                        setP2(p =>({...p, VpPrimary2: p2.VpPrimary2 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP2(p =>({...p, VpSecondary2: p2.VpSecondary2 + ammount}))
+                    }
+                break;
+
+                case 3:
+                    if (type == "Primary") {
+                        setP2(p =>({...p, VpPrimary3: p2.VpPrimary3 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP2(p =>({...p, VpSecondary3: p2.VpSecondary3 + ammount}))
+                    }
+                break;
+
+                case 4:
+                    if (type == "Primary") {
+                        setP2(p =>({...p, VpPrimary4: p2.VpPrimary4 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP2(p =>({...p, VpSecondary4: p2.VpSecondary4 + ammount}))
+                    }
+                break;
+
+                case 5:
+                    if (type == "Primary") {
+                        setP2(p =>({...p, VpPrimary5: p2.VpPrimary5 + ammount}))
+                    }else if(type == "Secondary"){
+                        setP2(p =>({...p, VpSecondary5: p2.VpSecondary5 + ammount}))
+                    }
+                break;
+            
+                default:
+                    break;
+            }
+        }
     }
 
     useEffect(() =>{
         syncPlayerData(1)
     },[p1])
-
     useEffect(() =>{
         syncPlayerData(2)
     },[p2])
 
+    const renderNextRoundControls = () =>{
+        let response = <Button onClick={nextRound} >Další kolo</Button>;
+        if(matchData.Round == 5){response = <Button onClick={closeGame} >Uzavřít hru</Button>}
+        return(
+            response
+        )
+    }
 
     return (
         <div>
@@ -163,13 +272,13 @@ function MatchboardView() {
                     </Card.Header>
                     <Card.Body>
                         <Row>
-                            <Col className="text-center">VP: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</Col>
+                            <Col className="text-center"><h3>Výtězné body: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</h3></Col>
                             <Col><h3 className="text-center">Aktuální kolo: {roundCounter}</h3></Col>
-                            <Col className="text-center">VP: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</Col>
+                            <Col className="text-center"><h3>Výtězné body: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</h3></Col>
                         </Row>
                     </Card.Body>
                     <Card.Footer>
-                        <Button onClick={nextRound} >Další kolo</Button>
+                        {renderNextRoundControls()}
                     </Card.Footer>
                 </Card>
                 <Row>
@@ -184,12 +293,14 @@ function MatchboardView() {
                     <Col>
                         <VP changePoints={changePoints} round={matchData.Round} player={1}
                         VP1={p1.VpPrimary1} VP2={p1.VpPrimary2} VP3={p1.VpPrimary3} VP4={p1.VpPrimary4} VP5={p1.VpPrimary5}
-                        VS1={p1.VpSecondary1} VS2={p1.VpSecondary2} VS3={p1.VpSecondary3} VS4={p1.VpSecondary4} VS5={p1.VpSecondary5}
-                        >
+                        VS1={p1.VpSecondary1} VS2={p1.VpSecondary2} VS3={p1.VpSecondary3} VS4={p1.VpSecondary4} VS5={p1.VpSecondary5}>
                         </VP>
                     </Col>
-                    <Col><VP></VP>
-                    
+                    <Col>
+                    <VP changePoints={changePoints} round={matchData.Round} player={2}
+                        VP1={p2.VpPrimary1} VP2={p2.VpPrimary2} VP3={p2.VpPrimary3} VP4={p2.VpPrimary4} VP5={p2.VpPrimary5}
+                        VS1={p2.VpSecondary1} VS2={p2.VpSecondary2} VS3={p2.VpSecondary3} VS4={p2.VpSecondary4} VS5={p2.VpSecondary5}>
+                        </VP>
                     </Col>
                 </Row> 
 

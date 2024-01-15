@@ -47,10 +47,10 @@ function VictoryPoint(props) {
             </Table>
         </Card.Body>
         <Card.Footer>
-            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "VP", 1)}} >Primární +</Button>{' '}
-            <Button variant="warning">Primární -</Button>{' '}
-            <Button variant="success">Sekundární +</Button>{' '}
-            <Button variant="warning">Sekundární -</Button>{' '}
+            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Primary", 1)}} >Primární +</Button>{' '}
+            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Primary", -1)}}>Primární -</Button>{' '}
+            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Secondary", 1)}}>Sekundární +</Button>{' '}
+            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Secondary", -1)}}>Sekundární -</Button>{' '}
         </Card.Footer>
     </Card>;
 }
