@@ -291,10 +291,10 @@ function MatchboardView() {
                 </Card>
                 <Row>
                     <Col>
-                        <CP CP={p1.Cp} player={1} payCP={payCP} getCP={getCP} stratagems={p1Stratagems}></CP>
+                        <CP CP={p1.Cp} player={1} round={matchData.Round} payCP={payCP} getCP={getCP} stratagems={p1Stratagems}></CP>
                     </Col>
                     <Col>
-                        <CP CP={p2.Cp} player={2} payCP={payCP} getCP={getCP} stratagems={p2Stratagems}></CP>
+                        <CP CP={p2.Cp} player={2} round={matchData.Round} payCP={payCP} getCP={getCP} stratagems={p2Stratagems}></CP>
                     </Col>
                 </Row>
                 <Row>

@@ -16,6 +16,18 @@ function CommandPoint(props) {
             return(<CardSubtitle className="ml-2">{props.stratagems[chosenStratagem].Ability}</CardSubtitle>)
         }
     }
+
+    const renderControls = () =>{
+        if(props.Round == -1){return}
+        return (
+        <div>
+        <Card.Footer>
+            <Button  onClick={() => props.payCP(props.player,[props.stratagems[chosenStratagem].Price])}>Použít Stratagem</Button>
+            <Button  className="btn btn-success mx-2" color="success" onClick={() => props.getCP(props.player)}>Přidat CP</Button>
+        </Card.Footer>
+        </div>
+        )
+    }
     
     return <Card style={{ marginTop: '2%' }}>
         <Card.Header><h3 className="text-center" >Command Points: {props.CP} </h3></Card.Header>
@@ -30,10 +42,7 @@ function CommandPoint(props) {
             </Card.Text>
             {renderExplainStratagem()}
         </Card.Body>
-        <Card.Footer>
-            <Button  onClick={() => props.payCP(props.player,[props.stratagems[chosenStratagem].Price])}>Použít Stratagem</Button>
-            <Button  className="btn btn-success mx-2" color="success" onClick={() => props.getCP(props.player)}>Přidat CP</Button>
-        </Card.Footer>
+            {renderControls()}
     </Card>;
 }
 
