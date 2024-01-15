@@ -17,8 +17,8 @@ function LoginScreen() {
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertText, setAlertText] = useState("");
-    const [Login, setLogin] = useState()
-    const [Password, setPassword] = useState()
+    const [Login, setLogin] = useState("")
+    const [Password, setPassword] = useState("")
     const userName = useSelector(selectUserName);
     const isAdmin = useSelector(selectIsAdmin);
     const id = useSelector(selectUserId);
