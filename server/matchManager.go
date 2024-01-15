@@ -122,7 +122,7 @@ func DBGetMatches(id string) (result []match) {
 
 // Získá data zápasu na základě jeho ID
 func DBGetMatchData(id int) (result matchDataResponse) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání dat zápasu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

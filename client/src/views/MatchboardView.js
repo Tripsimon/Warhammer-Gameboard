@@ -65,7 +65,10 @@ function MatchboardView() {
     const  [p2Stratagems, setP2Stratagems] = useState([{"Name":"Not Loaded yet"}])
 
     const getData = (event) => {
-        requests.get('http://localhost:3001/matches/getMatchData?id=1')
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        console.log(urlParams.get('key'))
+        requests.get('http://localhost:3001/matches/getMatchData?id='+urlParams.get('key'))
             .then(res =>{
                 setMatchData(res.data.Match)
                 setRoundCounter(res.data.Match.Round)
