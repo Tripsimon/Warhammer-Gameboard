@@ -26,8 +26,8 @@ func main() {
 	http.HandleFunc("/matches/createMatch", VerifyTokenMiddleware(HandleCreateMatch, false))
 	http.HandleFunc("/matches/getMatches", VerifyTokenMiddleware(HandleGetMatches, false))
 	http.HandleFunc("/matches/getMatchData", VerifyTokenMiddleware(HandleGetMatchData, false))
-	http.HandleFunc("/matches/syncMatchData", HandleSyncMatchData)
-	http.HandleFunc("/matches/syncPlayerData", HandleSyncPlayerData)
+	http.HandleFunc("/matches/syncMatchData", VerifyTokenMiddleware(HandleSyncMatchData, false))
+	http.HandleFunc("/matches/syncPlayerData", VerifyTokenMiddleware(HandleSyncPlayerData, false))
 
 	http.HandleFunc("/facility/createFacility", VerifyTokenMiddleware(HandleCreateFacility, true))
 	http.HandleFunc("/facility/getAllFacility", VerifyTokenMiddleware(HandleGetAllFacility, true))
