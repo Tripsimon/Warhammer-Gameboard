@@ -143,7 +143,6 @@ function MatchboardView() {
      * Tohle by mohla byt asi o dost lépe udělaná funkce ale je to co to je
      */
     const changePoints = (round, player, type, ammount) =>{
-        console.log(p1)
         if(player == 1){
             switch (round) {
                 case 1:
