@@ -112,7 +112,7 @@ function MatchboardView() {
     }}
 
     const closeGame = () =>{
-
+        setMatchData(m =>({...m, Round: -1}))
     }
 
     //Hrač zaplatí CP za Stratagem
@@ -237,6 +237,9 @@ function MatchboardView() {
         }
     }
 
+    useEffect(() =>{
+        syncMatchData()
+    },[matchData])
     useEffect(() =>{
         syncPlayerData(1)
     },[p1])
