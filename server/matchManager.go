@@ -78,7 +78,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction int, play
 		}
 	}
 
-	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo) VALUES (?,0,?,?)", name, playerOne, playerTwo)
+	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo) VALUES (?,1,?,?)", name, playerOne, playerTwo)
 
 	defer insert.Close()
 	log.Println("Herní místnost založena")
