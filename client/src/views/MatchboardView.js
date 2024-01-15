@@ -7,7 +7,6 @@ import VP from "../components/VictoryPoint.js"
 
 import left from '../imgs/bg_adeptusMechanicus.jpg'
 import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
-import axios from "axios";
 
 function MatchboardView() {
 
@@ -68,25 +67,25 @@ function MatchboardView() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         console.log(urlParams.get('key'))
-        requests.get('http://localhost:3001/matches/getMatchData?id='+urlParams.get('key'))
+        requests.get('/matches/getMatchData?id='+urlParams.get('key'))
             .then(res =>{
                 setMatchData(res.data.Match)
                 setRoundCounter(res.data.Match.Round)
                 setP1(res.data.P1)
                 setP2(res.data.P2)
 
-                axios.get("http://localhost:3001/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P1.Detachment).then(detRes =>{
+                requests.get("/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P1.Detachment).then(detRes =>{
                     setP1Stratagems(detRes.data);
                 })
 
-                axios.get("http://localhost:3001/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P2.Detachment).then(detRes =>{
+                requests.get("/stratagem/getStratagemsForDetachment?detachmentId="+res.data.P2.Detachment).then(detRes =>{
                     setP2Stratagems(detRes.data);
                 })
             })
     };
 
     const syncMatchData = () =>{
-        axios.get("http://localhost:3001/matches/syncMatchData?id="+matchData.Id+"&round="+matchData.Round)
+        requests.get("/matches/syncMatchData?id="+matchData.Id+"&round="+matchData.Round)
     }
 
     const syncPlayerData = (player) =>{
@@ -98,7 +97,7 @@ function MatchboardView() {
         }else{
             return
         }
-        axios.get("http://localhost:3001/matches/syncPlayerData?id="+player.Id+"&cp="+player.Cp+"&vp1="+player.VpPrimary1+"&vp2="+player.VpPrimary2+"&vp3="+player.VpPrimary3+"&vp4="+player.VpPrimary4+"&vp5="+player.VpPrimary5+"&vs1="+player.VpSecondary1+"&vs2="+player.VpSecondary2+"&vs3="+player.VpSecondary3+"&vs4="+player.VpSecondary4+"&vs5="+player.VpSecondary5)
+        requests.get("/matches/syncPlayerData?id="+player.Id+"&cp="+player.Cp+"&vp1="+player.VpPrimary1+"&vp2="+player.VpPrimary2+"&vp3="+player.VpPrimary3+"&vp4="+player.VpPrimary4+"&vp5="+player.VpPrimary5+"&vs1="+player.VpSecondary1+"&vs2="+player.VpSecondary2+"&vs3="+player.VpSecondary3+"&vs4="+player.VpSecondary4+"&vs5="+player.VpSecondary5)
     }
 
     useEffect(() => {
@@ -277,7 +276,6 @@ function MatchboardView() {
         }else{
             return <h3>Aktuální kolo: {matchData.Round}</h3>
         }
-        return
     }
 
     return (
