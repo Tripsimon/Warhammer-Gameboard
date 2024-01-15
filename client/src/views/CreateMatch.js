@@ -65,7 +65,7 @@ function CreateMatch() {
         <option disabled>Při komunikaci se serverem se vyskytla chyba. Prosím, pokuste se o akci později</option>
 
         if (!player1Faction) {
-          return <option value="" disabled selected>Vyberte nejprve frakci</option>;
+          return <option value=""  defaultValue={undefined}>Vyberte nejprve frakci</option>;
         }
 
     const filteredDetachments1 = avaliableDetachments1.filter(avaliableDetachments1 => avaliableDetachments1.FactionId === parseInt(player1Faction, 10));
@@ -92,7 +92,7 @@ function CreateMatch() {
 
     return (
       filteredDetachments2.length === 0
-      ? <option value="" disabled selected>Tato frakce nemá žádný detachment</option>
+      ? <option value=""  defaultValue={undefined}>Tato frakce nemá žádný detachment</option>
       : filteredDetachments2.map(avaliableDetachments2 => (
         <option key={avaliableDetachments2.Id} value={avaliableDetachments2.Id}>{avaliableDetachments2.Name}</option>
       ))
@@ -121,7 +121,7 @@ function CreateMatch() {
         }
       );
   
-      if (res.status === 200) {
+      if (res.status === 201) {
         navigate('/browseMatches/');
       }
     } catch (error) {
