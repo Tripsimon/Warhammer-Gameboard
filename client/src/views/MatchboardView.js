@@ -248,8 +248,13 @@ function MatchboardView() {
     },[p2])
 
     const renderNextRoundControls = () =>{
-        let response = <Button onClick={nextRound} >Další kolo</Button>;
-        if(matchData.Round == 5){response = <Button onClick={closeGame} >Uzavřít hru</Button>}
+        let response = null;
+        if (matchData.Round < 0 && matchData.Round > 5) {
+            response = <Button onClick={nextRound} className="btn btn-success" >Další kolo</Button>;
+        }else if(matchData.Round == 5){
+            response = <Button onClick={closeGame} className="btn btn-danger">Uzavřít hru</Button>}
+
+
         return(
             response
         )
@@ -276,7 +281,7 @@ function MatchboardView() {
                     <Card.Body>
                         <Row>
                             <Col className="text-center"><h3>Výtězné body: {p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5} + {p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5}</h3></Col>
-                            <Col><h3 className="text-center">Aktuální kolo: {roundCounter}</h3></Col>
+                            <Col><h3 className="text-center">Aktuální kolo: {roundCounter > 0 ? roundCounter : "Hra uzavřena"}</h3></Col>
                             <Col className="text-center"><h3>Výtězné body: {p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5} + {p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5}</h3></Col>
                         </Row>
                     </Card.Body>
