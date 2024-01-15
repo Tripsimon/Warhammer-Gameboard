@@ -60,11 +60,6 @@ func enableCors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
 }
 
 type TokenVerificationResponse struct {
@@ -203,7 +198,7 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 
 		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d)
 
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintln(w, "SUCCESS")
 	default:
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -220,7 +215,7 @@ func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(DBGetMatches())
 }
 
@@ -267,7 +262,7 @@ func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(DBGetFacilities())
 }
 
@@ -322,7 +317,7 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return
 	case http.MethodPost:
 		var data map[string]string
@@ -345,7 +340,7 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(DBGetFactions())
 }
 
@@ -379,7 +374,7 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
 	case http.MethodOptions:
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		return
 	case http.MethodPost:
 		var data map[string]string
@@ -402,7 +397,7 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(DBGetDetachments())
 }
 

@@ -53,6 +53,10 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 
 func VerifyTokenMiddleware(next http.HandlerFunc, adminOnly bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == "OPTIONS" {
+			next.ServeHTTP(w, req)
+			return
+		}
 		enableCors(w, req)
 		tokenString := req.Header.Get("Authorization")
 

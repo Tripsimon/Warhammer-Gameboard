@@ -110,8 +110,8 @@ function CreateFaction() {
                   <Form.Control value={createScreenName} onChange={(e) => setCreateScreenName(e.target.value)} type='text' placeholder='Jméno frakce'></Form.Control>
                   <Row>
                       <Col>
-                        <Form.Label>codeName:</Form.Label>
-                        <Form.Control value={createCodeName} onChange={(e) => setCreateCodeName(e.target.value)} type='text' placeholder='codeName'></Form.Control>
+                        <Form.Label>Code name:</Form.Label>
+                        <Form.Control value={createCodeName} onChange={(e) => setCreateCodeName(e.target.value)} type='text' placeholder='Code name'></Form.Control>
                       </Col>
                     </Row>
                     <Row>
@@ -157,7 +157,7 @@ function renderTable() {
         <tr> 
           <th>ID</th> 
           <th>Jméno frakce</th> 
-          <th>codeName ???</th> 
+          <th>Code name</th> 
           <th>Popis</th>
           <th>Akce</th>
         </tr> 
