@@ -107,6 +107,7 @@ function CreateMatch() {
       return;
     }
     try {
+
       const res = await requests.post(
         '/matches/createMatch',
         {
@@ -117,7 +118,7 @@ function CreateMatch() {
           p2: player2Name,
           p2f: player2Faction,
           p2d: player2Detachment,
-          fId: user.id
+          fId: ""+user.id
         }
       );
   

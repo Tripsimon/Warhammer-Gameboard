@@ -42,9 +42,8 @@ type matchDataResponse struct {
 }
 
 // Funkce pro vytvoření zápasu
-func DBcreateMatch(name string, playerOneName string, playerOneFaction string, playerOneDetachment string, playerTwoName string, playerTwoFaction string, playerTwoDetachment string,
-	facilityId string) {
-	log.Println("Připojuji se k DB")
+func DBcreateMatch(name string, playerOneName string, playerOneFaction string, playerOneDetachment string, playerTwoName string, playerTwoFaction string, playerTwoDetachment string, facilityId string) {
+	log.Println("DB Akce: Tvorba zápasu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -52,7 +51,6 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 	}
 	defer db.Close()
 
-	log.Println(playerTwoFaction)
 	var playerOne int64
 	queryOne, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerOneName, playerOneFaction, playerOneDetachment)
 
@@ -81,11 +79,12 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 		}
 	}
 
+	log.Println(facilityId);
+	
 	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo, facility_id) VALUES (?,1,?,?,?)", name, playerOne, playerTwo, facilityId)
 
 	defer insert.Close()
 	log.Println("Herní místnost založena")
-
 }
 
 // Získá seznam zápasů

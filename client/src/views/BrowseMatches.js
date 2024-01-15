@@ -34,7 +34,7 @@ function BrowseMatches() {
     }else{
       return(
         avaliableMatches.map((match,index) => (
-          <MatchEntry key={match['Id']} name={match['Name']} state={match["Round"] == 5 ?   "DOKONčENO": match["Round"] } id={match['Id']} />
+          <MatchEntry key={match['Id']} name={match['Name']} state={match["Round"] == -1 ?   "Ukončený zápas": "Kolo: " + match["Round"] } id={match['Id']} />
         ))
       )
     }
