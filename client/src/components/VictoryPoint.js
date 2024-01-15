@@ -1,7 +1,19 @@
 import { Card, Table ,Row, Col, Button, Form } from "react-bootstrap";
-import { useState } from "react"
 
 function VictoryPoint(props) {
+
+    const renderControls = () =>{
+        if(props.round == -1){return}
+        return (
+        <div>
+            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Primary", 1)}} >Primární +</Button>{' '}
+            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Primary", -1)}}>Primární -</Button>{' '}
+            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Secondary", 1)}}>Sekundární +</Button>{' '}
+            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Secondary", -1)}}>Sekundární -</Button>{' '}
+        </div>
+        )
+    }
+
     return <Card style={{ marginTop: '2%' }}>
         <Card.Header>
             <h3 className="text-center">Vítězné body</h3>
@@ -47,10 +59,7 @@ function VictoryPoint(props) {
             </Table>
         </Card.Body>
         <Card.Footer>
-            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Primary", 1)}} >Primární +</Button>{' '}
-            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Primary", -1)}}>Primární -</Button>{' '}
-            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "Secondary", 1)}}>Sekundární +</Button>{' '}
-            <Button variant="warning" onClick={() => {props.changePoints(props.round, props.player, "Secondary", -1)}}>Sekundární -</Button>{' '}
+            {renderControls()}
         </Card.Footer>
     </Card>;
 }
