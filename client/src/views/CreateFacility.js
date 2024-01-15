@@ -8,10 +8,10 @@ import requests from '../utils/Requests';
 function CreateFacility() {
 
   const [facilities, setFacilities] = useState();
-  const [createScreenName, setCreateScreenName] = useState();
-  const [createLogin, setCreateLogin] = useState();
-  const [createPassword, setCreatePassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const [createScreenName, setCreateScreenName] = useState("");
+  const [createLogin, setCreateLogin] = useState("");
+  const [createPassword, setCreatePassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
 
