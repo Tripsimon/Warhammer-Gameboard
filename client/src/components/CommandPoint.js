@@ -24,7 +24,7 @@ function CommandPoint(props) {
     }
 
     const renderControls = () =>{
-        if(props.Round == -1){return}
+        if(props.round == -1){return}
         return (
         <div>
         <Card.Footer>
