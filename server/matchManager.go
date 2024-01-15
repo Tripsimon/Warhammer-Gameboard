@@ -41,7 +41,7 @@ type matchDataResponse struct {
 }
 
 // Funkce pro vytvoření zápasu
-func DBcreateMatch(name string, playerOneName string, playerOneFaction int, playerOneDetachment int, playerTwoName string, playerTwoFaction int, playerTwoDetachment int) {
+func DBcreateMatch(name string, playerOneName string, playerOneFaction string, playerOneDetachment string, playerTwoName string, playerTwoFaction string, playerTwoDetachment string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -50,6 +50,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction int, play
 	}
 	defer db.Close()
 
+	log.Println(playerTwoFaction)
 	var playerOne int64
 	queryOne, err := db.Exec("INSERT INTO matchPlayers (name, faction, detachment) VALUES (?,?,?)", playerOneName, playerOneFaction, playerOneDetachment)
 
