@@ -79,8 +79,8 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 		}
 	}
 
-	log.Println(facilityId);
-	
+	log.Println(facilityId)
+
 	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo, facility_id) VALUES (?,1,?,?,?)", name, playerOne, playerTwo, facilityId)
 
 	defer insert.Close()
@@ -163,12 +163,14 @@ func DBSyncMatchData(id string, round string) {
 	if err != nil {
 		panic(err.Error())
 	}
+	defer db.Close()
 
-	_, err = db.Query("UPDATE matches SET `round` = ? WHERE id = ? ", round, id)
+	result, err := db.Query("UPDATE matches SET `round` = ? WHERE id = ? ", round, id)
 
 	if err != nil {
 		panic(err.Error())
 	}
+	defer result.Close()
 }
 
 func DBSyncPlayerData(id string, cp string, VpPrimary1 string, VpPrimary2 string, VpPrimary3 string, VpPrimary4 string, VpPrimary5 string, VpSecondary1 string, VpSecondary2 string, VpSecondary3 string, VpSecondary4 string, VpSecondary5 string) {
@@ -178,10 +180,12 @@ func DBSyncPlayerData(id string, cp string, VpPrimary1 string, VpPrimary2 string
 	if err != nil {
 		panic(err.Error())
 	}
+	defer db.Close()
 
-	_, err = db.Query("UPDATE matchPlayers SET cp = ?, vpPrimary1 = ?, vpPrimary2 = ?, vpPrimary3 = ?, vpPrimary4 = ?, vpPrimary5 = ?,  vpSecondary1 = ?, vpSecondary2 = ?, vpSecondary3 = ?, vpSecondary4 = ?, vpSecondary5 = ? WHERE id = ?", cp, VpPrimary1, VpPrimary2, VpPrimary3, VpPrimary4, VpPrimary5, VpSecondary1, VpSecondary2, VpSecondary3, VpSecondary4, VpSecondary5, id)
+	result, err := db.Query("UPDATE matchPlayers SET cp = ?, vpPrimary1 = ?, vpPrimary2 = ?, vpPrimary3 = ?, vpPrimary4 = ?, vpPrimary5 = ?,  vpSecondary1 = ?, vpSecondary2 = ?, vpSecondary3 = ?, vpSecondary4 = ?, vpSecondary5 = ? WHERE id = ?", cp, VpPrimary1, VpPrimary2, VpPrimary3, VpPrimary4, VpPrimary5, VpSecondary1, VpSecondary2, VpSecondary3, VpSecondary4, VpSecondary5, id)
 
 	if err != nil {
 		panic(err.Error())
 	}
+	defer result.Close()
 }
