@@ -130,12 +130,15 @@ function MatchboardView() {
         }
     }
 
+    const changePoints = (round, player, type, ammount) =>{
+        console.log(round,player,type,ammount);
+    }
+
     useEffect(() =>{
         syncPlayerData(1)
     },[p1])
 
     useEffect(() =>{
-        console.log("Tady jsme")
         syncPlayerData(2)
     },[p2])
 
@@ -166,7 +169,7 @@ function MatchboardView() {
                         </Row>
                     </Card.Body>
                     <Card.Footer>
-                        <Button onClick={nextRound} className="btn btn-success" color="success">Další kolo</Button>
+                        <Button onClick={nextRound} >Další kolo</Button>
                     </Card.Footer>
                 </Card>
                 <Row>
@@ -179,9 +182,15 @@ function MatchboardView() {
                 </Row>
                 <Row>
                     <Col>
-                        <VP VP={p1.vpPrimary1}>
+                        <VP changePoints={changePoints} round={matchData.Round} player={1}
+                        VP1={p1.VpPrimary1} VP2={p1.VpPrimary2} VP3={p1.VpPrimary3} VP4={p1.VpPrimary4} VP5={p1.VpPrimary5}
+                        VS1={p1.VpSecondary1} VS2={p1.VpSecondary2} VS3={p1.VpSecondary3} VS4={p1.VpSecondary4} VS5={p1.VpSecondary5}
+                        >
                         </VP>
-                    </Col><Col><VP></VP></Col>
+                    </Col>
+                    <Col><VP></VP>
+                    
+                    </Col>
                 </Row> 
 
             </Container>

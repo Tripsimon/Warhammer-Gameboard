@@ -1,60 +1,57 @@
-import { Card, Row, Col, Button, Form } from "react-bootstrap";
+import { Card, Table ,Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from "react"
 
-function VictoryPoint() {
-
-    const [vpCounterPrimary, setvpCounterPrimary] = useState(0);
-    const [vpCounterSecondary, setvpCounterSecondary] = useState(0);
-
-    function reduceVictoryPointPrimary() {
-        setvpCounterPrimary(vpCounterPrimary - 1)
-    }
-
-    function increaseVictoryPointPrimary() {
-        setvpCounterPrimary(vpCounterPrimary + 1)
-    }
-
-    function reduceVictoryPointSecondary() {
-        setvpCounterSecondary(vpCounterSecondary - 1)
-    }
-
-    function increaseVictoryPointSecondary() {
-        setvpCounterSecondary(vpCounterSecondary + 1)
-    }
-
+function VictoryPoint(props) {
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header> 
-            Round: 1
+        <Card.Header>
+            <h3 className="text-center">Vítězné body</h3>
         </Card.Header>
 
         <Card.Body>
-            <Card.Title>
-                <Row>
-                    <Col>
-                        <Button onClick={() => reduceVictoryPointPrimary()}>-</Button>
-                    </Col>
-                    <Col xs="6">
-                        Primary victory points:
-                    </Col>
-                    <Col>
-                        <Button onClick={() => increaseVictoryPointPrimary()} >+</Button>
-                    </Col>
-                </Row>
-            </Card.Title>
-            <Card.Title>
-                Secondary Victory Points
-            </Card.Title>
-            <Row>
-            <Form.Select aria-label="Default select example">
-                            <option>Vybrat</option>
-                            {// TODO: Tady dodělat nějak import stratagemů z DB
-                            }
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </Form.Select>
-            </Row>
+
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Kolo</th>
+                        <th>Primární</th>
+                        <th>Sekundární</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1:</th>
+                        <th>{props.VP1}</th>
+                        <th>{props.VS1}</th>
+                    </tr>
+                    <tr>
+                        <th>2:</th>
+                        <th>{props.VP2}</th>
+                        <th>{props.VS2}</th>
+                    </tr>
+                    <tr>
+                        <th>3:</th>
+                        <th>{props.VP3}</th>
+                        <th>{props.VS3}</th>
+                    </tr>
+                    <tr>
+                        <th>4:</th>
+                        <th>{props.VP4}</th>
+                        <th>{props.VS4}</th>
+                    </tr>
+                    <tr>
+                        <th>5:</th>
+                        <th>{props.VP5}</th>
+                        <th>{props.VS5}</th>
+                    </tr>
+                </tbody>
+            </Table>
         </Card.Body>
+        <Card.Footer>
+            <Button variant="success" onClick={() => {props.changePoints(props.round, props.player, "VP", 1)}} >Primární +</Button>{' '}
+            <Button variant="warning">Primární -</Button>{' '}
+            <Button variant="success">Sekundární +</Button>{' '}
+            <Button variant="warning">Sekundární -</Button>{' '}
+        </Card.Footer>
     </Card>;
 }
 

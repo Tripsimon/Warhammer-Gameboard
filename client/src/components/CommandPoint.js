@@ -18,7 +18,7 @@ function CommandPoint(props) {
     }
     
     return <Card style={{ marginTop: '2%' }}>
-        <Card.Header><h2 className="text-center" >Command Points: {props.CP} </h2></Card.Header>
+        <Card.Header><h3 className="text-center" >Command Points: {props.CP} </h3></Card.Header>
         <Card.Body>
             <Card.Title> Použít Stratagem: </Card.Title>
             <Card.Text>
