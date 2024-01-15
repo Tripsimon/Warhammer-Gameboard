@@ -195,8 +195,9 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 		p2, _ := data["p2"].(string)
 		p2f, _ := data["p2f"].(string)
 		p2d, _ := data["p2d"].(string)
+		fId, _ := data["fId"].(string)
 
-		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d)
+		DBcreateMatch(name, p1, p1f, p1d, p2, p2f, p2d, fId)
 
 		w.WriteHeader(http.StatusCreated)
 		fmt.Fprintln(w, "SUCCESS")
@@ -214,9 +215,10 @@ func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 
 func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
+	var id = strings.Join(req.URL.Query()["id"], "")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(DBGetMatches())
+	json.NewEncoder(w).Encode(DBGetMatches(id))
 }
 
 // Uprava dat zápasu

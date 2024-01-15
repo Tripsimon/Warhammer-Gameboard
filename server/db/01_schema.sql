@@ -51,6 +51,7 @@ CREATE TABLE `matches` (
 	`round` INT NOT NULL DEFAULT '0',
 	`playerOne` INT NOT NULL DEFAULT '0',
 	`playerTwo` INT NOT NULL DEFAULT '0',
+	`facility_id` INT NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )
 COLLATE='cp1250_czech_cs';

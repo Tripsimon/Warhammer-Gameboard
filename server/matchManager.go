@@ -8,11 +8,12 @@ import (
 )
 
 type match struct {
-	Id        int    `json:id`
-	Name      string `json:name`
-	Round     int    `json:round`
-	PlayerOne int    `json:playerOne`
-	PlayerTwo int    `json:playerTwo`
+	Id         int    `json:id`
+	Name       string `json:name`
+	Round      int    `json:round`
+	PlayerOne  int    `json:playerOne`
+	PlayerTwo  int    `json:playerTwo`
+	FacilityId int    `json:facilityId`
 }
 
 type matchPlayer struct {
@@ -41,7 +42,8 @@ type matchDataResponse struct {
 }
 
 // Funkce pro vytvoření zápasu
-func DBcreateMatch(name string, playerOneName string, playerOneFaction string, playerOneDetachment string, playerTwoName string, playerTwoFaction string, playerTwoDetachment string) {
+func DBcreateMatch(name string, playerOneName string, playerOneFaction string, playerOneDetachment string, playerTwoName string, playerTwoFaction string, playerTwoDetachment string,
+	facilityId string) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -79,7 +81,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 		}
 	}
 
-	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo) VALUES (?,1,?,?)", name, playerOne, playerTwo)
+	insert, err := db.Query("INSERT INTO matches (name, round, playerOne, playerTwo, facility_id) VALUES (?,1,?,?,?)", name, playerOne, playerTwo, facilityId)
 
 	defer insert.Close()
 	log.Println("Herní místnost založena")
@@ -87,7 +89,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 }
 
 // Získá seznam zápasů
-func DBGetMatches() (result []match) {
+func DBGetMatches(id string) (result []match) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
@@ -96,7 +98,7 @@ func DBGetMatches() (result []match) {
 	}
 	defer db.Close()
 
-	query, err := db.Query("SELECT id, name, round, playerOne, playerTwo FROM matches")
+	query, err := db.Query("SELECT id, name, round, playerOne, playerTwo FROM matches WHERE facility_id = ?", id)
 
 	if err != nil {
 		panic(err.Error())

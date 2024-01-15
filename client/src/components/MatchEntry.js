@@ -19,7 +19,7 @@ function MatchEntry(props) {
         </th>
         <th>
             <Button onClick={() => handleEntry()}>
-                Ovetřít
+                Otevřít
             </Button>
         </th>
     </tr>
