@@ -19,7 +19,7 @@ type AuthenticationResult struct {
 	WrongPassword bool
 }
 
-// Funkce pro autentikaci uživatele
+// Funkce pro autentizaci uživatele
 func DBAuthenticateUser(login string, password string) (result AuthenticationResult, err error) {
 	log.Println("DB Akce: Autentikace uživatele")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -50,6 +50,7 @@ func DBAuthenticateUser(login string, password string) (result AuthenticationRes
 		return AuthenticationResult{}, err
 	}
 
+	//BCrypt pro porovnání hash
 	err = bcrypt.CompareHashAndPassword([]byte(storedHashedPassword), []byte(password))
 	if err != nil {
 		if err == bcrypt.ErrMismatchedHashAndPassword {

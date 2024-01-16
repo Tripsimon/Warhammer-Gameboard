@@ -4,7 +4,7 @@ import getAuthToken from '../hooks/getToken';
 import { useState, useEffect } from 'react';
 import requests from '../utils/Requests';
 
-//Utilitka pro routování admin věcí
+//Utilitka pro routování stránek pro herny
 const PrivateRoutes = () => {
     const authToken = getAuthToken();
     const [isVerified, setIsVerified] = useState(false);

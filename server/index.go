@@ -74,7 +74,7 @@ type TokenVerificationResponse struct {
 	IsAdmin bool `json:"isAdmin"`
 }
 
-// Verifikace tokenu. Je to ve vysledku middleware
+// Verifikace tokenu (při přechodu mezi stránkami)
 func HandleTokenVerification(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -150,6 +150,7 @@ func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		//Generování tokenu
 		jwtManager := NewJWTManager("your-secret-key", 24*time.Hour)
 		token, err := jwtManager.Generate(result.UserID, result.Username, result.IsAdmin)
 		if err != nil {
