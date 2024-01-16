@@ -1,8 +1,10 @@
+//Importy
 import { Outlet, Navigate } from 'react-router-dom'
 import getAuthToken from '../hooks/getToken';
 import { useState, useEffect } from 'react';
 import requests from '../utils/Requests';
 
+//Utilitka pro routování admin věcí
 const PrivateRoutes = () => {
     const authToken = getAuthToken();
     const [isVerified, setIsVerified] = useState(false);
@@ -39,5 +41,6 @@ const PrivateRoutes = () => {
         return <Navigate to="/" />;
     }
 };
-  
+
+//Export
 export default PrivateRoutes;

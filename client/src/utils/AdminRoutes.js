@@ -1,8 +1,10 @@
+//Importy
 import { Outlet, Navigate } from 'react-router-dom'
 import getAuthToken from '../hooks/getToken';
 import { useState, useEffect } from 'react';
 import requests from '../utils/Requests';
 
+//Utilitka pro routování admin věcí
 const AdminRoutes = () => {
     const authToken = getAuthToken();
     const [isVerified, setIsVerified] = useState(false);
@@ -42,4 +44,5 @@ const AdminRoutes = () => {
     }
 };
 
+//Export
 export default AdminRoutes;
