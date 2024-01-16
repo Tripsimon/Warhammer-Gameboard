@@ -1,8 +1,10 @@
+//Importy
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import { loginUser } from '../stores/userSlice';
 import Cookies from 'universal-cookie';
 
+//Data uživatele
 export const useLogin = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
