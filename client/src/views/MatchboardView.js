@@ -101,15 +101,15 @@ function MatchboardView() {
      * @returns 
      */
     const syncPlayerData = (player) =>{
-        var player;
-        if(player == 1){
-            player = p1
-        }else if(player == 2){
-            player = p2
+        var playerHolder;
+        if(player === 1){
+            playerHolder = p1
+        }else if(player === 2){
+            playerHolder = p2
         }else{
             return
         }
-        requests.get("/matches/syncPlayerData?id="+player.Id+"&cp="+player.Cp+"&vp1="+player.VpPrimary1+"&vp2="+player.VpPrimary2+"&vp3="+player.VpPrimary3+"&vp4="+player.VpPrimary4+"&vp5="+player.VpPrimary5+"&vs1="+player.VpSecondary1+"&vs2="+player.VpSecondary2+"&vs3="+player.VpSecondary3+"&vs4="+player.VpSecondary4+"&vs5="+player.VpSecondary5)
+        requests.get("/matches/syncPlayerData?id="+playerHolder.Id+"&cp="+playerHolder.Cp+"&vp1="+playerHolder.VpPrimary1+"&vp2="+playerHolder.VpPrimary2+"&vp3="+playerHolder.VpPrimary3+"&vp4="+playerHolder.VpPrimary4+"&vp5="+playerHolder.VpPrimary5+"&vs1="+playerHolder.VpSecondary1+"&vs2="+playerHolder.VpSecondary2+"&vs3="+playerHolder.VpSecondary3+"&vs4="+playerHolder.VpSecondary4+"&vs5="+playerHolder.VpSecondary5)
     }
 
     //On-Load
@@ -142,9 +142,9 @@ function MatchboardView() {
      * @param {*} cp - Cena v CP
      */
     const payCP = (player, cp) =>{
-        if (player == 1) {
+        if (player === 1) {
             setP1(p =>({...p, Cp: p1.Cp - cp}))
-        }else if( player == 2){
+        }else if( player === 2){
             setP2(p =>({...p, Cp: p2.Cp - cp}))
         }
     }
@@ -152,9 +152,9 @@ function MatchboardView() {
     //Hrač získá jedno CP (Zatim nemužeme omezit na kolo kvuli Leviathanu)
     //TODO:: Tyhle 2 funkce dát dohromady. Třeba tak že cena v DB bude zaporna
     const getCP = (player) =>{
-        if (player == 1) {
+        if (player === 1) {
             setP1(p =>({...p, Cp: p1.Cp + 1}))
-        }else if( player == 2){
+        }else if( player === 2){
             setP2(p =>({...p, Cp: p2.Cp + 1}))
         }
     }
@@ -168,44 +168,44 @@ function MatchboardView() {
      * Tohle by mohla byt asi o dost lépe udělaná funkce ale je to co to je
      */
     const changePoints = (round, player, type, ammount) =>{
-        if(player == 1){
+        if(player === 1){
             switch (round) {
                 case 1:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP1(p =>({...p, VpPrimary1: p1.VpPrimary1 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP1(p =>({...p, VpSecondary1: p1.VpSecondary1 + ammount}))
                     }
                 break;
 
                 case 2:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP1(p =>({...p, VpPrimary2: p1.VpPrimary2 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP1(p =>({...p, VpSecondary2: p1.VpSecondary2 + ammount}))
                     }
                 break;
 
                 case 3:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP1(p =>({...p, VpPrimary3: p1.VpPrimary3 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP1(p =>({...p, VpSecondary3: p1.VpSecondary3 + ammount}))
                     }
                 break;
 
                 case 4:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP1(p =>({...p, VpPrimary4: p1.VpPrimary4 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP1(p =>({...p, VpSecondary4: p1.VpSecondary4 + ammount}))
                     }
                 break;
 
                 case 5:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP1(p =>({...p, VpPrimary5: p1.VpPrimary5 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP1(p =>({...p, VpSecondary5: p1.VpSecondary5 + ammount}))
                     }
                 break;
@@ -213,44 +213,44 @@ function MatchboardView() {
                 default:
                     break;
             }
-        }else if(player == 2){
+        }else if(player === 2){
             switch (round) {
                 case 1:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP2(p =>({...p, VpPrimary1: p2.VpPrimary1 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP2(p =>({...p, VpSecondary1: p2.VpSecondary1 + ammount}))
                     }
                 break;
 
                 case 2:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP2(p =>({...p, VpPrimary2: p2.VpPrimary2 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP2(p =>({...p, VpSecondary2: p2.VpSecondary2 + ammount}))
                     }
                 break;
 
                 case 3:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP2(p =>({...p, VpPrimary3: p2.VpPrimary3 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP2(p =>({...p, VpSecondary3: p2.VpSecondary3 + ammount}))
                     }
                 break;
 
                 case 4:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP2(p =>({...p, VpPrimary4: p2.VpPrimary4 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP2(p =>({...p, VpSecondary4: p2.VpSecondary4 + ammount}))
                     }
                 break;
 
                 case 5:
-                    if (type == "Primary") {
+                    if (type === "Primary") {
                         setP2(p =>({...p, VpPrimary5: p2.VpPrimary5 + ammount}))
-                    }else if(type == "Secondary"){
+                    }else if(type === "Secondary"){
                         setP2(p =>({...p, VpSecondary5: p2.VpSecondary5 + ammount}))
                     }
                 break;
@@ -280,7 +280,7 @@ function MatchboardView() {
         let response = null;
         if (matchData.Round > 0 && matchData.Round < 5) {
             response = <Button onClick={nextRound} className="btn btn-success" >Další kolo</Button>;
-        }else if(matchData.Round == 5){
+        }else if(matchData.Round === 5){
             response = <Button onClick={closeGame} className="btn btn-danger">Uzavřít hru</Button>}
 
 
@@ -294,7 +294,7 @@ function MatchboardView() {
      * @returns 
      */
     const renderActualScore = () =>{
-        if (matchData.Round == -1) {
+        if (matchData.Round === -1) {
             let p1Points = p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5 + p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5;
             let p2Points = p2.VpPrimary1 + p2.VpPrimary2 + p2.VpPrimary3 + p2.VpPrimary4 + p2.VpPrimary5 + p2.VpSecondary1 + p2.VpSecondary2 +p2.VpSecondary3 + p2.VpSecondary4 + p2.VpSecondary5;
             let winner;
