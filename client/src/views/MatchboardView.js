@@ -1,15 +1,16 @@
+//Importy
 import { Container, Card, Row, Col, Button, Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import requests from '../utils/Requests';
-
 import CP from "../components/CommandPoint.js"
 import VP from "../components/VictoryPoint.js"
-
 import left from '../imgs/bg_adeptusMechanicus.jpg'
 import right from '../imgs/bg_spaceMarinesBlackTemplars.jpg'
 
+//Komponenta pohledu na zápas
 function MatchboardView() {
 
+    //Variables
     const [matchData,setMatchData] = useState(
     {
         "Id":0,
@@ -63,7 +64,10 @@ function MatchboardView() {
     const  [p1Stratagems, setP1Stratagems] = useState([{"Name":"Not Loaded yet"}])
     const  [p2Stratagems, setP2Stratagems] = useState([{"Name":"Not Loaded yet"}])
 
-    const getData = (event) => {
+    /**
+     * Funkce pro získání dat zápasu
+     */
+    const getData = () => {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         console.log(urlParams.get('key'))
@@ -84,10 +88,18 @@ function MatchboardView() {
             })
     };
 
+    /**
+     * Synchronizace dat zápasu s DB
+     */
     const syncMatchData = () =>{
         requests.get("/matches/syncMatchData?id="+matchData.Id+"&round="+matchData.Round)
     }
 
+    /**
+     * Synchronizace dat hráče s DB
+     * @param {*} player - Identifikátor hráče. 1 nebo 2
+     * @returns 
+     */
     const syncPlayerData = (player) =>{
         var player;
         if(player == 1){
@@ -100,10 +112,14 @@ function MatchboardView() {
         requests.get("/matches/syncPlayerData?id="+player.Id+"&cp="+player.Cp+"&vp1="+player.VpPrimary1+"&vp2="+player.VpPrimary2+"&vp3="+player.VpPrimary3+"&vp4="+player.VpPrimary4+"&vp5="+player.VpPrimary5+"&vs1="+player.VpSecondary1+"&vs2="+player.VpSecondary2+"&vs3="+player.VpSecondary3+"&vs4="+player.VpSecondary4+"&vs5="+player.VpSecondary5)
     }
 
+    //On-Load
     useEffect(() => {
         getData()
     }, []);
 
+    /**
+     * Funkce pro přepnutí kola zápasu
+     */
     const nextRound = () => {
     if (roundCounter < 5) {
         setRoundCounter(roundCounter + 1)
@@ -113,11 +129,18 @@ function MatchboardView() {
         syncMatchData()
     }}
 
+    /**
+     * Ukončení hry pokud je kolo 5
+     */
     const closeGame = () =>{
         setMatchData(m =>({...m, Round: -1}))
     }
 
-    //Hrač zaplatí CP za Stratagem
+    /**
+     * Funkce pro platbu za Stratagem
+     * @param {*} player - Identifikátor hráče. 1 nebo 2
+     * @param {*} cp - Cena v CP
+     */
     const payCP = (player, cp) =>{
         if (player == 1) {
             setP1(p =>({...p, Cp: p1.Cp - cp}))
@@ -238,6 +261,7 @@ function MatchboardView() {
         }
     }
 
+    //Reakce na změnu dat
     useEffect(() =>{
         syncMatchData()
     },[matchData])
@@ -248,6 +272,10 @@ function MatchboardView() {
         syncPlayerData(2)
     },[p2])
 
+    /**
+     * Vykreslí možnosti ovládání kola
+     * @returns 
+     */
     const renderNextRoundControls = () =>{
         let response = null;
         if (matchData.Round > 0 && matchData.Round < 5) {
@@ -261,6 +289,10 @@ function MatchboardView() {
         )
     }
 
+    /**
+     * Vykreslí kolo
+     * @returns 
+     */
     const renderActualScore = () =>{
         if (matchData.Round == -1) {
             let p1Points = p1.VpPrimary1 + p1.VpPrimary2 + p1.VpPrimary3 + p1.VpPrimary4 + p1.VpPrimary5 + p1.VpSecondary1 + p1.VpSecondary2 +p1.VpSecondary3 + p1.VpSecondary4 + p1.VpSecondary5;
@@ -278,6 +310,7 @@ function MatchboardView() {
         }
     }
 
+    //Komponenta
     return (
         <div>
             <div className="bgWrap">
@@ -335,5 +368,6 @@ function MatchboardView() {
     )
 }
 
+//Export
 export default MatchboardView;
 

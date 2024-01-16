@@ -1,56 +1,60 @@
+//Importy
 import React from 'react';
 import { Container, Form, Button, Card, Row, Col, Table, Modal } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import FacilitiesEntry from '../components/FacilitiesEntry';
 import { useState, useEffect } from 'react';
 import requests from '../utils/Requests';
 
+//Komponenta pro tvorbu heren
 function CreateFacility() {
+  const navigate = useNavigate();
 
+  //Variables
   const [facilities, setFacilities] = useState();
   const [createScreenName, setCreateScreenName] = useState("");
   const [createLogin, setCreateLogin] = useState("");
   const [createPassword, setCreatePassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const navigate = useNavigate();
-
+  //On-Load
   useEffect(() => {
     getFacilities()
   }, [])
 
   /**
- * Funkce pro vykreslení tabulky s informacemi o hernách.
- * @function renderTable
- * @returns {JSX.Element | null} - Vrací JSX element obsahující tabulku s informacemi o hernách nebo null, pokud nejsou žádné herny k dispozici.
- */
-    function renderTable() { 
-    if (facilities == undefined) { 
-      return 
-    } else { 
-      return ( <Table striped bordered hover size="sm" > 
-        <thead> 
-          <tr> 
-            <th>ID</th> 
-            <th>Jméno herny</th> 
-            <th>Login</th> 
-            <th>Akce</th> 
-          </tr> 
-        </thead> 
-        <tbody> 
-          {facilities.map(facility => ( 
-            <tr key={facility.Id}> 
-            <td>{facility.Id}</td> 
-            <td>{facility.ScreenName}</td> 
-            <td>{facility.Login}</td> 
-            <td><Button variant="secondary" onClick={() => handleDeleteFacility(facility.Id)}>Smazat</Button></td>
-          </tr> ))} 
-        </tbody> 
-      </Table> ) } }
+   * Funkce pro vykreslení tabulky s informacemi o hernách.
+   * @function renderTable
+   * @returns {JSX.Element | null} - Vrací JSX element obsahující tabulku s informacemi o hernách nebo null, pokud nejsou žádné herny k dispozici.
+   */
+  function renderTable() {
+    if (facilities == undefined) {
+      return
+    } else {
+      return (<Table striped bordered hover size="sm" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Jméno herny</th>
+            <th>Login</th>
+            <th>Akce</th>
+          </tr>
+        </thead>
+        <tbody>
+          {facilities.map(facility => (
+            <tr key={facility.Id}>
+              <td>{facility.Id}</td>
+              <td>{facility.ScreenName}</td>
+              <td>{facility.Login}</td>
+              <td><Button variant="secondary" onClick={() => handleDeleteFacility(facility.Id)}>Smazat</Button></td>
+            </tr>))}
+        </tbody>
+      </Table>)
+    }
+  }
 
   /**
    * Funkce která ziská existující herny
-   * @param {*} event 
+   * @param {*} event - Data volání
    */
   const getFacilities = async (event) => {
     await requests.get('/facility/getAllFacility')
@@ -62,7 +66,7 @@ function CreateFacility() {
 
   /**
    * Funkce která založí novou hernu
-   * @param {*} event 
+   * @param {*} event - Data volání
    */
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -90,23 +94,32 @@ function CreateFacility() {
         login: createLogin,
         password: createPassword
       })
-        await getFacilities();
-        alert("Herna založena.");
-        setCreateScreenName("");
-        setCreateLogin("");
-        setCreatePassword("");
-        setConfirmPassword("");
-    } 
+      await getFacilities();
+      alert("Herna založena.");
+      setCreateScreenName("");
+      setCreateLogin("");
+      setCreatePassword("");
+      setConfirmPassword("");
+    }
     catch (err) {
       console.log(err);
       alert("Chyba při ověřování loginu.");
     }
   };
 
+  /**
+   * Funkce pro navigaci na Admin stránku
+   */
   const handleAdminPage = () => {
     navigate("/admin");
   };
+
+  //Stavy
   const [show, setShow] = useState(false);
+
+  /**
+   * Funkce pro zavření
+   */
   const handleClose = () => {
     setShow(false);
     setCreateScreenName("");
@@ -116,23 +129,24 @@ function CreateFacility() {
   }
   const handleShow = () => setShow(true);
 
- /**
-   * Funkce která smaže vybranou existující hernu
-   * @param {number} id -- ID herny ke smazání
-   */
+  /**
+    * Funkce která smaže vybranou existující hernu
+    * @param {number} id -- ID herny ke smazání
+    */
   const handleDeleteFacility = (id) => {
     const confirmDelete = window.confirm("Opravdu chcete smazat tuto hernu?");
     if (confirmDelete) {
       requests.delete('/facility/deleteFacility?id=' + id)
-      .then(() => {
-        getFacilities();
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        .then(() => {
+          getFacilities();
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
   }
-}
 
+  //Komponenta
   return (
     <div>
       <Container className='mt-4'>
@@ -178,7 +192,7 @@ function CreateFacility() {
             </Modal>
           </Card.Header>
           <Card.Body>
-            {renderTable()}       
+            {renderTable()}
           </Card.Body>
           <Card.Footer>
             <Button type='submit' onClick={handleAdminPage}>Zpět</Button>
@@ -189,4 +203,5 @@ function CreateFacility() {
   )
 }
 
+//Export
 export default CreateFacility

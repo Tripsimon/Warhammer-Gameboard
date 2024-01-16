@@ -1,10 +1,13 @@
+//Importy
 import React from 'react';
 import { Container, Form, Button, Card, Row, Col} from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
 
+//Stránka administrace
 function AdminPage() {
-
   const navigate = useNavigate();
+  
+  //Mini router
   const handleFacilities = () => {
     navigate("/createFacility");
   };
@@ -15,8 +18,8 @@ function AdminPage() {
     navigate("/createDetachment");
   };
 
-    return (
-  
+  //Komponenta
+  return (
     <div>
       <Container className='mt-4'>
         <Card>
@@ -48,7 +51,8 @@ function AdminPage() {
         </Card>
       </Container>
     </div>
-)
+  )
 }
 
+//Export
 export default AdminPage

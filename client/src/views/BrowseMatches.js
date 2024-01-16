@@ -1,3 +1,4 @@
+//Importy 
 import React from 'react';
 import { Button, Card, Container, Table } from 'react-bootstrap';
 import { useNavigate  } from "react-router-dom";
@@ -6,29 +7,35 @@ import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import requests from '../utils/Requests';
 
-
+//Komponenta seznamu zápasů (Včetně ukončených)
 function BrowseMatches() {
 
+  //Variables
   const [avaliableMatches, setAvaliableMatches] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(state => state.user)
 
 
-  //Získá si data jednotlivých zápasů
-  const getData = (event) =>{
-
+/**
+ * Funkce pro získání dat zápasů
+ */
+  const getData = () =>{
     requests.get("/matches/getMatches?id=" + user.id)
       .then(res =>{
         setAvaliableMatches(res.data)
       })
   }
 
-
+  //On-Load
   useEffect(() => {
     getData()
   }, []);
 
-  const renderMatchesOptions = (event) =>{
+/**
+ * Funkce pro render jednotlvých zápasů
+ * @returns ReactKod
+ */
+  const renderMatchesOptions = () =>{
     if (avaliableMatches == false) {
       return
     }else{
@@ -40,7 +47,7 @@ function BrowseMatches() {
     }
   }
 
-
+  //Komponenta
   return (
     <Container className='mt-2'>
         <Card data-bs-theme="dark">
@@ -67,4 +74,5 @@ function BrowseMatches() {
   )
 }
 
+//Export
 export default BrowseMatches
