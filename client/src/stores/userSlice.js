@@ -1,9 +1,12 @@
+//Importy
 import { createSlice } from "@reduxjs/toolkit"
 import Cookies from 'universal-cookie';
 
+//Variables
 const cookies = new Cookies();
 const getCookieValue = (cookieName) => cookies.get(cookieName);
 
+//Slice do store pro uživatelsá data
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -28,7 +31,7 @@ export const userSlice = createSlice({
     }
   })
   
-  // Action creators are generated for each case reducer function
+  // Exporty
   export const { logoutUser, loginUser } = userSlice.actions
 
   export const selectUserName = (state) => state.user.name;

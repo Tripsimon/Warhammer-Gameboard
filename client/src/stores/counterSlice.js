@@ -1,3 +1,7 @@
+// DEPRECATED
+
+// Tohle je store který sem hodí sám redux. POužíval jsem to pro naučení se práe s reduxem. Muže se ale smazat
+
 import { createSlice } from "@reduxjs/toolkit"
 
 export const counterSlice = createSlice({
