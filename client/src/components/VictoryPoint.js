@@ -1,7 +1,10 @@
+//Import
 import { Card, Table ,Row, Col, Button, Form } from "react-bootstrap";
 
+//Sub-Komponenta pro výpis Victory points uživatele
 function VictoryPoint(props) {
 
+    //Render ovládání
     const renderControls = () =>{
         if(props.round == -1){return}
         return (
@@ -14,6 +17,7 @@ function VictoryPoint(props) {
         )
     }
 
+    //Vlastní komponenta
     return <Card style={{ marginTop: '2%' }}>
         <Card.Header>
             <h3 className="text-center">Vítězné body</h3>
@@ -64,4 +68,5 @@ function VictoryPoint(props) {
     </Card>;
 }
 
+//Export
 export default VictoryPoint;
