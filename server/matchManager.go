@@ -1,5 +1,6 @@
 package main
 
+//Importy
 import (
 	"database/sql"
 	"log"
@@ -7,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Strukty
 type match struct {
 	Id         int    `json:id`
 	Name       string `json:name`
@@ -156,6 +158,7 @@ func DBGetMatchData(id int) (result matchDataResponse) {
 	return (res)
 }
 
+// Funkce pro synchronizaci dat z frontendu do DB - Zápas
 func DBSyncMatchData(id string, round string) {
 	log.Println("DB Akce: Uprava dat zápasu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -173,6 +176,7 @@ func DBSyncMatchData(id string, round string) {
 	defer result.Close()
 }
 
+// Funkce pro synchronizaci dat z frontendu do DB - Hráč
 func DBSyncPlayerData(id string, cp string, VpPrimary1 string, VpPrimary2 string, VpPrimary3 string, VpPrimary4 string, VpPrimary5 string, VpSecondary1 string, VpSecondary2 string, VpSecondary3 string, VpSecondary4 string, VpSecondary5 string) {
 	log.Println("DB Akce: Uprava dat hráče")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")

@@ -1,5 +1,6 @@
 package main
 
+// Importy
 import (
 	"database/sql"
 	"log"
@@ -7,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Structy
 type detachment struct {
 	Id          int    `json:id`
 	FactionId   int    `json:factionId`
@@ -34,7 +36,7 @@ func DBcreateDetachment(faction_id string, name string, description string) {
 	log.Println("Detachment založen")
 }
 
-// Funkce pro dotažení všech detachmentů
+// Funkce pro získání všech detachmentů
 func DBGetDetachments() (result []detachment) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")

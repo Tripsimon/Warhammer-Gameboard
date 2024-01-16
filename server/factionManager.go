@@ -1,5 +1,6 @@
 package main
 
+//Importy
 import (
 	"database/sql"
 	"log"
@@ -7,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Structy
 type faction struct {
 	Id          int    `json:id`
 	Name        string `json:name`
@@ -55,7 +57,7 @@ func DBcreateFaction(name string, codeName string, description string) {
 	log.Println("Frakce založena")
 }
 
-// Funkce pro dotažení všech frakcí
+// Funkce pro Získání všech frakcí
 func DBGetFactions() (result []faction) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")

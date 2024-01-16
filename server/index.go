@@ -1,5 +1,8 @@
 package main
 
+//Vstupní soubor backendu
+
+//Importy
 import (
 	"encoding/json"
 	"fmt"
@@ -14,9 +17,11 @@ import (
 
 var jwtManager *JWTManager
 
+// Funkce, která se spustí při nastartování backendu
 func main() {
 	log.Println("Server se zapíná")
 
+	//Jednotlivé obsloužení rout
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello!")
 	})
@@ -56,17 +61,20 @@ func main() {
 
 }
 
+// řešení Cors. Zatím je tam * ale pro nasazení se bude muset opravit
 func enableCors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, DELETE")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 }
 
+// Token Struct
 type TokenVerificationResponse struct {
 	Success bool `json:"success"`
 	IsAdmin bool `json:"isAdmin"`
 }
 
+// Verifikace tokenu. Je to ve vysledku middleware
 func HandleTokenVerification(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -105,9 +113,7 @@ func HandleTokenVerification(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-/**
-* Funkce pro obsloužení požadavku na přihlášení
-**/
+// Funkce pro obsloužení loginu
 func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -172,7 +178,7 @@ func HandleLoginAuthenticate(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Funkce pro obsloužení požadavku pro založení nové hry
+// Funkce pro obsloužení tvorby zápasu
 func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -206,6 +212,7 @@ func HandleCreateMatch(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// Funkce pro obsloužení získání dat zápasu
 func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	id, _ := strconv.Atoi(strings.Join(req.URL.Query()["id"], ""))
@@ -213,6 +220,7 @@ func HandleGetMatchData(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetMatchData(id))
 }
 
+// Funkce pro obsloužení získání zápasů
 func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
@@ -221,7 +229,7 @@ func HandleGetMatches(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetMatches(id))
 }
 
-// Uprava dat zápasu
+// Funkce pro obsloužení upravy dat zápasu
 func HandleSyncMatchData(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 
@@ -230,7 +238,7 @@ func HandleSyncMatchData(w http.ResponseWriter, req *http.Request) {
 	DBSyncMatchData(id, round)
 }
 
-// Uprava dat hrace
+// Funkce pro obsloužení upravy dat hráče
 func HandleSyncPlayerData(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 
@@ -260,7 +268,7 @@ func HandleCheckFacilityLogin(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
-// Funkce pro dotažení všech heren
+// Funkce pro obsloužení získání všech heren (Tohle je asi bezpečnostní riziko a budeme muset smazat/nahradit)
 func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
@@ -268,7 +276,7 @@ func HandleGetAllFacility(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetFacilities())
 }
 
-// Funkce pro vytoření herny
+// Funkce pro obsloužení tvorby herny
 func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -297,7 +305,7 @@ func HandleCreateFacility(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Funkce pro smazání herny
+// Funkce pro obsloužení smazání herny
 func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
@@ -305,7 +313,7 @@ func HandleDeleteFacility(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(w, "SUCCESS")
 }
 
-// Funkce pro obsloužení požadavku na kontrolu existence jména frakce v tabulce frakcí
+// Funkce pro obsloužení kontroly jména herny
 func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var screenName = strings.Join(req.URL.Query()["screenName"], "")
@@ -314,7 +322,7 @@ func HandleCheckFactionName(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
-// Funkce pro vytvoření frakce
+// Funkce pro obsloužení tvorby frakce
 func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -338,7 +346,7 @@ func HandleCreateFaction(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Funkce pro dotažení všech frakcí
+// Funkce pro obsloužení získání frakcí
 func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
@@ -346,7 +354,7 @@ func HandleGetAllFaction(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetFactions())
 }
 
-// Funkce pro smazání frakce
+// Funkce pro obsloužení smazání frakce
 func HandleDeleteFaction(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
@@ -354,11 +362,13 @@ func HandleDeleteFaction(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(w, "SUCCESS")
 }
 
+// Funkce pro obsloužení Hello World kontroly
 func HandleHelloWorld(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	fmt.Fprintf(w, "Hello World !")
 }
 
+// Funkce pro obsloužení získání headerů
 func headers(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -371,7 +381,7 @@ func headers(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Funkce pro vytvoření detachmentu
+// Funkce pro obsloužení tvorby detachmentu
 func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	switch req.Method {
@@ -395,7 +405,7 @@ func HandleCreateDetachment(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// Funkce pro dotažení všech detachmentů
+// Funkce pro obsloužení získání detachmentů
 func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	w.Header().Set("Content-Type", "application/json")
@@ -403,7 +413,7 @@ func HandleGetAllDetachment(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(DBGetDetachments())
 }
 
-// Funkce pro smazání detachmentu
+// Funkce pro obsloužení smazání detachmentu
 func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var id = strings.Join(req.URL.Query()["id"], "")
@@ -411,7 +421,7 @@ func HandleDeleteDetachment(w http.ResponseWriter, req *http.Request) {
 	fmt.Println(w, "SUCCESS")
 }
 
-// Funkce pro obsloužení požadavku na kontrolu existence jména detachmentu v tabulce detachmentuů
+// Funkce pro obsloužení kontroly jména detachmentu
 func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 	var detachmentName = strings.Join(req.URL.Query()["detachmentName"], "")
@@ -420,6 +430,7 @@ func HandleCheckDetachmentName(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(map[string]bool{"exists": exists})
 }
 
+// Funkce pro obsloužení získánístratagemů náležícím k detachmentu
 func HandleGetStratagemsForDetachment(w http.ResponseWriter, req *http.Request) {
 	enableCors(w, req)
 

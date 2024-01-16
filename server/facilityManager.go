@@ -1,5 +1,6 @@
 package main
 
+//Importy
 import (
 	"database/sql"
 	"log"
@@ -7,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// Structy
 type facility struct {
 	Id         int    `json:id`
 	Login      string `json:login`
@@ -34,7 +36,7 @@ func DBcreateFacility(login string, password string, facilityName string) {
 	log.Println("Herna založena")
 }
 
-// Funkce pro dotažení všech heren
+// Funkce pro získání všech heren
 func DBGetFacilities() (result []facility) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
@@ -87,7 +89,6 @@ func DBdeleteFacility(id string) {
 }
 
 // Kontrola proti duplicitně založenému loginu
-
 func DBcheckFacilityLogin(login string) (exists bool) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")

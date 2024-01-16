@@ -1,5 +1,6 @@
 package main
 
+//Importy
 import (
 	"context"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// Strukty
 type JWTManager struct {
 	secretKey     string
 	tokenDuration time.Duration

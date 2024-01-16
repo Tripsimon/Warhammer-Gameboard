@@ -1,5 +1,6 @@
 package main
 
+//Immport
 import (
 	"database/sql"
 	"log"
@@ -9,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Typy
+// Structy
 type AuthenticationResult struct {
 	UserID        string
 	Username      string
@@ -18,6 +19,7 @@ type AuthenticationResult struct {
 	WrongPassword bool
 }
 
+// Funkce pro autentikaci uživatele
 func DBAuthenticateUser(login string, password string) (result AuthenticationResult, err error) {
 	log.Println("Připojuji se k DB")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
