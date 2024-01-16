@@ -18,7 +18,7 @@ type detachment struct {
 
 // Funkce pro vytvoření detachmentu
 func DBcreateDetachment(faction_id string, name string, description string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Vytvoření detachmentu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -38,7 +38,7 @@ func DBcreateDetachment(faction_id string, name string, description string) {
 
 // Funkce pro získání všech detachmentů
 func DBGetDetachments() (result []detachment) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání detachmentů")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -70,7 +70,7 @@ func DBGetDetachments() (result []detachment) {
 
 // Funkce pro smazání detachmentu
 func DBdeleteDetachment(id string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Smazání detachmentu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -90,7 +90,7 @@ func DBdeleteDetachment(id string) {
 
 // Funkce pro kontrolu, zda se v tabulce detachments již nachází stejný název
 func DBcheckDetachmentName(detachmentName string) (exists bool) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Kontrola jména detachmentu")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

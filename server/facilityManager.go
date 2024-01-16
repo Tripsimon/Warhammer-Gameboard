@@ -18,7 +18,7 @@ type facility struct {
 
 // Funkce pro vytvoření herny
 func DBcreateFacility(login string, password string, facilityName string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Tvorba herny")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -38,7 +38,7 @@ func DBcreateFacility(login string, password string, facilityName string) {
 
 // Funkce pro získání všech heren
 func DBGetFacilities() (result []facility) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání heren")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -70,7 +70,7 @@ func DBGetFacilities() (result []facility) {
 
 // Funkce pro smazání herny
 func DBdeleteFacility(id string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Smazání herny")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -90,7 +90,7 @@ func DBdeleteFacility(id string) {
 
 // Kontrola proti duplicitně založenému loginu
 func DBcheckFacilityLogin(login string) (exists bool) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Kontrola loginu herny")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

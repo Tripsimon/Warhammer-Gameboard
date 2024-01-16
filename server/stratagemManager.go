@@ -19,7 +19,7 @@ type stratagem struct {
 
 // Funkce pro získání stratagemů pro detachment
 func DBGetStratagemsForDetachment(detachmentId string) (result []stratagem) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání stratagemů")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

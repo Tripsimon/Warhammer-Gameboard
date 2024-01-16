@@ -18,7 +18,7 @@ type faction struct {
 
 // Funkce pro kontrolu, zda se v tabulce factions již nachází stejný název
 func DBcheckFactionName(screenName string) (exists bool) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Kontrola jména frakce")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -39,7 +39,7 @@ func DBcheckFactionName(screenName string) (exists bool) {
 
 // Funkce pro vytvoření frakce
 func DBcreateFaction(name string, codeName string, description string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Tvorba frakce")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -59,7 +59,7 @@ func DBcreateFaction(name string, codeName string, description string) {
 
 // Funkce pro Získání všech frakcí
 func DBGetFactions() (result []faction) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání frakcí")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
@@ -91,7 +91,7 @@ func DBGetFactions() (result []faction) {
 
 // Funkce pro smazání frakce
 func DBdeleteFaction(id string) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Smazání frakce")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

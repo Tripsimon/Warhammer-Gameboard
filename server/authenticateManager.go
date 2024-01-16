@@ -21,7 +21,7 @@ type AuthenticationResult struct {
 
 // Funkce pro autentikaci uživatele
 func DBAuthenticateUser(login string, password string) (result AuthenticationResult, err error) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Autentikace uživatele")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {

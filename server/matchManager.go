@@ -91,7 +91,7 @@ func DBcreateMatch(name string, playerOneName string, playerOneFaction string, p
 
 // Získá seznam zápasů
 func DBGetMatches(id string) (result []match) {
-	log.Println("Připojuji se k DB")
+	log.Println("DB Akce: Získání zápasů")
 	db, err := sql.Open("mysql", "user:Aa123456@tcp(localhost:3002)/WH")
 
 	if err != nil {
