@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 const getCookieValue = (cookieName) => cookies.get(cookieName);
 
-//Slice do store pro uživatelsá data
+//Slice do store pro uživatelská data
 export const userSlice = createSlice({
   name: 'user',
   initialState: {

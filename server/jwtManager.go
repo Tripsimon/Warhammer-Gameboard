@@ -20,6 +20,7 @@ func NewJWTManager(secretKey string, tokenDuration time.Duration) *JWTManager {
 	return &JWTManager{secretKey, tokenDuration}
 }
 
+// Tvorba tokenu
 func (manager *JWTManager) Generate(userID, username string, isAdmin bool) (string, error) {
 	claims := jwt.MapClaims{
 		"userID":   userID,
@@ -53,6 +54,7 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 	return nil, fmt.Errorf("Token is not valid")
 }
 
+// Middleware funkce pro ověření tokenu při každé operaci
 func VerifyTokenMiddleware(next http.HandlerFunc, adminOnly bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == "OPTIONS" {

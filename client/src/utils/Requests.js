@@ -2,12 +2,12 @@
 import axios from 'axios';
 import getAuthToken from '../hooks/getToken';
 
-//Zadani basic URL pro axios.
+//Zadani basic URL pro axios
 const requests = axios.create({
     baseURL: 'http://localhost:3001' // Základní URL serveru
 });
 
-//Token věci
+//Práce s tokenem
 requests.interceptors.request.use(
     config => {
         const authToken = getAuthToken(); // Získání tokenu
